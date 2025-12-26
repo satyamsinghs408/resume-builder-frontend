@@ -2,56 +2,47 @@ import React from 'react';
 
 const PersonalForm = ({ resumeData, handleChange }) => {
   return (
-    <div style={{ padding: '10px', background: '#fff', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-      <h3>Personal Details</h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+      <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Personal Details</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input 
           name="firstName" 
           placeholder="First Name" 
           value={resumeData.firstName} 
           onChange={handleChange} 
-          style={inputStyle} 
+          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
         <input 
           name="lastName" 
           placeholder="Last Name" 
           value={resumeData.lastName} 
           onChange={handleChange} 
-          style={inputStyle} 
+          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
         <input 
           name="email" 
           placeholder="Email" 
           value={resumeData.email} 
           onChange={handleChange} 
-          style={inputStyle} 
+          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
         <input 
           name="phone" 
           placeholder="Phone" 
           value={resumeData.phone} 
           onChange={handleChange} 
-          style={inputStyle} 
+          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
         <input 
           name="address" 
           placeholder="Address" 
           value={resumeData.address} 
           onChange={handleChange} 
-          style={inputStyle} 
+          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none md:col-span-2"
         />
       </div>
     </div>
   );
-};
-
-// Simple style object to keep it clean
-const inputStyle = {
-  padding: '8px',
-  border: '1px solid #ccc',
-  borderRadius: '4px',
-  width: '100%',
-  boxSizing: 'border-box' // Fixes padding issues
 };
 
 export default PersonalForm;

@@ -6,39 +6,47 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
-  const { login } = useContext(AuthContext); // Access global function
+  const { login } = useContext(AuthContext); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await login(email, password);
     if (success) {
-      navigate('/editor'); // Redirect to Editor on success
+      navigate('/editor'); 
     }
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="email" 
-          placeholder="Email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-        />
-        <input 
-          type="password" 
-          placeholder="Password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          style={{ width: '100%', padding: '10px', marginBottom: '10px' }}
-        />
-        <button type="submit" style={{ width: '100%', padding: '10px', background: 'blue', color: 'white' }}>
-          Login
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+            <input 
+              type="email" 
+              placeholder="Enter your email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
+            <input 
+              type="password" 
+              placeholder="Enter your password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <button type="submit" className="w-full bg-blue-600 text-white font-bold py-2 rounded hover:bg-blue-700 transition">
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

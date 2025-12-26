@@ -6,25 +6,42 @@ const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <nav style={{ padding: '15px 30px', background: '#333', color: 'white', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <Link to="/" style={{ color: 'white', textDecoration: 'none', fontSize: '20px', fontWeight: 'bold' }}>
-        ResumeBuilder
-      </Link>
-      
-      <div>
-        {user ? (
-          <>
-            <span style={{ marginRight: '15px' }}>Hi, {user.name}</span>
-            <button onClick={logout} style={{ background: 'red', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer' }}>
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" style={{ color: 'white', textDecoration: 'none', marginRight: '15px' }}>Login</Link>
-            <Link to="/register" style={{ color: 'white', textDecoration: 'none' }}>Register</Link>
-          </>
-        )}
+    <nav className="bg-gray-900 text-white shadow-lg">
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-bold tracking-wide hover:text-gray-300 transition">
+          Resume<span className="text-blue-500">Builder</span>
+        </Link>
+        
+        {/* Links */}
+        <div className="flex items-center space-x-6">
+          {user ? (
+            <>
+              <Link to="/dashboard" className="text-gray-300 hover:text-white transition font-medium">
+                Dashboard
+              </Link>
+              <div className="flex items-center gap-4 border-l border-gray-700 pl-6">
+                <span className="text-sm text-gray-400">Hi, {user.name}</span>
+                <button 
+                  onClick={logout} 
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded text-sm font-medium transition"
+                >
+                  Logout
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="text-gray-300 hover:text-white transition">Login</Link>
+              <Link 
+                to="/register" 
+                className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded font-medium transition"
+              >
+                Register
+              </Link>
+            </>
+          )}
+        </div>
       </div>
     </nav>
   );

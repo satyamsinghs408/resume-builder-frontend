@@ -1,13 +1,13 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext'; // Import Auth Context
+import { AuthContext } from '../context/AuthContext';
 import { downloadResumePDF } from '../utils/pdfGenerator';
+import { useLocation, useNavigate } from 'react-router-dom'; // Import hooks
 import PersonalForm from '../components/PersonalForm';
 import ExperienceForm from '../components/ExperienceForm';
 import EducationForm from '../components/EducationForm';
 
 const ResumeEditor = () => {
-  // 1. STATE
   const [resumeData, setResumeData] = useState({
     firstName: '', lastName: '', email: '', phone: '', address: '',
     experience: [{ title: '', company: '', description: '' }],
@@ -15,10 +15,34 @@ const ResumeEditor = () => {
   });
   const [template, setTemplate] = useState('classic'); 
   
-  // Get the user (for the token)
   const { user } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  // 2. HANDLERS
+  // CHECK: Are we editing an existing resume?
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentResumeId, setCurrentResumeId] = useState(null);
+
+  useEffect(() => {
+    // If data was sent from Dashboard, load it!
+    if (location.state && location.state.resumeToEdit) {
+      const { _id, firstName, lastName, email, phone, address, experience, education } = location.state.resumeToEdit;
+      
+      setResumeData({
+        firstName: firstName || '',
+        lastName: lastName || '',
+        email: email || '',
+        phone: phone || '',
+        address: address || '',
+        experience: experience || [],
+        education: education || []
+      });
+      setIsEditing(true);
+      setCurrentResumeId(_id);
+    }
+  }, [location]);
+
+  // --- HANDLERS (Same as before) ---
   const handleChange = (e) => setResumeData({ ...resumeData, [e.target.name]: e.target.value });
 
   const handleExperienceChange = (e, index) => {
@@ -45,7 +69,7 @@ const ResumeEditor = () => {
     setResumeData({ ...resumeData, education: list });
   };
 
-  // 3. SAVE FUNCTION (The One and Only)
+  // --- SAVE FUNCTION (UPDATED) ---
   const saveResume = async () => {
     if (!user) {
       alert("Please login to save your resume.");
@@ -56,12 +80,23 @@ const ResumeEditor = () => {
       const config = {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}` // Send the token
+          'Authorization': `Bearer ${user.token}`
         }
       };
+
+      if (isEditing) {
+        // UPDATE Existing Resume (PUT)
+        await axios.put(`http://localhost:5000/api/resumes/${currentResumeId}`, resumeData, config);
+        alert('Resume Updated Successfully!');
+      } else {
+        // CREATE New Resume (POST)
+        await axios.post('http://localhost:5000/api/resumes', resumeData, config);
+        alert('Resume Created Successfully!');
+      }
       
-      await axios.post('http://localhost:5000/api/resumes', resumeData, config);
-      alert('Resume saved to Cloud successfully!');
+      // Optional: Redirect back to dashboard after save
+      navigate('/dashboard');
+
     } catch (error) {
       console.error('Error saving:', error);
       alert('Failed to save.');
@@ -69,13 +104,19 @@ const ResumeEditor = () => {
   };
 
   return (
-    <div style={{ padding: '20px', display: 'flex', gap: '20px', background: '#f5f7fa', minHeight: '100vh' }}>
+    <div className="flex flex-col lg:flex-row h-screen bg-gray-100 overflow-hidden">
       
-      {/* FORM SECTION */}
-      <div className="form-section" style={{ flex: 1, height: '90vh', overflowY: 'scroll', paddingRight: '15px' }}>
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
-          <h2 style={{margin: 0}}>Editor</h2>
-          <select value={template} onChange={(e) => setTemplate(e.target.value)} style={{padding: '8px', borderRadius: '4px'}}>
+      {/* LEFT: Editor Form */}
+      <div className="w-full lg:w-1/2 p-6 overflow-y-auto h-full scrollbar-thin">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-gray-800">
+            {isEditing ? 'Edit Resume' : 'Create New Resume'}
+          </h2>
+          <select 
+            value={template} 
+            onChange={(e) => setTemplate(e.target.value)} 
+            className="p-2 border border-gray-300 rounded bg-white text-gray-700 focus:outline-none"
+          >
             <option value="classic">Classic Template</option>
             <option value="modern">Modern Template</option>
           </select>
@@ -98,38 +139,85 @@ const ResumeEditor = () => {
             removeEducation={removeEducation}
           />
 
-          <div style={{ marginTop: '20px', paddingBottom: '50px' }}>
-            <button type="submit" style={{ padding: '12px 24px', background: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginRight: '10px', fontSize: '16px' }}>
-              Save
+          <div className="flex gap-4 mt-8 mb-20">
+            <button 
+              type="submit" 
+              className="flex-1 bg-green-600 text-white py-3 rounded hover:bg-green-700 transition font-bold shadow"
+            >
+              {isEditing ? 'Update Resume' : 'Save to Cloud'}
             </button>
-            <button type="button" onClick={() => downloadResumePDF(resumeData, template)} style={{ padding: '12px 24px', background: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '16px' }}>
+            <button 
+              type="button" 
+              onClick={() => downloadResumePDF(resumeData, template)} 
+              className="flex-1 bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition font-bold shadow"
+            >
               Download PDF
             </button>
           </div>
         </form>
       </div>
 
-      {/* PREVIEW SECTION */}
-      <div className="preview-section" style={{ flex: 1, paddingLeft: '20px' }}>
-        <div style={{ background: 'white', padding: '40px', minHeight: '800px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
+      {/* RIGHT: Live Preview */}
+      <div className="hidden lg:flex w-1/2 bg-gray-200 p-8 overflow-y-auto h-full items-center justify-center">
+        <div className="bg-white shadow-2xl w-full max-w-[210mm] min-h-[297mm] p-10 transform scale-90 origin-top">
+          {/* TEMPLATE RENDERING LOGIC */}
           {template === 'classic' ? (
-             <div>
-                <h1 style={{textAlign: 'center', fontSize: '28px', marginBottom: '5px'}}>{resumeData.firstName} {resumeData.lastName}</h1>
-                <p style={{textAlign: 'center', color: '#555'}}>{resumeData.email} | {resumeData.phone}</p>
-                <hr style={{margin: '20px 0'}} />
-                {resumeData.experience.map((exp, i) => <div key={i} style={{marginBottom: '15px'}}><h4 style={{margin:0}}>{exp.title}</h4><div style={{fontStyle: 'italic', color: '#666'}}>{exp.company}</div><div style={{marginTop: '5px'}}>{exp.description}</div></div>)}
+             <div className="text-gray-800">
+                <h1 className="text-center text-3xl font-bold mb-2 uppercase">{resumeData.firstName} {resumeData.lastName}</h1>
+                <p className="text-center text-gray-600 mb-6">{resumeData.email} | {resumeData.phone}</p>
+                <hr className="border-t-2 border-gray-300 my-4" />
+                
+                <h3 className="text-xl font-bold uppercase border-b border-gray-300 mb-4 pb-1">Experience</h3>
+                {resumeData.experience.map((exp, i) => (
+                  <div key={i} className="mb-4">
+                    <h4 className="font-bold text-lg">{exp.title}</h4>
+                    <div className="italic text-gray-600 mb-1">{exp.company}</div>
+                    <p className="text-sm leading-relaxed">{exp.description}</p>
+                  </div>
+                ))}
+
+                <h3 className="text-xl font-bold uppercase border-b border-gray-300 mb-4 pb-1 mt-6">Education</h3>
+                 {resumeData.education.map((edu, i) => (
+                  <div key={i} className="mb-2 flex justify-between">
+                    <div>
+                      <div className="font-bold">{edu.school}</div>
+                      <div className="italic text-sm">{edu.degree}</div>
+                    </div>
+                    <div className="text-sm font-bold">{edu.year}</div>
+                  </div>
+                ))}
              </div>
           ) : (
-             <div style={{display: 'flex'}}>
-                <div style={{width: '30%', borderRight: '2px solid #2c3e50', paddingRight: '15px', textAlign: 'right'}}>
-                  <h4 style={{color: '#2c3e50', borderBottom: '1px solid #ccc'}}>Contact</h4>
-                  <div style={{fontSize: '13px', marginBottom: '5px'}}>{resumeData.email}</div>
-                  <div style={{fontSize: '13px'}}>{resumeData.phone}</div>
+             <div className="flex h-full">
+                <div className="w-1/3 border-r-2 border-gray-800 pr-6 text-right">
+                  <h4 className="font-bold text-gray-800 border-b border-gray-300 pb-2 mb-4">CONTACT</h4>
+                  <div className="text-sm text-gray-600 mb-1">{resumeData.email}</div>
+                  <div className="text-sm text-gray-600">{resumeData.phone}</div>
+                  <div className="text-sm text-gray-600">{resumeData.address}</div>
+
+                  <h4 className="font-bold text-gray-800 border-b border-gray-300 pb-2 mb-4 mt-8">EDUCATION</h4>
+                   {resumeData.education.map((edu, i) => (
+                    <div key={i} className="mb-4">
+                      <div className="font-bold text-sm">{edu.school}</div>
+                      <div className="text-xs italic">{edu.degree}</div>
+                      <div className="text-xs font-bold text-gray-500">{edu.year}</div>
+                    </div>
+                  ))}
                 </div>
-                <div style={{width: '70%', paddingLeft: '20px'}}>
-                  <h1 style={{color: '#2c3e50', margin: '0 0 20px 0', textTransform: 'uppercase'}}>{resumeData.firstName} <br/>{resumeData.lastName}</h1>
-                  <h3 style={{color: '#2c3e50', borderBottom: '1px solid #ccc'}}>Experience</h3>
-                  {resumeData.experience.map((exp, i) => <div key={i} style={{marginBottom: '15px'}}><h4 style={{margin:0}}>{exp.title}</h4><div style={{fontStyle: 'italic', fontSize: '14px', marginBottom: '5px'}}>{exp.company}</div><p style={{fontSize: '14px'}}>{exp.description}</p></div>)}
+                <div className="w-2/3 pl-8">
+                  <h1 className="text-4xl font-extrabold text-gray-800 mb-6 uppercase tracking-wider leading-none">
+                    {resumeData.firstName} <br/>
+                    <span className="text-blue-900">{resumeData.lastName}</span>
+                  </h1>
+                  
+                  <h3 className="text-xl font-bold text-blue-900 border-b-2 border-blue-900 pb-1 mb-6">EXPERIENCE</h3>
+                  {resumeData.experience.map((exp, i) => (
+                    <div key={i} className="mb-6">
+                      <h4 className="font-bold text-lg">{exp.title}</h4>
+                      <div className="italic text-gray-600 text-sm mb-2">{exp.company}</div>
+                      <p className="text-sm text-gray-700 leading-relaxed">{exp.description}</p>
+                    </div>
+                  ))}
                 </div>
              </div>
           )}

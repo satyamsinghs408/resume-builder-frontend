@@ -2,50 +2,56 @@ import React from 'react';
 
 const EducationForm = ({ education, handleEducationChange, addEducation, removeEducation }) => {
   return (
-    <div style={{ marginTop: '20px', padding: '10px', background: '#fff', borderRadius: '5px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-      <h3>Education</h3>
+    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
+      <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Education</h3>
       
       {education.map((edu, index) => (
-        <div key={index} style={{ marginBottom: '15px', padding: '10px', border: '1px solid #eee', borderRadius: '5px' }}>
-          <input 
-            name="school" 
-            placeholder="School / University" 
-            value={edu.school} 
-            onChange={(e) => handleEducationChange(e, index)} 
-            style={inputStyle}
-          />
-          <input 
-            name="degree" 
-            placeholder="Degree" 
-            value={edu.degree} 
-            onChange={(e) => handleEducationChange(e, index)} 
-            style={{...inputStyle, marginTop: '5px'}}
-          />
-          <input 
-            name="year" 
-            placeholder="Graduation Year" 
-            value={edu.year} 
-            onChange={(e) => handleEducationChange(e, index)} 
-            style={{...inputStyle, marginTop: '5px'}}
-          />
+        <div key={index} className="mb-6 p-4 bg-gray-50 rounded border border-gray-200">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input 
+              name="school" 
+              placeholder="School / University" 
+              value={edu.school} 
+              onChange={(e) => handleEducationChange(e, index)} 
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 md:col-span-3"
+            />
+            <input 
+              name="degree" 
+              placeholder="Degree" 
+              value={edu.degree} 
+              onChange={(e) => handleEducationChange(e, index)} 
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 md:col-span-2"
+            />
+            <input 
+              name="year" 
+              placeholder="Year" 
+              value={edu.year} 
+              onChange={(e) => handleEducationChange(e, index)} 
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+            />
+          </div>
           
           {education.length > 1 && (
-            <button type="button" onClick={() => removeEducation(index)} style={removeBtnStyle}>
+            <button 
+              type="button" 
+              onClick={() => removeEducation(index)} 
+              className="mt-2 text-red-500 text-sm hover:underline"
+            >
               Remove Education
             </button>
           )}
         </div>
       ))}
       
-      <button type="button" onClick={addEducation} style={addBtnStyle}>
+      <button 
+        type="button" 
+        onClick={addEducation} 
+        className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900 transition text-sm"
+      >
         + Add Education
       </button>
     </div>
   );
 };
-
-const inputStyle = { padding: '8px', width: '100%', boxSizing: 'border-box', border: '1px solid #ccc', borderRadius: '4px' };
-const removeBtnStyle = { marginTop: '5px', background: '#ff4d4d', color: 'white', border: 'none', padding: '5px 10px', cursor: 'pointer', borderRadius: '3px', fontSize: '12px' };
-const addBtnStyle = { background: '#333', color: 'white', border: 'none', padding: '8px 15px', cursor: 'pointer', borderRadius: '3px' };
 
 export default EducationForm;
