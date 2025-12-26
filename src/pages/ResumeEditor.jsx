@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { AuthContext } from '../context/AuthContext'; // Import Auth Context
 import { downloadResumePDF } from '../utils/pdfGenerator';
 import PersonalForm from '../components/PersonalForm';
 import ExperienceForm from '../components/ExperienceForm';
@@ -13,6 +14,9 @@ const ResumeEditor = () => {
     education: [{ school: '', degree: '', year: '' }]
   });
   const [template, setTemplate] = useState('classic'); 
+  
+  // Get the user (for the token)
+  const { user } = useContext(AuthContext);
 
   // 2. HANDLERS
   const handleChange = (e) => setResumeData({ ...resumeData, [e.target.name]: e.target.value });
@@ -41,9 +45,22 @@ const ResumeEditor = () => {
     setResumeData({ ...resumeData, education: list });
   };
 
+  // 3. SAVE FUNCTION (The One and Only)
   const saveResume = async () => {
+    if (!user) {
+      alert("Please login to save your resume.");
+      return;
+    }
+
     try {
-      await axios.post('http://localhost:5000/api/resumes', resumeData);
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}` // Send the token
+        }
+      };
+      
+      await axios.post('http://localhost:5000/api/resumes', resumeData, config);
       alert('Resume saved to Cloud successfully!');
     } catch (error) {
       console.error('Error saving:', error);
@@ -54,7 +71,7 @@ const ResumeEditor = () => {
   return (
     <div style={{ padding: '20px', display: 'flex', gap: '20px', background: '#f5f7fa', minHeight: '100vh' }}>
       
-      {/* --- LEFT SIDE: THE FORMS --- */}
+      {/* FORM SECTION */}
       <div className="form-section" style={{ flex: 1, height: '90vh', overflowY: 'scroll', paddingRight: '15px' }}>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
           <h2 style={{margin: 0}}>Editor</h2>
@@ -65,19 +82,15 @@ const ResumeEditor = () => {
         </div>
 
         <form onSubmit={(e) => { e.preventDefault(); saveResume(); }}>
-          
-          {/* 1. Personal Component */}
           <PersonalForm resumeData={resumeData} handleChange={handleChange} />
-
-          {/* 2. Experience Component */}
+          
           <ExperienceForm 
             experience={resumeData.experience} 
             handleExperienceChange={handleExperienceChange}
             addExperience={addExperience}
             removeExperience={removeExperience}
           />
-
-          {/* 3. Education Component */}
+          
           <EducationForm 
             education={resumeData.education} 
             handleEducationChange={handleEducationChange}
@@ -96,7 +109,7 @@ const ResumeEditor = () => {
         </form>
       </div>
 
-      {/* --- RIGHT SIDE: PREVIEW (UNCHANGED) --- */}
+      {/* PREVIEW SECTION */}
       <div className="preview-section" style={{ flex: 1, paddingLeft: '20px' }}>
         <div style={{ background: 'white', padding: '40px', minHeight: '800px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
           {template === 'classic' ? (

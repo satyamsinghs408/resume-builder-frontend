@@ -1,18 +1,42 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// import Home from './pages/Home';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/Navbar.jsx';
+
+// Import the Guard
+import ProtectedRoute from './components/ProtectedRoute.jsx'; // <--- IMPORT THIS
+
 import Home from './pages/Home.jsx';
-import ResumeEditor from './pages/ResumeEditor';
+import ResumeEditor from './pages/ResumeEditor.jsx';
+import Login from './pages/Login.jsx'; 
+import Register from './pages/Register.jsx';
+
 import './App.css';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/editor" element={<ResumeEditor />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          
+          {/* --- PROTECT THIS ROUTE --- */}
+          <Route 
+            path="/editor" 
+            element={
+              <ProtectedRoute>
+                <ResumeEditor />
+              </ProtectedRoute>
+            } 
+          />
+          {/* -------------------------- */}
+          
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
