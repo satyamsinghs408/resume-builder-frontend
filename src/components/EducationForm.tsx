@@ -1,6 +1,14 @@
 import React from 'react';
+import { Education } from '../types';
 
-const EducationForm = ({ education, handleEducationChange, addEducation, removeEducation }) => {
+interface EducationFormProps {
+  education: Education[];
+  handleEducationChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => void;
+  addEducation: () => void;
+  removeEducation: (index: number) => void;
+}
+
+const EducationForm: React.FC<EducationFormProps> = ({ education, handleEducationChange, addEducation, removeEducation }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
       <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Education</h3>

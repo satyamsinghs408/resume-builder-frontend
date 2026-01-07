@@ -1,18 +1,21 @@
-import React, { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
+
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { Resume } from '../types';
 
 const Dashboard = () => {
-  const [resumes, setResumes] = useState([]);
-  const { user } = useContext(AuthContext);
+  const [resumes, setResumes] = useState<Resume[]>([]);
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchResumes = async () => {
       try {
+        if (!user) return;
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get('http://localhost:5000/api/resumes', config);
+        const { data } = await axios.get<Resume[]>('http://localhost:5000/api/resumes', config);
         setResumes(data);
       } catch (error) {
         console.error('Error fetching resumes:', error);
@@ -21,9 +24,10 @@ const Dashboard = () => {
     if (user) fetchResumes();
   }, [user]);
 
-  const deleteResume = async (id) => {
+  const deleteResume = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this resume?')) {
       try {
+        if (!user) return;
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
         await axios.delete(`http://localhost:5000/api/resumes/${id}`, config);
         setResumes(resumes.filter((resume) => resume._id !== id));
@@ -33,9 +37,10 @@ const Dashboard = () => {
     }
   };
 
-  const handleEdit = (resume) => {
+  const handleEdit = (resume: Resume) => {
     navigate('/editor', { state: { resumeToEdit: resume } });
   };
+
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -60,9 +65,10 @@ const Dashboard = () => {
                   <h3 className="text-xl font-bold text-gray-800 truncate">{resume.firstName} {resume.lastName}</h3>
                   <p className="text-gray-500 text-sm mt-1">{resume.email}</p>
                   <span className="inline-block mt-3 px-2 py-1 bg-blue-50 text-blue-600 text-xs font-semibold rounded">
-                    {new Date(resume.createdAt).toLocaleDateString()}
+                    {resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : 'N/A'}
                   </span>
                 </div>
+
                 
                 <div className="flex gap-3 mt-4">
                   <button 
@@ -72,9 +78,10 @@ const Dashboard = () => {
                     Edit
                   </button>
                   <button 
-                    onClick={() => deleteResume(resume._id)}
+                    onClick={() => resume._id && deleteResume(resume._id)}
                     className="px-4 bg-red-100 hover:bg-red-200 text-red-600 py-2 rounded text-sm font-medium transition"
                   >
+
                     Delete
                   </button>
                 </div>

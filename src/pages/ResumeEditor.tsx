@@ -1,27 +1,29 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { downloadResumePDF } from '../utils/pdfGenerator';
-import { useLocation, useNavigate } from 'react-router-dom'; // Import hooks
+import { useLocation, useNavigate } from 'react-router-dom';
 import PersonalForm from '../components/PersonalForm';
 import ExperienceForm from '../components/ExperienceForm';
 import EducationForm from '../components/EducationForm';
+import { Resume } from '../types';
+
 
 const ResumeEditor = () => {
-  const [resumeData, setResumeData] = useState({
+  const [resumeData, setResumeData] = useState<Resume>({
     firstName: '', lastName: '', email: '', phone: '', address: '',
     experience: [{ title: '', company: '', description: '' }],
     education: [{ school: '', degree: '', year: '' }]
   });
-  const [template, setTemplate] = useState('classic'); 
+  const [template, setTemplate] = useState<string>('classic'); 
   
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
   // CHECK: Are we editing an existing resume?
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentResumeId, setCurrentResumeId] = useState(null);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [currentResumeId, setCurrentResumeId] = useState<string | null>(null);
 
   useEffect(() => {
     // If data was sent from Dashboard, load it!
@@ -38,32 +40,34 @@ const ResumeEditor = () => {
         education: education || []
       });
       setIsEditing(true);
-      setCurrentResumeId(_id);
+      setCurrentResumeId(_id || null);
     }
   }, [location]);
 
   // --- HANDLERS (Same as before) ---
-  const handleChange = (e) => setResumeData({ ...resumeData, [e.target.name]: e.target.value });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
+    setResumeData({ ...resumeData, [e.target.name]: e.target.value });
 
-  const handleExperienceChange = (e, index) => {
+  const handleExperienceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     const list = [...resumeData.experience];
-    list[index][e.target.name] = e.target.value;
+    (list[index] as any)[e.target.name] = e.target.value; // Type assertion needed or typed indexing
     setResumeData({ ...resumeData, experience: list });
   };
   const addExperience = () => setResumeData({ ...resumeData, experience: [...resumeData.experience, { title: '', company: '', description: '' }] });
-  const removeExperience = (i) => {
+  const removeExperience = (i: number) => {
     const list = [...resumeData.experience];
     list.splice(i, 1);
     setResumeData({ ...resumeData, experience: list });
   };
 
-  const handleEducationChange = (e, index) => {
+  const handleEducationChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     const list = [...resumeData.education];
-    list[index][e.target.name] = e.target.value;
+    (list[index] as any)[e.target.name] = e.target.value;
     setResumeData({ ...resumeData, education: list });
   };
+
   const addEducation = () => setResumeData({ ...resumeData, education: [...resumeData.education, { school: '', degree: '', year: '' }] });
-  const removeEducation = (i) => {
+  const removeEducation = (i: number) => {
     const list = [...resumeData.education];
     list.splice(i, 1);
     setResumeData({ ...resumeData, education: list });
@@ -146,6 +150,7 @@ const ResumeEditor = () => {
             >
               {isEditing ? 'Update Resume' : 'Save to Cloud'}
             </button>
+
             <button 
               type="button" 
               onClick={() => downloadResumePDF(resumeData, template)} 

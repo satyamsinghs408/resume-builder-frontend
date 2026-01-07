@@ -1,16 +1,19 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { Resume } from '../types';
 
 // Register fonts
-if (pdfFonts && pdfFonts.pdfMake && pdfFonts.pdfMake.vfs) {
-  pdfMake.vfs = pdfFonts.pdfMake.vfs;
-} else if (pdfFonts && pdfFonts.vfs) {
-  pdfMake.vfs = pdfFonts.vfs;
+// Register fonts
+if (pdfFonts && (pdfFonts as any).pdfMake && (pdfFonts as any).pdfMake.vfs) {
+  pdfMake.vfs = (pdfFonts as any).pdfMake.vfs;
+} else if (pdfFonts && (pdfFonts as any).vfs) {
+  pdfMake.vfs = (pdfFonts as any).vfs;
 } else {
-  pdfMake.vfs = pdfFonts;
+  pdfMake.vfs = pdfFonts as any;
 }
 
-const getClassicDefinition = (resumeData) => {
+
+const getClassicDefinition = (resumeData: Resume): any => {
   return {
     content: [
       { text: `${resumeData.firstName} ${resumeData.lastName}`, style: 'header' },
@@ -39,7 +42,7 @@ const getClassicDefinition = (resumeData) => {
   };
 };
 
-const getModernDefinition = (resumeData) => {
+const getModernDefinition = (resumeData: Resume): any => {
   return {
     content: [
       {
@@ -93,7 +96,7 @@ const getModernDefinition = (resumeData) => {
 };
 
 // Export the main function
-export const downloadResumePDF = (resumeData, template) => {
+export const downloadResumePDF = (resumeData: Resume, template: string) => {
   const docDefinition = template === 'modern' ? getModernDefinition(resumeData) : getClassicDefinition(resumeData);
   pdfMake.createPdf(docDefinition).download(`Resume_${template}.pdf`);
 };

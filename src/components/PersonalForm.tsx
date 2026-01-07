@@ -1,6 +1,12 @@
 import React from 'react';
+import { Resume } from '../types';
 
-const PersonalForm = ({ resumeData, handleChange }) => {
+interface PersonalFormProps {
+  resumeData: Resume;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+}
+
+const PersonalForm: React.FC<PersonalFormProps> = ({ resumeData, handleChange }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
       <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Personal Details</h3>

@@ -1,6 +1,14 @@
 import React from 'react';
+import { Experience } from '../types';
 
-const ExperienceForm = ({ experience, handleExperienceChange, addExperience, removeExperience }) => {
+interface ExperienceFormProps {
+  experience: Experience[];
+  handleExperienceChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => void;
+  addExperience: () => void;
+  removeExperience: (index: number) => void;
+}
+
+const ExperienceForm: React.FC<ExperienceFormProps> = ({ experience, handleExperienceChange, addExperience, removeExperience }) => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
       <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Experience</h3>
