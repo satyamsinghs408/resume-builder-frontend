@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import axios from 'axios';
 import { Resume } from '../../types';
+import { useApi } from '../../context/ApiContext';
 
 interface FileUploadProps {
   onUploadSuccess: (data: Resume) => void;
@@ -10,6 +11,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { endpoints } = useApi();
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -43,8 +45,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
     formData.append('resume', file);
 
     try {
-      // Assuming backend runs on port 5000
-      const res = await axios.post('http://localhost:5000/api/resumes/parse', formData, {
+      const res = await axios.post(endpoints.parseResume, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       

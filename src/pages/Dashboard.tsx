@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
-
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useApi } from '../context/ApiContext';
 import { useNavigate } from 'react-router-dom';
 import { Resume } from '../types';
 
 const Dashboard = () => {
   const [resumes, setResumes] = useState<Resume[]>([]);
   const { user } = useAuth();
+  const { endpoints } = useApi();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,7 +16,7 @@ const Dashboard = () => {
       try {
         if (!user) return;
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get<Resume[]>('http://localhost:5000/api/resumes', config);
+        const { data } = await axios.get<Resume[]>(endpoints.resumes, config);
         setResumes(data);
       } catch (error) {
         console.error('Error fetching resumes:', error);
@@ -29,7 +30,7 @@ const Dashboard = () => {
       try {
         if (!user) return;
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.delete(`http://localhost:5000/api/resumes/${id}`, config);
+        await axios.delete(`${endpoints.resumes}/${id}`, config);
         setResumes(resumes.filter((resume) => resume._id !== id));
       } catch (error) {
         alert('Failed to delete');

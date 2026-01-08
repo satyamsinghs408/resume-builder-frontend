@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useApi } from '../context/ApiContext';
 import { downloadResumePDF } from '../utils/pdfGenerator';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PersonalForm from '../components/PersonalForm';
@@ -34,6 +35,7 @@ const ResumeEditor = () => {
   const TOTAL_STEPS = 4;
 
   const { user } = useAuth();
+  const { endpoints } = useApi();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -106,10 +108,10 @@ const ResumeEditor = () => {
       };
 
       if (isEditing) {
-        await axios.put(`http://localhost:5000/api/resumes/${currentResumeId}`, resumeData, config);
+        await axios.put(`${endpoints.resumes}/${currentResumeId}`, resumeData, config);
         alert('Resume Updated Successfully!');
       } else {
-        await axios.post('http://localhost:5000/api/resumes', resumeData, config);
+        await axios.post(endpoints.resumes, resumeData, config);
         alert('Resume Created Successfully!');
       }
       navigate('/dashboard');
@@ -150,16 +152,39 @@ const ResumeEditor = () => {
   };
 
   const handleUploadSuccess = (data: Resume) => {
+    // Update ALL fields from parsed PDF - not just contact info!
     setResumeData(prev => ({
         ...prev,
         firstName: data.firstName || prev.firstName,
         lastName: data.lastName || prev.lastName,
         email: data.email || prev.email,
         phone: data.phone || prev.phone,
-        experience: data.experience.length > 0 ? data.experience : prev.experience,
+        address: data.address || prev.address,
+        experience: data.experience && data.experience.length > 0 && data.experience[0].title 
+          ? data.experience 
+          : prev.experience,
+        education: data.education && data.education.length > 0 && data.education[0].school 
+          ? data.education 
+          : prev.education,
     }));
-    // Optional: Flash success message
-    alert("Resume content imported! Please review the details.");
+
+    // Build a summary of what was imported (like major resume builders do)
+    const imported: string[] = [];
+    if (data.firstName || data.lastName) imported.push('Name');
+    if (data.email) imported.push('Email');
+    if (data.phone) imported.push('Phone');
+    if (data.experience && data.experience.length > 0 && data.experience[0].title) {
+      imported.push(`${data.experience.length} Experience(s)`);
+    }
+    if (data.education && data.education.length > 0 && data.education[0].school) {
+      imported.push(`${data.education.length} Education(s)`);
+    }
+
+    const summary = imported.length > 0 
+      ? `Imported: ${imported.join(', ')}` 
+      : 'Could not extract structured data';
+    
+    alert(`Resume parsed successfully!\n\n${summary}\n\nPlease proceed through each step to review and edit the details.`);
   };
 
   return (

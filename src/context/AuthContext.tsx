@@ -2,6 +2,9 @@ import React, { createContext, useState, useEffect, ReactNode, useContext } from
 import axios from 'axios';
 import { User, AuthContextType } from '../types';
 
+// Get API URL from environment variable
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 // Create the context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -26,7 +29,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
       const config = { headers: { 'Content-Type': 'application/json' } };
-      const { data } = await axios.post<User>('http://localhost:5000/api/users/login', { email, password }, config);
+      const { data } = await axios.post<User>(`${API_URL}/api/users/login`, { email, password }, config);
       
       // Save to LocalStorage
       localStorage.setItem('userInfo', JSON.stringify(data));
@@ -43,7 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     try {
       const config = { headers: { 'Content-Type': 'application/json' } };
-      const { data } = await axios.post<User>('http://localhost:5000/api/users/register', { name, email, password }, config);
+      const { data } = await axios.post<User>(`${API_URL}/api/users/register`, { name, email, password }, config);
       
       localStorage.setItem('userInfo', JSON.stringify(data));
       setUser(data);

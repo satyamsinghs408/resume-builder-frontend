@@ -2,6 +2,7 @@
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ApiProvider } from "./context/ApiContext";
 import Navbar from "./components/Navbar.jsx";
 
 // Import the Guard
@@ -17,36 +18,38 @@ import "./App.css";
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
+    <ApiProvider>
+      <AuthProvider>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          {/* --- PROTECT THIS ROUTE --- */}
-          <Route
-            path="/editor"
-            element={
-              <ProtectedRoute>
-                <ResumeEditor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          {/* -------------------------- */}
+            {/* --- PROTECT THIS ROUTE --- */}
+            <Route
+              path="/editor"
+              element={
+                <ProtectedRoute>
+                  <ResumeEditor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            {/* -------------------------- */}
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </Router>
-    </AuthProvider>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
+    </ApiProvider>
   );
 }
 
