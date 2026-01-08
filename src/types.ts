@@ -38,3 +38,14 @@ export interface AuthContextType {
   logout: () => void;
 }
 
+
+export interface ThemeConfig {
+  primaryColor: string;
+  secondaryColor: string;
+  fontFamily: string;
+}
+
+export interface TemplateProps {
+  resumeData: Resume;
+  theme?: ThemeConfig;
+}

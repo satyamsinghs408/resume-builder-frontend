@@ -1,5 +1,6 @@
 import React from 'react';
 import { Resume } from '../types';
+import { Input } from './ui';
 
 interface PersonalFormProps {
   resumeData: Resume;
@@ -8,44 +9,51 @@ interface PersonalFormProps {
 
 const PersonalForm: React.FC<PersonalFormProps> = ({ resumeData, handleChange }) => {
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-6">
-      <h3 className="text-lg font-bold text-gray-700 mb-4 border-b pb-2">Personal Details</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <input 
+    <div className="animate-fadeIn">
+      {/* Title is handled by Layout, but we can add a description if needed */}
+      <p className="text-gray-500 mb-8">
+        Let's start with the basics. Recruiters use this information to contact you.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <Input 
           name="firstName" 
-          placeholder="First Name" 
+          label="First Name"
+          placeholder="e.g. John" 
           value={resumeData.firstName} 
           onChange={handleChange} 
-          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
-        <input 
+        <Input 
           name="lastName" 
-          placeholder="Last Name" 
+          label="Last Name"
+          placeholder="e.g. Doe" 
           value={resumeData.lastName} 
           onChange={handleChange} 
-          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
-        <input 
+        <Input 
           name="email" 
-          placeholder="Email" 
+          label="Email Address"
+          placeholder="john.doe@example.com" 
           value={resumeData.email} 
           onChange={handleChange} 
-          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          type="email"
         />
-        <input 
+        <Input 
           name="phone" 
-          placeholder="Phone" 
+          label="Phone Number"
+          placeholder="+1 234 567 890" 
           value={resumeData.phone} 
           onChange={handleChange} 
-          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
-        <input 
-          name="address" 
-          placeholder="Address" 
-          value={resumeData.address} 
-          onChange={handleChange} 
-          className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:outline-none md:col-span-2"
-        />
+        <div className="md:col-span-2">
+          <Input 
+            name="address" 
+            label="Address"
+            placeholder="City, Country" 
+            value={resumeData.address} 
+            onChange={handleChange} 
+          />
+        </div>
       </div>
     </div>
   );
