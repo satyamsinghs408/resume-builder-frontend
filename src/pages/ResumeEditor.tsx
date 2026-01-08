@@ -9,8 +9,12 @@ import EducationForm from '../components/EducationForm';
 import { Resume, ThemeConfig } from '../types';
 import ClassicTemplate from '../components/templates/ClassicTemplate';
 import ModernTemplate from '../components/templates/ModernTemplate';
+import MinimalistTemplate from '../components/templates/MinimalistTemplate';
+import ExecutiveTemplate from '../components/templates/ExecutiveTemplate';
+import CreativeTemplate from '../components/templates/CreativeTemplate';
 import EditorLayout from '../components/editor/EditorLayout';
 import ColorPicker from '../components/ui/ColorPicker';
+import FileUpload from '../components/editor/FileUpload';
 
 const ResumeEditor = () => {
   const [resumeData, setResumeData] = useState<Resume>({
@@ -19,7 +23,7 @@ const ResumeEditor = () => {
     education: [{ school: '', degree: '', year: '' }]
   });
   
-  const [template, setTemplate] = useState<'classic' | 'modern'>('classic'); 
+  const [template, setTemplate] = useState<'classic' | 'modern' | 'minimalist' | 'executive' | 'creative'>('classic'); 
   const [theme, setTheme] = useState<ThemeConfig>({
     primaryColor: '#2c3e50',
     secondaryColor: '#ffffff',
@@ -137,12 +141,25 @@ const ResumeEditor = () => {
 
   const getStepTitle = () => {
       switch(currentStep) {
-          case 1: return "Personal Information";
+          case 1: return "Import & Personal Information";
           case 2: return "Experience";
           case 3: return "Education";
           case 4: return "Finalize & Download";
           default: return "";
       }
+  };
+
+  const handleUploadSuccess = (data: Resume) => {
+    setResumeData(prev => ({
+        ...prev,
+        firstName: data.firstName || prev.firstName,
+        lastName: data.lastName || prev.lastName,
+        email: data.email || prev.email,
+        phone: data.phone || prev.phone,
+        experience: data.experience.length > 0 ? data.experience : prev.experience,
+    }));
+    // Optional: Flash success message
+    alert("Resume content imported! Please review the details.");
   };
 
   return (
@@ -159,7 +176,15 @@ const ResumeEditor = () => {
             isSubmitting={isSaving}
         >
             {currentStep === 1 && (
-                <PersonalForm resumeData={resumeData} handleChange={handleChange} />
+                <div className="animate-fadeIn">
+                    <FileUpload onUploadSuccess={handleUploadSuccess} />
+                    <div className="flex items-center gap-4 my-8">
+                        <div className="h-px bg-gray-200 flex-1"></div>
+                        <span className="text-gray-400 text-sm font-medium uppercase tracking-wider">Or enter manually</span>
+                        <div className="h-px bg-gray-200 flex-1"></div>
+                    </div>
+                    <PersonalForm resumeData={resumeData} handleChange={handleChange} />
+                </div>
             )}
             {currentStep === 2 && (
                 <ExperienceForm 
@@ -181,26 +206,63 @@ const ResumeEditor = () => {
                 <div className="animate-fadeIn space-y-8">
                     <div className="space-y-4">
                          <h3 className="font-bold text-gray-800 text-lg">1. Choose Template</h3>
-                         <div className="grid grid-cols-2 gap-4">
+                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                              {/* Classic */}
                               <button 
                                   onClick={() => setTemplate('classic')}
-                                  className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'classic' ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
+                                  className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'classic' ? 'border-blue-600 bg-blue-50ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
                               >
-                                  <div className="w-full aspect-[0.724] bg-gray-200 rounded overflow-hidden relative border border-gray-300">
-                                      <div className="absolute top-2 left-2 right-2 h-2 bg-gray-400 rounded-sm"></div>
-                                      <div className="absolute top-6 left-2 right-2 h-px bg-gray-300"></div>
+                                  <div className="w-full aspect-[0.724] bg-white rounded overflow-hidden relative border border-gray-200 shadow-sm">
+                                      <div className="absolute top-2 left-2 right-2 h-1 bg-gray-300 rounded-sm"></div>
+                                      <div className="absolute top-4 left-2 right-2 h-px bg-gray-200"></div>
                                   </div>
-                                  <span className={`font-bold ${template === 'classic' ? 'text-blue-700' : 'text-gray-600'}`}>Classic</span>
+                                  <span className="font-bold text-sm text-gray-700">Classic</span>
                               </button>
 
+                              {/* Modern */}
                               <button 
                                   onClick={() => setTemplate('modern')}
-                                  className={`p-4 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'modern' ? 'border-blue-600 bg-blue-50' : 'border-gray-200 hover:border-blue-300'}`}
+                                  className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'modern' ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
                               >
-                                  <div className="w-full aspect-[0.724] bg-gray-800 rounded overflow-hidden relative border border-gray-700">
+                                  <div className="w-full aspect-[0.724] bg-gray-800 rounded overflow-hidden relative border border-gray-700 shadow-sm">
                                        <div className="absolute top-0 left-0 w-full h-8 bg-gray-700"></div>
                                   </div>
-                                  <span className={`font-bold ${template === 'modern' ? 'text-blue-700' : 'text-gray-600'}`}>Modern</span>
+                                  <span className="font-bold text-sm text-gray-700">Modern</span>
+                              </button>
+
+                              {/* Minimalist */}
+                              <button 
+                                  onClick={() => setTemplate('minimalist')}
+                                  className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'minimalist' ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
+                              >
+                                  <div className="w-full aspect-[0.724] bg-white rounded overflow-hidden relative border border-gray-200 shadow-sm p-2 flex flex-col gap-1">
+                                      <div className="w-1/2 h-1 bg-gray-900 rounded-sm mb-1"></div>
+                                      <div className="w-full h-px bg-gray-100"></div>
+                                  </div>
+                                  <span className="font-bold text-sm text-gray-700">Minimalist</span>
+                              </button>
+
+                              {/* Executive */}
+                              <button 
+                                  onClick={() => setTemplate('executive')}
+                                  className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'executive' ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
+                              >
+                                  <div className="w-full aspect-[0.724] bg-gray-50 rounded overflow-hidden relative border border-gray-300 shadow-sm border-t-4 border-t-blue-800">
+                                      <div className="w-full text-[4px] text-center mt-1 font-bold text-blue-900">NAME</div>
+                                  </div>
+                                  <span className="font-bold text-sm text-gray-700">Executive</span>
+                              </button>
+
+                              {/* Creative */}
+                              <button 
+                                  onClick={() => setTemplate('creative')}
+                                  className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'creative' ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
+                              >
+                                  <div className="w-full aspect-[0.724] bg-pink-50 rounded overflow-hidden relative border border-pink-100 shadow-sm">
+                                      <div className="absolute top-0 left-0 w-full h-1/3 bg-pink-500"></div>
+                                      <div className="absolute top-2 left-2 w-4 h-4 rounded-full bg-white/20"></div>
+                                  </div>
+                                  <span className="font-bold text-sm text-gray-700">Creative</span>
                               </button>
                          </div>
                     </div>
@@ -249,11 +311,11 @@ const ResumeEditor = () => {
         {/* The A4 Scaled Paper Container */}
         <div className="transform scale-[0.55] xl:scale-[0.70] origin-center transition-transform duration-300 shadow-2xl rounded-sm">
           <div className="w-[210mm] min-h-[297mm] overflow-hidden bg-white">
-            {template === 'classic' ? (
-              <ClassicTemplate resumeData={resumeData} theme={theme} />
-            ) : (
-              <ModernTemplate resumeData={resumeData} theme={theme} />
-            )}
+            {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
+            {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
+            {template === 'minimalist' && <MinimalistTemplate resumeData={resumeData} theme={theme} />}
+            {template === 'executive' && <ExecutiveTemplate resumeData={resumeData} theme={theme} />}
+            {template === 'creative' && <CreativeTemplate resumeData={resumeData} theme={theme} />}
           </div>
         </div>
       </div>
