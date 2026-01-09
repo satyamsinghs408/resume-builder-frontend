@@ -324,24 +324,50 @@ const ResumeEditor = () => {
       </div>
 
       {/* RIGHT: Live Preview */}
-      <div className="hidden lg:flex flex-col w-1/2 bg-gray-100 h-full items-center justify-center relative overflow-hidden border-l border-gray-200">
+      <div className="hidden lg:flex flex-col w-1/2 h-full items-center justify-center relative overflow-hidden border-l border-gray-200"
+           style={{
+             background: 'linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 50%, #f8fafc 100%)',
+             backgroundImage: `
+               linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 50%, #f8fafc 100%),
+               radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+               radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%)
+             `
+           }}>
         
-        {/* Helper Text */}
-        <div className="absolute top-6 left-0 right-0 flex justify-center pointer-events-none z-10">
-            <div className="bg-gray-800/80 backdrop-blur text-white px-4 py-1.5 rounded-full text-xs font-medium shadow-xl">
-                Live Preview
-            </div>
+        {/* Decorative Background Pattern */}
+        <div className="absolute inset-0 opacity-30"
+             style={{
+               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+             }}
+        />
+
+        {/* Live Preview Badge - Positioned at top-right corner */}
+        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-linear-to-r from-gray-900 to-gray-800 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-lg border border-gray-700/50">
+            <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            Live Preview
         </div>
 
         {/* The A4 Scaled Paper Container */}
-        <div className="transform scale-[0.55] xl:scale-[0.70] origin-center transition-transform duration-300 shadow-2xl rounded-sm">
-          <div className="w-[210mm] min-h-[297mm] overflow-hidden bg-white">
+        <div className="relative transform scale-[0.50] xl:scale-[0.65] 2xl:scale-[0.75] origin-center transition-all duration-500 ease-out group">
+          {/* Paper Shadow */}
+          <div className="absolute -inset-4 bg-linear-to-br from-blue-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
+          
+          {/* A4 Paper */}
+          <div className="relative w-[210mm] min-h-[297mm] bg-white rounded-sm shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.05)] overflow-hidden">
             {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
             {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
             {template === 'minimalist' && <MinimalistTemplate resumeData={resumeData} theme={theme} />}
             {template === 'executive' && <ExecutiveTemplate resumeData={resumeData} theme={theme} />}
             {template === 'creative' && <CreativeTemplate resumeData={resumeData} theme={theme} />}
           </div>
+        </div>
+
+        {/* Zoom Controls Hint */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-200/50">
+          Template: <span className="font-semibold text-gray-700 capitalize">{template}</span>
         </div>
       </div>
     </div>

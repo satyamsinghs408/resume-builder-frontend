@@ -38,7 +38,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
              </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
                {steps.map((step, idx) => {
                    const isActive = step.id === currentStep;
                    const isCompleted = step.id < currentStep;
@@ -47,7 +47,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
                    return (
                        <div key={idx} className="flex items-center">
                            <div className={`
-                               flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300
+                               flex items-center gap-1 px-2 py-2 rounded-full transition-all duration-300
                                ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 
                                  isCompleted ? 'bg-blue-50 text-blue-600' : 'text-gray-400'}
                            `}>
