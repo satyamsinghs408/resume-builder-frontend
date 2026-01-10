@@ -11,11 +11,11 @@ const PersonalForm: React.FC<PersonalFormProps> = ({ resumeData, handleChange })
   return (
     <div className="animate-fadeIn">
       {/* Title is handled by Layout, but we can add a description if needed */}
-      <p className="text-gray-500 mb-8">
+      <p className="text-gray-500 text-sm md:text-base mb-5 md:mb-8">
         Let's start with the basics. Recruiters use this information to contact you.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <Input 
           name="firstName" 
           label="First Name"

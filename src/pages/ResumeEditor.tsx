@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../context/ApiContext';
+import { useEditor } from '../context/EditorContext';
 import { downloadResumePDF } from '../utils/pdfGenerator';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PersonalForm from '../components/PersonalForm';
@@ -36,8 +37,15 @@ const ResumeEditor = () => {
 
   const { user } = useAuth();
   const { endpoints } = useApi();
+  const { setEditorSteps, clearEditorSteps } = useEditor();
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Sync step state with global header
+  useEffect(() => {
+    setEditorSteps(currentStep, TOTAL_STEPS);
+    return () => clearEditorSteps(); // Clear on unmount
+  }, [currentStep, setEditorSteps, clearEditorSteps]);
 
   // CHECK: Are we editing an existing resume?
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -188,10 +196,10 @@ const ResumeEditor = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen bg-gray-100 overflow-hidden font-sans">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100 overflow-hidden font-sans pt-14 md:pt-16">
       
       {/* LEFT: Editor Wizard */}
-      <div className="w-full lg:w-1/2 h-full z-10 bg-white">
+      <div className="w-full lg:w-1/2 h-[calc(100vh-56px)] md:h-[calc(100vh-64px)] z-10 bg-white overflow-hidden">
         <EditorLayout
             currentStep={currentStep}
             totalSteps={TOTAL_STEPS}
@@ -203,9 +211,9 @@ const ResumeEditor = () => {
             {currentStep === 1 && (
                 <div className="animate-fadeIn">
                     <FileUpload onUploadSuccess={handleUploadSuccess} />
-                    <div className="flex items-center gap-4 my-8">
+                    <div className="flex items-center gap-3 my-6 md:my-8">
                         <div className="h-px bg-gray-200 flex-1"></div>
-                        <span className="text-gray-400 text-sm font-medium uppercase tracking-wider">Or enter manually</span>
+                        <span className="text-gray-400 text-xs md:text-sm font-medium uppercase tracking-wider">Or enter manually</span>
                         <div className="h-px bg-gray-200 flex-1"></div>
                     </div>
                     <PersonalForm resumeData={resumeData} handleChange={handleChange} />
@@ -228,10 +236,10 @@ const ResumeEditor = () => {
                 />
             )}
             {currentStep === 4 && (
-                <div className="animate-fadeIn space-y-8">
-                    <div className="space-y-4">
-                         <h3 className="font-bold text-gray-800 text-lg">1. Choose Template</h3>
-                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="animate-fadeIn space-y-5 md:space-y-8">
+                    <div className="space-y-3 md:space-y-4">
+                         <h3 className="font-bold text-gray-800 text-base md:text-lg">1. Choose Template</h3>
+                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
                               {/* Classic */}
                               <button 
                                   onClick={() => setTemplate('classic')}
@@ -292,9 +300,9 @@ const ResumeEditor = () => {
                          </div>
                     </div>
 
-                    <div className="space-y-4">
-                        <h3 className="font-bold text-gray-800 text-lg">2. Customize Theme</h3>
-                        <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
+                    <div className="space-y-3 md:space-y-4">
+                        <h3 className="font-bold text-gray-800 text-base md:text-lg">2. Customize Theme</h3>
+                        <div className="bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-100">
                              <ColorPicker 
                                 label="Primary Color" 
                                 color={theme.primaryColor} 
@@ -303,18 +311,18 @@ const ResumeEditor = () => {
                         </div>
                     </div>
 
-                    <div className="bg-blue-50/50 p-6 rounded-xl space-y-4 border border-blue-100 mt-8">
-                         <h3 className="font-bold text-gray-800">Ready?</h3>
+                    <div className="bg-blue-50/50 p-4 md:p-6 rounded-xl space-y-3 md:space-y-4 border border-blue-100 mt-6 md:mt-8">
+                         <h3 className="font-bold text-gray-800 text-sm md:text-base">Ready?</h3>
                          <button 
                              onClick={() => downloadResumePDF(resumeData, template, theme)} 
-                             className="w-full bg-blue-600 text-white py-4 rounded-lg font-bold shadow-lg hover:bg-blue-700 hover:shadow-blue-500/30 transition-all flex justify-center items-center gap-2"
+                             className="w-full bg-blue-600 text-white py-3 md:py-4 text-sm md:text-base rounded-lg font-bold shadow-lg hover:bg-blue-700 hover:shadow-blue-500/30 transition-all flex justify-center items-center gap-2"
                          >
                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
                             </svg>
                              Download PDF
                          </button>
-                         <p className="text-center text-xs text-gray-400">
+                         <p className="text-center text-xs md:text-sm text-gray-400">
                              Click "Finish & Download" below to save your resume to the dashboard.
                          </p>
                     </div>
@@ -323,26 +331,25 @@ const ResumeEditor = () => {
         </EditorLayout>
       </div>
 
-      {/* RIGHT: Live Preview */}
-      <div className="hidden lg:flex flex-col w-1/2 h-full items-center justify-center relative overflow-hidden border-l border-gray-200"
+      {/* RIGHT: Live Preview - Dark themed like NovoResume */}
+      <div className="hidden lg:flex flex-col w-1/2 h-[calc(100vh-64px)] items-center justify-center relative overflow-hidden"
            style={{
-             background: 'linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 50%, #f8fafc 100%)',
-             backgroundImage: `
-               linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 50%, #f8fafc 100%),
-               radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-               radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.05) 0%, transparent 50%)
-             `
+             background: 'linear-gradient(145deg, #1e293b 0%, #0f172a 50%, #1e1e2e 100%)',
            }}>
         
         {/* Decorative Background Pattern */}
-        <div className="absolute inset-0 opacity-30"
+        <div className="absolute inset-0 opacity-20"
              style={{
-               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234f46e5' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
              }}
         />
 
-        {/* Live Preview Badge - Positioned at top-right corner */}
-        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-linear-to-r from-gray-900 to-gray-800 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-lg border border-gray-700/50">
+        {/* Subtle gradient orbs for visual interest */}
+        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
+
+        {/* Live Preview Badge - Top right */}
+        <div className="absolute top-6 right-6 z-20 flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-xl text-xs font-semibold border border-white/20">
             <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
@@ -350,24 +357,27 @@ const ResumeEditor = () => {
             Live Preview
         </div>
 
-        {/* The A4 Scaled Paper Container */}
-        <div className="relative transform scale-[0.50] xl:scale-[0.65] 2xl:scale-[0.75] origin-center transition-all duration-500 ease-out group">
-          {/* Paper Shadow */}
-          <div className="absolute -inset-4 bg-linear-to-br from-blue-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity" />
-          
-          {/* A4 Paper */}
-          <div className="relative w-[210mm] min-h-[297mm] bg-white rounded-sm shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25),0_0_0_1px_rgba(0,0,0,0.05)] overflow-hidden">
-            {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
-            {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
-            {template === 'minimalist' && <MinimalistTemplate resumeData={resumeData} theme={theme} />}
-            {template === 'executive' && <ExecutiveTemplate resumeData={resumeData} theme={theme} />}
-            {template === 'creative' && <CreativeTemplate resumeData={resumeData} theme={theme} />}
+        {/* The A4 Scaled Paper Container - Properly centered */}
+        <div className="relative flex items-center justify-center w-full h-full py-8 px-8">
+          <div className="relative transform scale-[0.40] xl:scale-[0.50] 2xl:scale-[0.60] origin-center transition-transform duration-300 ease-out group">
+            {/* Paper Glow Effect */}
+            <div className="absolute -inset-6 bg-linear-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
+            
+            {/* A4 Paper */}
+            <div className="relative w-[210mm] min-h-[297mm] bg-white rounded-sm shadow-[0_25px_80px_-15px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)] overflow-hidden">
+              {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
+              {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
+              {template === 'minimalist' && <MinimalistTemplate resumeData={resumeData} theme={theme} />}
+              {template === 'executive' && <ExecutiveTemplate resumeData={resumeData} theme={theme} />}
+              {template === 'creative' && <CreativeTemplate resumeData={resumeData} theme={theme} />}
+            </div>
           </div>
         </div>
 
-        {/* Zoom Controls Hint */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-xs text-gray-500 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-200/50">
-          Template: <span className="font-semibold text-gray-700 capitalize">{template}</span>
+        {/* Template Indicator - Bottom center */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-white/70 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
+          <span className="text-white/50">Template:</span>
+          <span className="font-semibold text-white capitalize">{template}</span>
         </div>
       </div>
     </div>

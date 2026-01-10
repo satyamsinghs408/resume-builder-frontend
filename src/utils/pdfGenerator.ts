@@ -1,25 +1,26 @@
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
+import { vfs } from "pdfmake/build/vfs_fonts";
 import { Resume, ThemeConfig } from '../types';
 
-// Register fonts
-if (pdfFonts && (pdfFonts as any).pdfMake && (pdfFonts as any).pdfMake.vfs) {
-  pdfMake.vfs = (pdfFonts as any).pdfMake.vfs;
-} else if (pdfFonts && (pdfFonts as any).vfs) {
-  pdfMake.vfs = (pdfFonts as any).vfs;
-} else {
-  pdfMake.vfs = pdfFonts as any;
-}
-
+// Register fonts - Simple and clean method (exactly like your working project)
+pdfMake.vfs = vfs;
+pdfMake.fonts = {
+  Roboto: {
+    normal: 'Roboto-Regular.ttf',
+    bold: 'Roboto-Medium.ttf',
+    italics: 'Roboto-Italic.ttf',
+    bolditalics: 'Roboto-MediumItalic.ttf'
+  }
+};
 
 const getClassicDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
   const primaryColor = theme?.primaryColor || '#000000';
-  
+ 
   return {
     content: [
       { text: `${resumeData.firstName} ${resumeData.lastName}`, style: 'header', color: primaryColor },
       { text: `Email: ${resumeData.email} | Phone: ${resumeData.phone}`, alignment: 'center', margin: [0, 0, 0, 20] },
-      
+     
       { text: 'Experience', style: 'sectionHeader', color: primaryColor },
       { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: primaryColor }] },
       ...resumeData.experience.map(exp => ([
@@ -27,7 +28,6 @@ const getClassicDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
         { text: exp.company, italics: true, margin: [0, 0, 0, 5] },
         { text: exp.description, margin: [0, 0, 0, 10] }
       ])),
-
       { text: 'Education', style: 'sectionHeader', margin: [0, 20, 0, 5], color: primaryColor },
       { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: primaryColor }] },
       ...resumeData.education.map(edu => ([
@@ -46,14 +46,13 @@ const getClassicDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
 const getModernDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
   const primaryColor = theme?.primaryColor || '#2c3e50';
   const secondaryColor = theme?.secondaryColor || '#ffffff';
-
   return {
     content: [
       {
         table: {
           widths: ['*'],
-          body: [[{ 
-            text: `${resumeData.firstName} ${resumeData.lastName}`.toUpperCase(), 
+          body: [[{
+            text: `${resumeData.firstName} ${resumeData.lastName}`.toUpperCase(),
             style: 'modernHeader', fillColor: primaryColor, color: secondaryColor || 'white', alignment: 'center', margin: [0, 10, 0, 10]
           }]]
         },
@@ -105,12 +104,11 @@ const getMinimalistDefinition = (resumeData: Resume, theme?: ThemeConfig): any =
     content: [
       { text: `${resumeData.firstName} ${resumeData.lastName}`.toUpperCase(), style: 'minimalHeader', color: primaryColor },
       { text: `${resumeData.email} | ${resumeData.phone} | ${resumeData.address}`, style: 'minimalSub', margin: [0, 5, 0, 20] },
-
       { text: 'EXPERIENCE', style: 'minimalSection', color: primaryColor },
       ...resumeData.experience.map(exp => ({
         columns: [
           { text: exp.company, width: '25%', style: 'minimalGray' },
-          { 
+          {
             width: '75%',
             stack: [
               { text: exp.title, bold: true, fontSize: 11 },
@@ -120,12 +118,11 @@ const getMinimalistDefinition = (resumeData: Resume, theme?: ThemeConfig): any =
         ],
         margin: [0, 0, 0, 15]
       })),
-
       { text: 'EDUCATION', style: 'minimalSection', color: primaryColor, margin: [0, 10, 0, 10] },
       ...resumeData.education.map(edu => ({
         columns: [
           { text: edu.year, width: '25%', style: 'minimalGray' },
-          { 
+          {
              width: '75%',
              stack: [
                { text: edu.school, bold: true, fontSize: 11 },
@@ -151,20 +148,19 @@ const getExecutiveDefinition = (resumeData: Resume, theme?: ThemeConfig): any =>
   return {
     content: [
       { text: `${resumeData.firstName} ${resumeData.lastName}`.toUpperCase(), style: 'execHeader', color: primaryColor },
-      { text: `${resumeData.email}  •  ${resumeData.phone}  •  ${resumeData.address}`, alignment: 'center', fontSize: 9, color: '#555', margin: [0, 5, 0, 20] },
+      { text: `${resumeData.email} • ${resumeData.phone} • ${resumeData.address}`, alignment: 'center', fontSize: 9, color: '#555', margin: [0, 5, 0, 20] },
       { canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2, lineColor: primaryColor }] },
-      
+     
       { text: 'PROFESSIONAL EXPERIENCE', style: 'execSection', margin: [0, 20, 0, 10], color: primaryColor },
       ...resumeData.experience.map(exp => ([
         { text: exp.title, fontSize: 12, bold: true },
         { text: exp.company.toUpperCase(), fontSize: 9, bold: true, color: primaryColor, margin: [0, 2, 0, 5] },
         { text: exp.description, fontSize: 10, alignment: 'justify', margin: [0, 0, 0, 15] }
       ])),
-
       { text: 'EDUCATION', style: 'execSection', margin: [0, 10, 0, 10], color: primaryColor },
       ...resumeData.education.map(edu => ([
         { text: edu.school, fontSize: 11, bold: true },
-        { 
+        {
           columns: [
             { text: edu.degree, fontSize: 10, italics: true },
             { text: edu.year, fontSize: 10, alignment: 'right', bold: true, color: '#555' }
@@ -186,12 +182,11 @@ const getCreativeDefinition = (resumeData: Resume, theme?: ThemeConfig): any => 
     content: [
       {
         canvas: [
-             { type: 'rect', x: -40, y: -40, w: 595, h: 140, color: primaryColor } 
+             { type: 'rect', x: -40, y: -40, w: 595, h: 140, color: primaryColor }
         ]
       },
       { text: `${resumeData.firstName}\n${resumeData.lastName}`, absolutePosition: { x: 40, y: 40 }, color: 'white', fontSize: 36, bold: true, lineHeight: 0.9 },
       { text: `${resumeData.email} • ${resumeData.address}`, absolutePosition: { x: 40, y: 110 }, color: 'white', fontSize: 10, opacity: 0.9 },
-
       {
         columns: [
           {
@@ -231,18 +226,64 @@ const getCreativeDefinition = (resumeData: Resume, theme?: ThemeConfig): any => 
   };
 };
 
-// Export the main function
+// ──────────────────────────────────────────────────────────────────────────────
+// MAIN EXPORT FUNCTION - Using proven pattern from working project
+// ──────────────────────────────────────────────────────────────────────────────
 export const downloadResumePDF = (resumeData: Resume, template: string, theme?: ThemeConfig) => {
-  let docDefinition;
-  switch (template) {
-    case 'modern': docDefinition = getModernDefinition(resumeData, theme); break;
-    case 'minimalist': docDefinition = getMinimalistDefinition(resumeData, theme); break;
-    case 'executive': docDefinition = getExecutiveDefinition(resumeData, theme); break;
-    case 'creative': docDefinition = getCreativeDefinition(resumeData, theme); break;
-    case 'classic': 
-    default:
-        docDefinition = getClassicDefinition(resumeData, theme); break;
+  try {
+    let docDefinition: any;
+    
+    switch (template) {
+      case 'modern':
+        docDefinition = getModernDefinition(resumeData, theme);
+        break;
+      case 'minimalist':
+        docDefinition = getMinimalistDefinition(resumeData, theme);
+        break;
+      case 'executive':
+        docDefinition = getExecutiveDefinition(resumeData, theme);
+        break;
+      case 'creative':
+        docDefinition = getCreativeDefinition(resumeData, theme);
+        break;
+      case 'classic':
+      default:
+        docDefinition = getClassicDefinition(resumeData, theme);
+        break;
+    }
+   
+    // Create filename
+    const firstName = resumeData.firstName?.trim() || 'Resume';
+    const lastName = resumeData.lastName?.trim() || '';
+    const filename = lastName
+      ? `${firstName}_${lastName}_${template}.pdf`
+      : `${firstName}_${template}.pdf`;
+   
+    // ── Same pattern as working project ──────────────────────────────────────
+    const pdfDoc = pdfMake.createPdf(docDefinition);
+    
+    pdfDoc.getBlob((blob: Blob) => {
+      // Create download link
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      
+      link.href = url;
+      link.download = filename;
+      link.style.display = 'none';
+      
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup
+      setTimeout(() => {
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }, 100);
+    });
+    // ────────────────────────────────────────────────────────────────────────
+
+  } catch (error) {
+    console.error('[PDF Download] Error:', error);
+    alert(`PDF Generation failed: ${error}`);
   }
-  
-  pdfMake.createPdf(docDefinition).download(`Resume_${template}.pdf`);
 };

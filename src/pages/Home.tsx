@@ -114,15 +114,15 @@ const Home = () => {
           >
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>Free to use</span>
+              <span className="text-black">Free to use</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>No signup required</span>
+              <span className="text-black">No signup required</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-green-400" />
-              <span>PDF export</span>
+              <span className="text-black">PDF export</span>
             </div>
           </motion.div>
         </div>
@@ -269,7 +269,7 @@ const Home = () => {
             <span className="font-bold text-white">Resume<span className="text-blue-400">Builder</span></span>
           </div>
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} ResumeBuilder. Built with ❤️
+            © {new Date().getFullYear()} ResumeBuilder. Designed & developed with ❤️ by Satyam Singh.
           </p>
         </div>
       </footer>

@@ -12,14 +12,14 @@ interface EducationFormProps {
 const EducationForm: React.FC<EducationFormProps> = ({ education, handleEducationChange, addEducation, removeEducation }) => {
   return (
     <div className="animate-fadeIn">
-      <p className="text-gray-500 mb-8">
+      <p className="text-gray-500 text-sm md:text-base mb-5 md:mb-8">
         Add your educational background.
       </p>
       
       {education.map((edu, index) => (
-        <div key={index} className="mb-10 p-6 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
-          <div className="flex justify-between items-center mb-6">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-200 px-3 py-1 rounded-full">
+        <div key={index} className="mb-6 md:mb-10 p-4 md:p-6 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
+          <div className="flex justify-between items-center mb-4 md:mb-6">
+            <span className="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-200 px-2.5 py-1 rounded-full">
               School {index + 1}
             </span>
             {education.length > 1 && (
@@ -36,7 +36,7 @@ const EducationForm: React.FC<EducationFormProps> = ({ education, handleEducatio
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             <div className="md:col-span-2">
                 <Input 
                   name="school" 
