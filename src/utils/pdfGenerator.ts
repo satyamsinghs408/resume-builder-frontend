@@ -1,6 +1,6 @@
 import pdfMake from "pdfmake/build/pdfmake";
 import { vfs } from "pdfmake/build/vfs_fonts";
-import { Resume, ThemeConfig } from '../types';
+import { ResumeData, ThemeConfig } from '../types';
 
 // Register fonts - Simple and clean method (exactly like your working project)
 pdfMake.vfs = vfs;
@@ -13,26 +13,35 @@ pdfMake.fonts = {
   }
 };
 
-const getClassicDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
+const formatDateRange = (startDate: string, endDate: string, current: boolean) => {
+  if (!startDate) return '';
+  const start = new Date(startDate).getFullYear();
+  const end = current ? 'Present' : (endDate ? new Date(endDate).getFullYear() : '');
+  return `${start} - ${end}`;
+};
+
+const getClassicDefinition = (resumeData: ResumeData, theme?: ThemeConfig): any => {
   const primaryColor = theme?.primaryColor || '#000000';
+  const { firstName, lastName, email, phone } = resumeData.personalInfo;
  
   return {
     content: [
-      { text: `${resumeData.firstName} ${resumeData.lastName}`, style: 'header', color: primaryColor },
-      { text: `Email: ${resumeData.email} | Phone: ${resumeData.phone}`, alignment: 'center', margin: [0, 0, 0, 20] },
+      { text: `${firstName} ${lastName}`, style: 'header', color: primaryColor },
+      { text: `Email: ${email} | Phone: ${phone}`, alignment: 'center', margin: [0, 0, 0, 20] },
      
       { text: 'Experience', style: 'sectionHeader', color: primaryColor },
       { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: primaryColor }] },
       ...resumeData.experience.map(exp => ([
         { text: exp.title, style: 'jobTitle', margin: [0, 10, 0, 0] },
         { text: exp.company, italics: true, margin: [0, 0, 0, 5] },
+        { text: `${formatDateRange(exp.startDate, exp.endDate, exp.current)}`, italics: true, fontSize: 10, margin: [0, 0, 0, 5] },
         { text: exp.description, margin: [0, 0, 0, 10] }
       ])),
       { text: 'Education', style: 'sectionHeader', margin: [0, 20, 0, 5], color: primaryColor },
       { canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: primaryColor }] },
       ...resumeData.education.map(edu => ([
         { text: edu.school, style: 'jobTitle', margin: [0, 10, 0, 0] },
-        { columns: [{ text: edu.degree, italics: true }, { text: edu.year, alignment: 'right' }], margin: [0, 0, 0, 10] }
+        { columns: [{ text: edu.degree, italics: true }, { text: formatDateRange(edu.startDate, edu.endDate, edu.current), alignment: 'right' }], margin: [0, 0, 0, 10] }
       ]))
     ],
     styles: {
@@ -43,16 +52,18 @@ const getClassicDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
   };
 };
 
-const getModernDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
+const getModernDefinition = (resumeData: ResumeData, theme?: ThemeConfig): any => {
   const primaryColor = theme?.primaryColor || '#2c3e50';
   const secondaryColor = theme?.secondaryColor || '#ffffff';
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
+
   return {
     content: [
       {
         table: {
           widths: ['*'],
           body: [[{
-            text: `${resumeData.firstName} ${resumeData.lastName}`.toUpperCase(),
+            text: `${firstName} ${lastName}`.toUpperCase(),
             style: 'modernHeader', fillColor: primaryColor, color: secondaryColor || 'white', alignment: 'center', margin: [0, 10, 0, 10]
           }]]
         },
@@ -64,14 +75,14 @@ const getModernDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
             width: '30%',
             stack: [
               { text: 'CONTACT', style: 'modernSubHeader' },
-              { text: resumeData.email, style: 'smallText' },
-              { text: resumeData.phone, style: 'smallText' },
-              { text: resumeData.address, style: 'smallText' },
+              { text: email, style: 'smallText' },
+              { text: phone, style: 'smallText' },
+              { text: address, style: 'smallText' },
               { text: 'EDUCATION', style: 'modernSubHeader', margin: [0, 20, 0, 5] },
               ...resumeData.education.map(edu => ([
                 { text: edu.school, bold: true, fontSize: 10 },
                 { text: edu.degree, fontSize: 9 },
-                { text: edu.year, fontSize: 9, italics: true, margin: [0, 0, 0, 10] }
+                { text: formatDateRange(edu.startDate, edu.endDate, edu.current), fontSize: 9, italics: true, margin: [0, 0, 0, 10] }
               ]))
             ]
           },
@@ -81,7 +92,7 @@ const getModernDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
               { text: 'EXPERIENCE', style: 'modernSubHeader' },
               ...resumeData.experience.map(exp => ([
                 { text: exp.title, bold: true, fontSize: 12, color: primaryColor },
-                { text: exp.company, italics: true, fontSize: 10 },
+                { text: `${exp.company} | ${formatDateRange(exp.startDate, exp.endDate, exp.current)}`, italics: true, fontSize: 10 },
                 { text: exp.description, fontSize: 10, margin: [0, 5, 0, 15] }
               ]))
             ]
@@ -98,12 +109,14 @@ const getModernDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
   };
 };
 
-const getMinimalistDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
+const getMinimalistDefinition = (resumeData: ResumeData, theme?: ThemeConfig): any => {
   const primaryColor = theme?.primaryColor || '#000000';
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
+
   return {
     content: [
-      { text: `${resumeData.firstName} ${resumeData.lastName}`.toUpperCase(), style: 'minimalHeader', color: primaryColor },
-      { text: `${resumeData.email} | ${resumeData.phone} | ${resumeData.address}`, style: 'minimalSub', margin: [0, 5, 0, 20] },
+      { text: `${firstName} ${lastName}`.toUpperCase(), style: 'minimalHeader', color: primaryColor },
+      { text: `${email} | ${phone} | ${address}`, style: 'minimalSub', margin: [0, 5, 0, 20] },
       { text: 'EXPERIENCE', style: 'minimalSection', color: primaryColor },
       ...resumeData.experience.map(exp => ({
         columns: [
@@ -112,6 +125,7 @@ const getMinimalistDefinition = (resumeData: Resume, theme?: ThemeConfig): any =
             width: '75%',
             stack: [
               { text: exp.title, bold: true, fontSize: 11 },
+              { text: formatDateRange(exp.startDate, exp.endDate, exp.current), fontSize: 10, italics: true, color: '#666' },
               { text: exp.description, style: 'minimalText' }
             ]
           }
@@ -121,7 +135,7 @@ const getMinimalistDefinition = (resumeData: Resume, theme?: ThemeConfig): any =
       { text: 'EDUCATION', style: 'minimalSection', color: primaryColor, margin: [0, 10, 0, 10] },
       ...resumeData.education.map(edu => ({
         columns: [
-          { text: edu.year, width: '25%', style: 'minimalGray' },
+          { text: formatDateRange(edu.startDate, edu.endDate, edu.current), width: '25%', style: 'minimalGray' },
           {
              width: '75%',
              stack: [
@@ -143,18 +157,20 @@ const getMinimalistDefinition = (resumeData: Resume, theme?: ThemeConfig): any =
   };
 };
 
-const getExecutiveDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
+const getExecutiveDefinition = (resumeData: ResumeData, theme?: ThemeConfig): any => {
   const primaryColor = theme?.primaryColor || '#1e3a8a';
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
+
   return {
     content: [
-      { text: `${resumeData.firstName} ${resumeData.lastName}`.toUpperCase(), style: 'execHeader', color: primaryColor },
-      { text: `${resumeData.email} • ${resumeData.phone} • ${resumeData.address}`, alignment: 'center', fontSize: 9, color: '#555', margin: [0, 5, 0, 20] },
+      { text: `${firstName} ${lastName}`.toUpperCase(), style: 'execHeader', color: primaryColor },
+      { text: `${email} • ${phone} • ${address}`, alignment: 'center', fontSize: 9, color: '#555', margin: [0, 5, 0, 20] },
       { canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2, lineColor: primaryColor }] },
      
       { text: 'PROFESSIONAL EXPERIENCE', style: 'execSection', margin: [0, 20, 0, 10], color: primaryColor },
       ...resumeData.experience.map(exp => ([
         { text: exp.title, fontSize: 12, bold: true },
-        { text: exp.company.toUpperCase(), fontSize: 9, bold: true, color: primaryColor, margin: [0, 2, 0, 5] },
+        { text: `${exp.company.toUpperCase()} | ${formatDateRange(exp.startDate, exp.endDate, exp.current)}`, fontSize: 9, bold: true, color: primaryColor, margin: [0, 2, 0, 5] },
         { text: exp.description, fontSize: 10, alignment: 'justify', margin: [0, 0, 0, 15] }
       ])),
       { text: 'EDUCATION', style: 'execSection', margin: [0, 10, 0, 10], color: primaryColor },
@@ -163,7 +179,7 @@ const getExecutiveDefinition = (resumeData: Resume, theme?: ThemeConfig): any =>
         {
           columns: [
             { text: edu.degree, fontSize: 10, italics: true },
-            { text: edu.year, fontSize: 10, alignment: 'right', bold: true, color: '#555' }
+            { text: formatDateRange(edu.startDate, edu.endDate, edu.current), fontSize: 10, alignment: 'right', bold: true, color: '#555' }
           ],
           margin: [0, 0, 0, 10]
         }
@@ -176,8 +192,10 @@ const getExecutiveDefinition = (resumeData: Resume, theme?: ThemeConfig): any =>
   };
 };
 
-const getCreativeDefinition = (resumeData: Resume, theme?: ThemeConfig): any => {
+const getCreativeDefinition = (resumeData: ResumeData, theme?: ThemeConfig): any => {
   const primaryColor = theme?.primaryColor || '#ec4899';
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
+
   return {
     content: [
       {
@@ -185,8 +203,8 @@ const getCreativeDefinition = (resumeData: Resume, theme?: ThemeConfig): any => 
              { type: 'rect', x: -40, y: -40, w: 595, h: 140, color: primaryColor }
         ]
       },
-      { text: `${resumeData.firstName}\n${resumeData.lastName}`, absolutePosition: { x: 40, y: 40 }, color: 'white', fontSize: 36, bold: true, lineHeight: 0.9 },
-      { text: `${resumeData.email} • ${resumeData.address}`, absolutePosition: { x: 40, y: 110 }, color: 'white', fontSize: 10, opacity: 0.9 },
+      { text: `${firstName}\n${lastName}`, absolutePosition: { x: 40, y: 40 }, color: 'white', fontSize: 36, bold: true, lineHeight: 0.9 },
+      { text: `${email} • ${address}`, absolutePosition: { x: 40, y: 110 }, color: 'white', fontSize: 10, opacity: 0.9 },
       {
         columns: [
           {
@@ -197,7 +215,7 @@ const getCreativeDefinition = (resumeData: Resume, theme?: ThemeConfig): any => 
                ...resumeData.experience.map(exp => ({
                  stack: [
                     { text: exp.title, fontSize: 14, bold: true },
-                    { text: exp.company, fontSize: 10, bold: true, color: '#888', margin: [0, 2, 0, 5] },
+                    { text: `${exp.company} | ${formatDateRange(exp.startDate, exp.endDate, exp.current)}`, fontSize: 10, bold: true, color: '#888', margin: [0, 2, 0, 5] },
                     { text: exp.description, fontSize: 10, margin: [0, 0, 0, 20] }
                  ]
                }))
@@ -212,11 +230,11 @@ const getCreativeDefinition = (resumeData: Resume, theme?: ThemeConfig): any => 
                  stack: [
                    { text: edu.school, fontSize: 11, bold: true },
                    { text: edu.degree, fontSize: 10, color: '#555' },
-                   { text: edu.year, fontSize: 10, bold: true, color: '#aaa', margin: [0, 0, 0, 15] }
+                   { text: formatDateRange(edu.startDate, edu.endDate, edu.current), fontSize: 10, bold: true, color: '#aaa', margin: [0, 0, 0, 15] }
                  ]
                })),
                { text: 'CONTACT', fontSize: 14, bold: true, color: primaryColor, margin: [0, 20, 0, 10] },
-               { text: resumeData.phone, fontSize: 10 }
+               { text: phone, fontSize: 10 }
              ]
           }
         ]
@@ -229,7 +247,7 @@ const getCreativeDefinition = (resumeData: Resume, theme?: ThemeConfig): any => 
 // ──────────────────────────────────────────────────────────────────────────────
 // MAIN EXPORT FUNCTION - Using proven pattern from working project
 // ──────────────────────────────────────────────────────────────────────────────
-export const downloadResumePDF = (resumeData: Resume, template: string, theme?: ThemeConfig) => {
+export const downloadResumePDF = (resumeData: ResumeData, template: string, theme?: ThemeConfig) => {
   try {
     let docDefinition: any;
     
@@ -253,8 +271,8 @@ export const downloadResumePDF = (resumeData: Resume, template: string, theme?: 
     }
    
     // Create filename
-    const firstName = resumeData.firstName?.trim() || 'Resume';
-    const lastName = resumeData.lastName?.trim() || '';
+    const firstName = resumeData.personalInfo.firstName?.trim() || 'Resume';
+    const lastName = resumeData.personalInfo.lastName?.trim() || '';
     const filename = lastName
       ? `${firstName}_${lastName}_${template}.pdf`
       : `${firstName}_${template}.pdf`;

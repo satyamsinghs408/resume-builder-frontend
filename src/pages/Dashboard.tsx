@@ -3,12 +3,12 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../context/ApiContext';
 import { useNavigate } from 'react-router-dom';
-import { Resume } from '../types';
+import { ResumeData } from '../types';
 import { motion } from 'framer-motion';
 import { Plus, FileText, Edit3, Trash2, Calendar, Mail, LayoutGrid, Sparkles } from 'lucide-react';
 
 const Dashboard = () => {
-  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [resumes, setResumes] = useState<ResumeData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const { endpoints } = useApi();
@@ -19,7 +19,7 @@ const Dashboard = () => {
       try {
         if (!user) return;
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get<Resume[]>(endpoints.resumes, config);
+        const { data } = await axios.get<ResumeData[]>(endpoints.resumes, config);
         setResumes(data);
       } catch (error) {
         console.error('Error fetching resumes:', error);
@@ -43,8 +43,8 @@ const Dashboard = () => {
     }
   };
 
-  const handleEdit = (resume: Resume) => {
-    navigate('/editor', { state: { resumeToEdit: resume } });
+  const handleEdit = (resume: ResumeData) => {
+    navigate('/editor', { state: { resumeToEdit: resume } as { resumeToEdit: ResumeData } });
   };
 
   return (
@@ -175,13 +175,13 @@ const Dashboard = () => {
                 <div className="p-4 md:p-6">
                   {/* Name */}
                   <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-1 truncate group-hover:text-blue-600 transition-colors">
-                    {resume.firstName} {resume.lastName}
+                    {resume.personalInfo.firstName} {resume.personalInfo.lastName}
                   </h3>
                   
                   {/* Email */}
                   <div className="flex items-center gap-2 text-gray-500 text-xs md:text-sm mb-3 md:mb-4">
                     <Mail className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
-                    <span className="truncate">{resume.email || 'No email'}</span>
+                    <span className="truncate">{resume.personalInfo.email || 'No email'}</span>
                   </div>
 
                   {/* Meta Info */}

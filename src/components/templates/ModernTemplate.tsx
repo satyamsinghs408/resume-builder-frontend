@@ -1,9 +1,11 @@
 // src/components/templates/ModernTemplate.tsx
 import React from 'react';
 import { TemplateProps } from '../../types';
+import { formatDateRange } from '../../utils/dateUtils';
 
 const ModernTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
   const primaryColor = theme?.primaryColor || '#2c3e50'; // Dark Blue default
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
 
   return (
     <div className="flex h-full font-sans">
@@ -15,9 +17,9 @@ const ModernTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
         <div className="mb-8">
           <h2 className="text-xl font-bold border-b border-gray-400/30 pb-2 mb-4">Contact</h2>
           <div className="text-sm space-y-2 text-gray-100">
-            <p className="wrap-break-word">{resumeData.email}</p>
-            <p>{resumeData.phone}</p>
-            <p>{resumeData.address}</p>
+            <p className="wrap-break-word">{email}</p>
+            <p>{phone}</p>
+            <p>{address}</p>
           </div>
         </div>
 
@@ -27,7 +29,9 @@ const ModernTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
             <div key={index} className="mb-4">
               <div className="font-bold text-white">{edu.degree}</div>
               <div className="text-sm text-gray-300">{edu.school}</div>
-              <div className="text-xs text-gray-400 mt-1">{edu.year}</div>
+              <div className="text-xs text-gray-400 mt-1">
+                {formatDateRange(edu.startDate, edu.endDate, edu.current)}
+              </div>
             </div>
           ))}
         </div>
@@ -38,13 +42,13 @@ const ModernTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
         <h1 
             className="text-5xl font-extrabold text-gray-800 uppercase leading-none mb-2"
         >
-          {resumeData.firstName}
+          {firstName}
         </h1>
         <h1 
             className="text-5xl font-extrabold uppercase leading-none mb-10"
             style={{ color: primaryColor }}
         >
-          {resumeData.lastName}
+          {lastName}
         </h1>
 
         <h3 
@@ -60,12 +64,17 @@ const ModernTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
                 style={{ backgroundColor: primaryColor }}
              ></div>
             <h4 className="text-xl font-bold text-gray-800">{exp.title}</h4>
-            <span 
-                className="font-semibold text-sm"
-                style={{ color: primaryColor }}
-            >
-                {exp.company}
-            </span>
+            <div className="flex justify-between items-baseline mb-2">
+              <span 
+                  className="font-semibold text-sm"
+                  style={{ color: primaryColor }}
+              >
+                  {exp.company}
+              </span>
+              <span className="text-xs text-gray-500 font-medium">
+                  {formatDateRange(exp.startDate, exp.endDate, exp.current)}
+              </span>
+            </div>
             <p className="text-gray-600 mt-2 text-sm leading-relaxed">{exp.description}</p>
           </div>
         ))}

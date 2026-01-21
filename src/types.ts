@@ -1,27 +1,43 @@
 export interface Experience {
+  id: string;
   title: string;
   company: string;
+  startDate: string;
+  endDate: string;
+  current: boolean;
   description: string;
 }
 
 export interface Education {
+  id: string;
   school: string;
   degree: string;
-  year: string;
+  startDate: string;
+  endDate: string;
+  current: boolean;
+  description?: string;
 }
 
-export interface Resume {
-  _id?: string;
+export interface PersonalInfo {
   firstName: string;
   lastName: string;
   email: string;
   phone: string;
   address: string;
-  experience: Experience[];
-  education: Education[];
-  createdAt?: string;
+  summary?: string;
 }
 
+export interface ResumeData {
+  _id?: string;
+  personalInfo: PersonalInfo;
+  experience: Experience[];
+  education: Education[];
+  skills: string[]; // Added skills as it is standard
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// Keep User and AuthContextType as they are useful for Auth
 export interface User {
   _id: string;
   name: string;
@@ -38,7 +54,6 @@ export interface AuthContextType {
   logout: () => void;
 }
 
-
 export interface ThemeConfig {
   primaryColor: string;
   secondaryColor: string;
@@ -46,6 +61,7 @@ export interface ThemeConfig {
 }
 
 export interface TemplateProps {
-  resumeData: Resume;
+  resumeData: ResumeData;
   theme?: ThemeConfig;
 }
+

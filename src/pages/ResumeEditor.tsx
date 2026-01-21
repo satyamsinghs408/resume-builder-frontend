@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../context/ApiContext';
-import { useEditor } from '../context/EditorContext';
 import { downloadResumePDF } from '../utils/pdfGenerator';
 import { useLocation, useNavigate } from 'react-router-dom';
 import PersonalForm from '../components/PersonalForm';
 import ExperienceForm from '../components/ExperienceForm';
 import EducationForm from '../components/EducationForm';
-import { Resume, ThemeConfig } from '../types';
+import { ResumeData, ThemeConfig } from '../types';
 import ClassicTemplate from '../components/templates/ClassicTemplate';
 import ModernTemplate from '../components/templates/ModernTemplate';
 import MinimalistTemplate from '../components/templates/MinimalistTemplate';
@@ -17,13 +16,24 @@ import CreativeTemplate from '../components/templates/CreativeTemplate';
 import EditorLayout from '../components/editor/EditorLayout';
 import ColorPicker from '../components/ui/ColorPicker';
 import FileUpload from '../components/editor/FileUpload';
+import { normalizeDate } from '../utils/dateUtils';
+
+// Redux Imports
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { 
+    setResumeData,  
+} from '../store/slices/resumeSlice';
+import { 
+    setTotalSteps, 
+    nextStep, 
+    prevStep,
+    resetEditor
+} from '../store/slices/editorSlice';
 
 const ResumeEditor = () => {
-  const [resumeData, setResumeData] = useState<Resume>({
-    firstName: '', lastName: '', email: '', phone: '', address: '',
-    experience: [{ title: '', company: '', description: '' }],
-    education: [{ school: '', degree: '', year: '' }]
-  });
+  const dispatch = useAppDispatch();
+  const resumeData = useAppSelector((state: any) => state.resume);
+  const { currentStep, totalSteps } = useAppSelector((state: any) => state.editor);
   
   const [template, setTemplate] = useState<'classic' | 'modern' | 'minimalist' | 'executive' | 'creative'>('classic'); 
   const [theme, setTheme] = useState<ThemeConfig>({
@@ -32,20 +42,16 @@ const ResumeEditor = () => {
     fontFamily: 'Roboto'
   });
   
-  const [currentStep, setCurrentStep] = useState(1);
-  const TOTAL_STEPS = 4;
-
   const { user } = useAuth();
   const { endpoints } = useApi();
-  const { setEditorSteps, clearEditorSteps } = useEditor();
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Sync step state with global header
+  // Initialize Editor Steps
   useEffect(() => {
-    setEditorSteps(currentStep, TOTAL_STEPS);
-    return () => clearEditorSteps(); // Clear on unmount
-  }, [currentStep, setEditorSteps, clearEditorSteps]);
+    dispatch(setTotalSteps(4));
+    return () => { dispatch(resetEditor()); };
+  }, [dispatch]);
 
   // CHECK: Are we editing an existing resume?
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -54,50 +60,12 @@ const ResumeEditor = () => {
 
   useEffect(() => {
     if (location.state && location.state.resumeToEdit) {
-      const { _id, firstName, lastName, email, phone, address, experience, education } = location.state.resumeToEdit;
-      setResumeData({
-        firstName: firstName || '',
-        lastName: lastName || '',
-        email: email || '',
-        phone: phone || '',
-        address: address || '',
-        experience: experience || [],
-        education: education || []
-      });
+      const resumeToEdit = location.state.resumeToEdit as ResumeData;
+      dispatch(setResumeData(resumeToEdit));
       setIsEditing(true);
-      setCurrentResumeId(_id || null);
+      setCurrentResumeId(resumeToEdit._id || null);
     }
-  }, [location]);
-
-  // --- HANDLERS ---
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => 
-    setResumeData({ ...resumeData, [e.target.name]: e.target.value });
-
-  const handleExperienceChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-    const list = [...resumeData.experience];
-    (list[index] as any)[e.target.name] = e.target.value; 
-    setResumeData({ ...resumeData, experience: list });
-  };
-
-  const addExperience = () => setResumeData({ ...resumeData, experience: [...resumeData.experience, { title: '', company: '', description: '' }] });
-  const removeExperience = (i: number) => {
-    const list = [...resumeData.experience];
-    list.splice(i, 1);
-    setResumeData({ ...resumeData, experience: list });
-  };
-
-  const handleEducationChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
-    const list = [...resumeData.education];
-    (list[index] as any)[e.target.name] = e.target.value;
-    setResumeData({ ...resumeData, education: list });
-  };
-
-  const addEducation = () => setResumeData({ ...resumeData, education: [...resumeData.education, { school: '', degree: '', year: '' }] });
-  const removeEducation = (i: number) => {
-    const list = [...resumeData.education];
-    list.splice(i, 1);
-    setResumeData({ ...resumeData, education: list });
-  };
+  }, [location, dispatch]);
 
   // --- SAVE FUNCTION ---
   const saveResume = async () => {
@@ -133,17 +101,18 @@ const ResumeEditor = () => {
   };
 
   // --- NAVIGATION ---
-  const handleNext = () => {
-      if (currentStep === TOTAL_STEPS) {
+  
+  const onNextClick = () => {
+      if (currentStep === 3) { // Last step (0-indexed 3 = Step 4)
           saveResume();
       } else {
-          setCurrentStep(curr => curr + 1);
+          dispatch(nextStep());
       }
   };
 
-  const handleBack = () => {
-      if (currentStep > 1) {
-          setCurrentStep(curr => curr - 1);
+  const onBackClick = () => {
+      if (currentStep > 0) {
+          dispatch(prevStep());
       } else {
           navigate('/dashboard');
       }
@@ -151,48 +120,75 @@ const ResumeEditor = () => {
 
   const getStepTitle = () => {
       switch(currentStep) {
-          case 1: return "Import & Personal Information";
-          case 2: return "Experience";
-          case 3: return "Education";
-          case 4: return "Finalize & Download";
+          case 0: return "Import & Personal Information";
+          case 1: return "Experience";
+          case 2: return "Education";
+          case 3: return "Finalize & Download";
           default: return "";
       }
   };
 
-  const handleUploadSuccess = (data: Resume) => {
-    // Update ALL fields from parsed PDF - not just contact info!
-    setResumeData(prev => ({
-        ...prev,
-        firstName: data.firstName || prev.firstName,
-        lastName: data.lastName || prev.lastName,
-        email: data.email || prev.email,
-        phone: data.phone || prev.phone,
-        address: data.address || prev.address,
-        experience: data.experience && data.experience.length > 0 && data.experience[0].title 
-          ? data.experience 
-          : prev.experience,
-        education: data.education && data.education.length > 0 && data.education[0].school 
-          ? data.education 
-          : prev.education,
-    }));
+  const handleUploadSuccess = (data: any) => {
+    // 1. Map Backend Response (Flat) to Frontend State (Nested)
+    const mappedData: ResumeData = {
+        personalInfo: {
+            firstName: data.firstName || '',
+            lastName: data.lastName || '',
+            email: data.email || '',
+            phone: data.phone || '',
+            address: data.address || '',
+            summary: data.summary || '',
+        },
+        experience: data.experience || [],
+        education: data.education || [],
+        skills: data.skills || [],
+    };
 
-    // Build a summary of what was imported (like major resume builders do)
-    const imported: string[] = [];
-    if (data.firstName || data.lastName) imported.push('Name');
-    if (data.email) imported.push('Email');
-    if (data.phone) imported.push('Phone');
-    if (data.experience && data.experience.length > 0 && data.experience[0].title) {
-      imported.push(`${data.experience.length} Experience(s)`);
-    }
-    if (data.education && data.education.length > 0 && data.education[0].school) {
-      imported.push(`${data.education.length} Education(s)`);
+    // 2. Normalize Data before Dispatching
+    const cleanedData = { ...mappedData };
+
+    // 1. Normalize Experience
+    if (cleanedData.experience) {
+        cleanedData.experience = cleanedData.experience.map(exp => {
+            const normStart = normalizeDate(exp.startDate);
+            const normEnd = normalizeDate(exp.endDate);
+            
+            return {
+                ...exp,
+                id: exp.id || crypto.randomUUID(), // Ensure ID exists
+                startDate: normStart || '',
+                endDate: normEnd === 'PRESENT' ? '' : (normEnd || ''),
+                current: normEnd === 'PRESENT' || exp.current // Trust existing flag or derived 'PRESENT'
+            };
+        });
     }
 
-    const summary = imported.length > 0 
-      ? `Imported: ${imported.join(', ')}` 
-      : 'Could not extract structured data';
+    // 2. Normalize Education
+    if (cleanedData.education) {
+        cleanedData.education = cleanedData.education.map(edu => {
+             const normStart = normalizeDate(edu.startDate);
+             const normEnd = normalizeDate(edu.endDate);
+             
+             return {
+                 ...edu,
+                 id: edu.id || crypto.randomUUID(),
+                 startDate: normStart || '',
+                 endDate: normEnd === 'PRESENT' ? '' : (normEnd || ''),
+                 current: normEnd === 'PRESENT' || edu.current
+             };
+        });
+    }
+
+    // Dispatch to Redux
+    dispatch(setResumeData(cleanedData));
     
-    alert(`Resume parsed successfully!\n\n${summary}\n\nPlease proceed through each step to review and edit the details.`);
+    // Build summary logic similar to before
+    const imported: string[] = [];
+    if (cleanedData.personalInfo.firstName || cleanedData.personalInfo.lastName) imported.push('Name');
+    if (cleanedData.personalInfo.email) imported.push('Email');
+    if (cleanedData.experience && cleanedData.experience.length > 0) imported.push(`${cleanedData.experience.length} Experience(s)`);
+    
+    alert(`Resume parsed successfully! Imported: ${imported.join(', ')}. Please review the details.`);
   };
 
   return (
@@ -201,14 +197,14 @@ const ResumeEditor = () => {
       {/* LEFT: Editor Wizard */}
       <div className="w-full lg:w-1/2 h-[calc(100vh-56px)] md:h-[calc(100vh-64px)] z-10 bg-white overflow-hidden">
         <EditorLayout
-            currentStep={currentStep}
-            totalSteps={TOTAL_STEPS}
+            currentStep={currentStep + 1} // Convert 0-index to 1-index for UI
+            totalSteps={totalSteps}
             title={getStepTitle()}
-            onNext={handleNext}
-            onBack={handleBack}
+            onNext={onNextClick}
+            onBack={onBackClick}
             isSubmitting={isSaving}
         >
-            {currentStep === 1 && (
+            {currentStep === 0 && (
                 <div className="animate-fadeIn">
                     <FileUpload onUploadSuccess={handleUploadSuccess} />
                     <div className="flex items-center gap-3 my-6 md:my-8">
@@ -216,26 +212,16 @@ const ResumeEditor = () => {
                         <span className="text-gray-400 text-xs md:text-sm font-medium uppercase tracking-wider">Or enter manually</span>
                         <div className="h-px bg-gray-200 flex-1"></div>
                     </div>
-                    <PersonalForm resumeData={resumeData} handleChange={handleChange} />
+                    <PersonalForm />
                 </div>
             )}
+            {currentStep === 1 && (
+                <ExperienceForm />
+            )}
             {currentStep === 2 && (
-                <ExperienceForm 
-                    experience={resumeData.experience} 
-                    handleExperienceChange={handleExperienceChange}
-                    addExperience={addExperience}
-                    removeExperience={removeExperience}
-                />
+                <EducationForm />
             )}
             {currentStep === 3 && (
-                <EducationForm 
-                    education={resumeData.education} 
-                    handleEducationChange={handleEducationChange}
-                    addEducation={addEducation}
-                    removeEducation={removeEducation}
-                />
-            )}
-            {currentStep === 4 && (
                 <div className="animate-fadeIn space-y-5 md:space-y-8">
                     <div className="space-y-3 md:space-y-4">
                          <h3 className="font-bold text-gray-800 text-base md:text-lg">1. Choose Template</h3>

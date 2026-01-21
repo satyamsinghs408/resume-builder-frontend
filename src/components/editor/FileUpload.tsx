@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import axios from 'axios';
-import { Resume } from '../../types';
+import { ResumeData } from '../../types';
 import { useApi } from '../../context/ApiContext';
 
 interface FileUploadProps {
-  onUploadSuccess: (data: Resume) => void;
+  onUploadSuccess: (data: ResumeData) => void;
 }
 
 const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {

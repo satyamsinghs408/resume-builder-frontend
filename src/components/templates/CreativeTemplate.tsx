@@ -1,8 +1,10 @@
 import React from 'react';
 import { TemplateProps } from '../../types';
+import { formatDateRange } from '../../utils/dateUtils';
 
 const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
   const primaryColor = theme?.primaryColor || '#ec4899'; // Pink default
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
 
   return (
     <div className="font-sans text-gray-800 h-full max-w-[210mm] mx-auto flex flex-col">
@@ -14,10 +16,10 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
         <div className="absolute top-20 left-10 w-20 h-20 rounded-full bg-white/10"></div>
         
         <h1 className="text-5xl font-black mb-2 tracking-tighter relative z-10">
-          {resumeData.firstName}<br/>{resumeData.lastName}
+          {firstName}<br/>{lastName}
         </h1>
         <div className="text-sm font-medium opacity-90 relative z-10">
-           {resumeData.email} • {resumeData.address}
+           {email} • {address}
         </div>
       </div>
 
@@ -35,7 +37,12 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
                       <div key={index} className="relative">
                         <div className="absolute -left-7.75 top-1.5 w-4 h-4 rounded-full border-4 border-white shadow-sm" style={{ backgroundColor: primaryColor }}></div>
                         <h3 className="font-bold text-xl leading-none mb-1">{exp.title}</h3>
-                        <div className="text-sm font-bold text-gray-400 mb-3">{exp.company}</div>
+                        <div className="flex flex-col mb-3">
+                            <span className="text-sm font-bold text-gray-400">{exp.company}</span>
+                            <span className="text-xs font-medium text-gray-400 mt-0.5">
+                                {formatDateRange(exp.startDate, exp.endDate, exp.current)}
+                            </span>
+                        </div>
                         <p className="text-sm text-gray-600 leading-relaxed font-medium">
                           {exp.description}
                         </p>
@@ -54,7 +61,9 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
                         <div key={index} className="pb-4 border-b border-gray-200 last:border-0 last:pb-0">
                             <div className="font-bold text-gray-800">{edu.school}</div>
                             <div className="text-sm text-gray-500">{edu.degree}</div>
-                            <div className="text-xs font-bold mt-1 text-gray-400">{edu.year}</div>
+                            <div className="text-xs font-bold mt-1 text-gray-400">
+                                {formatDateRange(edu.startDate, edu.endDate, edu.current)}
+                            </div>
                         </div>
                     ))}
                  </div>
@@ -63,7 +72,7 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
              <section>
                  <div className="p-6 rounded-2xl text-white" style={{ backgroundColor: primaryColor }}>
                      <h2 className="text-xl font-black mb-2 opacity-90">Contact</h2>
-                     <p className="text-sm font-medium opacity-80">{resumeData.phone}</p>
+                     <p className="text-sm font-medium opacity-80">{phone}</p>
                  </div>
              </section>
           </div>

@@ -1,20 +1,22 @@
 import React from 'react';
 import { TemplateProps } from '../../types';
+import { formatDateRange } from '../../utils/dateUtils';
 
 const MinimalistTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
   const primaryColor = theme?.primaryColor || '#000000';
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
 
   return (
     <div className="font-sans text-gray-800 p-10 h-full max-w-[210mm] mx-auto">
       {/* Header - Left Aligned, Clean */}
       <div className="mb-8">
         <h1 className="text-4xl font-light tracking-tight mb-2" style={{ color: primaryColor }}>
-          {resumeData.firstName} <span className="font-bold">{resumeData.lastName}</span>
+          {firstName} <span className="font-bold">{lastName}</span>
         </h1>
         <div className="text-sm text-gray-500 flex flex-wrap gap-4">
-          <span>{resumeData.email}</span>
-          <span>{resumeData.phone}</span>
-          <span>{resumeData.address}</span>
+          <span>{email}</span>
+          <span>{phone}</span>
+          <span>{address}</span>
         </div>
       </div>
 
@@ -28,8 +30,8 @@ const MinimalistTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
             {resumeData.experience.map((exp, index) => (
               <div key={index} className="grid grid-cols-[1fr_3fr] gap-4">
                 <div className="text-sm text-gray-400 font-medium pt-1">
-                    {/* Date would go here if we had it, using Company for now as a placeholder for left col */}
-                    {exp.company}
+                    <div className="mb-1 text-gray-800 font-semibold">{exp.company}</div>
+                    {formatDateRange(exp.startDate, exp.endDate, exp.current)}
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800 text-lg mb-1">{exp.title}</h3>
@@ -48,7 +50,7 @@ const MinimalistTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
           {resumeData.education.map((edu, index) => (
              <div key={index} className="grid grid-cols-[1fr_3fr] gap-4 mb-4">
                 <div className="text-sm text-gray-400 font-medium pt-1">
-                    {edu.year}
+                    {formatDateRange(edu.startDate, edu.endDate, edu.current)}
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-800">{edu.school}</h3>
