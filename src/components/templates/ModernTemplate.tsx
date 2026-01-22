@@ -5,7 +5,7 @@ import { formatDateRange } from '../../utils/dateUtils';
 
 const ModernTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
   const primaryColor = theme?.primaryColor || '#2c3e50'; // Dark Blue default
-  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo || {};
 
   return (
     <div className="flex h-full font-sans">

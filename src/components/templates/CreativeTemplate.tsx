@@ -4,7 +4,7 @@ import { formatDateRange } from '../../utils/dateUtils';
 
 const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
   const primaryColor = theme?.primaryColor || '#ec4899'; // Pink default
-  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo || {};
 
   return (
     <div className="font-sans text-gray-800 h-full max-w-[210mm] mx-auto flex flex-col">

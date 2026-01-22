@@ -4,7 +4,7 @@ import { formatDateRange } from '../../utils/dateUtils';
 
 const MinimalistTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
   const primaryColor = theme?.primaryColor || '#000000';
-  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo || {};
 
   return (
     <div className="font-sans text-gray-800 p-10 h-full max-w-[210mm] mx-auto">

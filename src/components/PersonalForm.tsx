@@ -7,9 +7,11 @@ import { updatePersonalInfo } from '../store/slices/resumeSlice';
 import { PersonalInfo } from '../types';
 import { PersonalInfoSchema, PersonalInfoFormData } from '../utils/schemas';
 
+const defaultPersonalInfo = {} as PersonalInfo;
+
 const PersonalForm = () => {
   const dispatch = useAppDispatch();
-  const personalInfo = useAppSelector((state: any) => state.resume.personalInfo) as PersonalInfo;
+  const personalInfo = useAppSelector((state: any) => state.resume?.personalInfo || defaultPersonalInfo);
 
   const {
     register,
@@ -47,11 +49,13 @@ const PersonalForm = () => {
 
   // Sync from Redux (e.g. File Upload) IF form is not dirty
   // This handles the "Import" case where we want the form to populate.
+  // Sync from Redux (e.g. File Upload) IF form is not dirty
   useEffect(() => {
       if (!isDirty && personalInfo) {
           reset(personalInfo);
       }
-  }, [personalInfo, reset, isDirty]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(personalInfo), reset, isDirty]);
 
   return (
     <div className="animate-fadeIn">

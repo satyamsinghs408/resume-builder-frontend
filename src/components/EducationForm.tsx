@@ -31,9 +31,11 @@ const EducationFormSchema = z.object({
 
 type EducationFormValues = z.infer<typeof EducationFormSchema>;
 
+const defaultEducation: Education[] = [];
+
 const EducationForm = () => {
   const dispatch = useAppDispatch();
-  const educationData = useAppSelector((state: any) => state.resume.education) as Education[];
+  const educationData = useAppSelector((state: any) => state.resume?.education || defaultEducation) as Education[];
 
   const {
     register,

@@ -31,9 +31,11 @@ const ExperienceFormSchema = z.object({
 
 type ExperienceFormValues = z.infer<typeof ExperienceFormSchema>;
 
+const defaultExperience: Experience[] = [];
+
 const ExperienceForm = () => {
   const dispatch = useAppDispatch();
-  const experienceData = useAppSelector((state: any) => state.resume.experience) as Experience[];
+  const experienceData = useAppSelector((state: any) => state.resume?.experience || defaultExperience) as Experience[];
 
   const {
     register,

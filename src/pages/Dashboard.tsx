@@ -175,13 +175,13 @@ const Dashboard = () => {
                 <div className="p-4 md:p-6">
                   {/* Name */}
                   <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-1 truncate group-hover:text-blue-600 transition-colors">
-                    {resume.personalInfo.firstName} {resume.personalInfo.lastName}
+                    {resume.personalInfo?.firstName || 'Untitled'} {resume.personalInfo?.lastName || 'Resume'}
                   </h3>
                   
                   {/* Email */}
                   <div className="flex items-center gap-2 text-gray-500 text-xs md:text-sm mb-3 md:mb-4">
                     <Mail className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
-                    <span className="truncate">{resume.personalInfo.email || 'No email'}</span>
+                    <span className="truncate">{resume.personalInfo?.email || 'No email provided'}</span>
                   </div>
 
                   {/* Meta Info */}

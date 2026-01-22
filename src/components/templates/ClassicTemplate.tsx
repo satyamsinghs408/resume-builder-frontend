@@ -6,7 +6,7 @@ import { formatDateRange } from '../../utils/dateUtils';
 const ClassicTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
   const primaryColor = theme?.primaryColor || '#1f2937'; // gray-800 default
   
-  const { firstName, lastName, email, phone, address } = resumeData.personalInfo;
+  const { firstName, lastName, email, phone, address } = resumeData.personalInfo || {};
   const hasName = firstName || lastName;
   const hasContact = email || phone || address;
 
