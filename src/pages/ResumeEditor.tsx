@@ -366,6 +366,12 @@ const ResumeEditor = () => {
           <span className="font-semibold text-white capitalize">{template}</span>
         </div>
       </div>
+      {/* Info Hint - Bottom Right */}
+      <div className="absolute bottom-6 right-6 z-20 flex items-center gap-2 bg-blue-600 shadow-lg shadow-blue-900/20 text-white px-4 py-3 rounded-xl text-sm font-medium border border-blue-400/30 animate-bounce-slow">
+         <span>💡</span>
+         <span>Go to <b>Finalize & Download</b> to save PDF</span>
+      </div>
+
     </div>
   );
 };
