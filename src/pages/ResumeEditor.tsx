@@ -7,6 +7,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import PersonalForm from '../components/PersonalForm';
 import ExperienceForm from '../components/ExperienceForm';
 import EducationForm from '../components/EducationForm';
+import SkillsForm from '../components/SkillsForm';
+import ProjectsForm from '../components/ProjectsForm';
+import CertificationsForm from '../components/CertificationsForm';
+import LanguagesForm from '../components/LanguagesForm';
 import { ResumeData, ThemeConfig } from '../types';
 import ClassicTemplate from '../components/templates/ClassicTemplate';
 import ModernTemplate from '../components/templates/ModernTemplate';
@@ -46,12 +50,6 @@ const ResumeEditor = () => {
   const { endpoints } = useApi();
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Initialize Editor Steps
-  useEffect(() => {
-    dispatch(setTotalSteps(4));
-    return () => { dispatch(resetEditor()); };
-  }, [dispatch]);
 
   // CHECK: Are we editing an existing resume?
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -100,10 +98,18 @@ const ResumeEditor = () => {
     }
   };
 
+  // Initialize Editor Steps
+  useEffect(() => {
+    dispatch(setTotalSteps(8));
+    return () => { dispatch(resetEditor()); };
+  }, [dispatch]);
+
+  // ... (existing code)
+
   // --- NAVIGATION ---
   
   const onNextClick = () => {
-      if (currentStep === 3) { // Last step (0-indexed 3 = Step 4)
+      if (currentStep === 7) { // Last step (0-indexed 7 = Step 8)
           saveResume();
       } else {
           dispatch(nextStep());
@@ -123,11 +129,16 @@ const ResumeEditor = () => {
           case 0: return "Import & Personal Information";
           case 1: return "Experience";
           case 2: return "Education";
-          case 3: return "Finalize & Download";
+          case 3: return "Skills";
+          case 4: return "Projects";
+          case 5: return "Certifications";
+          case 6: return "Languages";
+          case 7: return "Finalize & Download";
           default: return "";
       }
   };
 
+  /* ... handleUploadSuccess ... */
   const handleUploadSuccess = (data: any) => {
     // 1. Map Backend Response (Flat) to Frontend State (Nested)
     const mappedData: ResumeData = {
@@ -138,27 +149,37 @@ const ResumeEditor = () => {
             phone: data.phone || '',
             address: data.address || '',
             summary: data.summary || '',
+            socialLinks: {
+                linkedin: data.socialLinks?.linkedin || '',
+                github: data.socialLinks?.github || '',
+                portfolio: data.socialLinks?.portfolio || '',
+                twitter: data.socialLinks?.twitter || '',
+            }
         },
         experience: data.experience || [],
         education: data.education || [],
         skills: data.skills || [],
+        projects: data.projects || [],
+        certifications: data.certifications || [],
+        languages: data.languages || [],
     };
 
     // 2. Normalize Data before Dispatching
     const cleanedData = { ...mappedData };
+
+    // Helper to ensure ID
+    const ensureId = (item: any) => ({ ...item, id: item.id || crypto.randomUUID() });
 
     // 1. Normalize Experience
     if (cleanedData.experience) {
         cleanedData.experience = cleanedData.experience.map(exp => {
             const normStart = normalizeDate(exp.startDate);
             const normEnd = normalizeDate(exp.endDate);
-            
             return {
-                ...exp,
-                id: exp.id || crypto.randomUUID(), // Ensure ID exists
+                ...ensureId(exp),
                 startDate: normStart || '',
                 endDate: normEnd === 'PRESENT' ? '' : (normEnd || ''),
-                current: normEnd === 'PRESENT' || exp.current // Trust existing flag or derived 'PRESENT'
+                current: normEnd === 'PRESENT' || exp.current
             };
         });
     }
@@ -168,15 +189,28 @@ const ResumeEditor = () => {
         cleanedData.education = cleanedData.education.map(edu => {
              const normStart = normalizeDate(edu.startDate);
              const normEnd = normalizeDate(edu.endDate);
-             
              return {
-                 ...edu,
-                 id: edu.id || crypto.randomUUID(),
+                 ...ensureId(edu),
                  startDate: normStart || '',
                  endDate: normEnd === 'PRESENT' ? '' : (normEnd || ''),
                  current: normEnd === 'PRESENT' || edu.current
              };
         });
+    }
+
+    // 3. Normalize Projects
+    if (cleanedData.projects) {
+        cleanedData.projects = cleanedData.projects.map(ensureId);
+    }
+
+    // 4. Normalize Certifications
+    if (cleanedData.certifications) {
+        cleanedData.certifications = cleanedData.certifications.map(ensureId);
+    }
+
+    // 5. Normalize Languages
+    if (cleanedData.languages) {
+        cleanedData.languages = cleanedData.languages.map(ensureId);
     }
 
     // Dispatch to Redux
@@ -187,6 +221,8 @@ const ResumeEditor = () => {
     if (cleanedData.personalInfo.firstName || cleanedData.personalInfo.lastName) imported.push('Name');
     if (cleanedData.personalInfo.email) imported.push('Email');
     if (cleanedData.experience && cleanedData.experience.length > 0) imported.push(`${cleanedData.experience.length} Experience(s)`);
+    if (cleanedData.skills && cleanedData.skills.length > 0) imported.push(`${cleanedData.skills.length} Skill(s)`);
+    if (cleanedData.projects && cleanedData.projects.length > 0) imported.push(`${cleanedData.projects.length} Project(s)`);
     
     alert(`Resume parsed successfully! Imported: ${imported.join(', ')}. Please review the details.`);
   };
@@ -222,14 +258,27 @@ const ResumeEditor = () => {
                 <EducationForm />
             )}
             {currentStep === 3 && (
+                <SkillsForm />
+            )}
+            {currentStep === 4 && (
+                <ProjectsForm />
+            )}
+            {currentStep === 5 && (
+                <CertificationsForm />
+            )}
+            {currentStep === 6 && (
+                <LanguagesForm />
+            )}
+            {currentStep === 7 && (
                 <div className="animate-fadeIn space-y-5 md:space-y-8">
+                    {/* ... (Template Selection UI) ... */}
                     <div className="space-y-3 md:space-y-4">
                          <h3 className="font-bold text-gray-800 text-base md:text-lg">1. Choose Template</h3>
                          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
                               {/* Classic */}
                               <button 
                                   onClick={() => setTemplate('classic')}
-                                  className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'classic' ? 'border-blue-600 bg-blue-50ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
+                                  className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${template === 'classic' ? 'border-blue-600 bg-blue-50 ring-2 ring-blue-200' : 'border-gray-200 hover:border-blue-300'}`}
                               >
                                   <div className="w-full aspect-[0.724] bg-white rounded overflow-hidden relative border border-gray-200 shadow-sm">
                                       <div className="absolute top-2 left-2 right-2 h-1 bg-gray-300 rounded-sm"></div>
@@ -318,58 +367,46 @@ const ResumeEditor = () => {
       </div>
 
       {/* RIGHT: Live Preview - Dark themed like NovoResume */}
-      <div className="hidden lg:flex flex-col w-1/2 h-[calc(100vh-64px)] items-center justify-center relative overflow-hidden"
-           style={{
-             background: 'linear-gradient(145deg, #1e293b 0%, #0f172a 50%, #1e1e2e 100%)',
-           }}>
+      <div className="hidden lg:flex flex-col w-1/2 h-[calc(100vh-64px)] relative bg-slate-900">
         
-        {/* Decorative Background Pattern */}
-        <div className="absolute inset-0 opacity-20"
-             style={{
-               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234f46e5' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-             }}
-        />
-
-        {/* Subtle gradient orbs for visual interest */}
-        <div className="absolute top-20 left-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
-
-        {/* Live Preview Badge - Top right */}
-        <div className="absolute top-6 right-6 z-20 flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-xl text-xs font-semibold border border-white/20">
-            <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            Live Preview
-        </div>
-
-        {/* The A4 Scaled Paper Container - Properly centered */}
-        <div className="relative flex items-center justify-center w-full h-full py-8 px-8">
-          <div className="relative transform scale-[0.40] xl:scale-[0.50] 2xl:scale-[0.60] origin-center transition-transform duration-300 ease-out group">
-            {/* Paper Glow Effect */}
-            <div className="absolute -inset-6 bg-linear-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur-2xl opacity-60 group-hover:opacity-100 transition-opacity" />
-            
-            {/* A4 Paper */}
-            <div className="relative w-[210mm] min-h-[297mm] bg-white rounded-sm shadow-[0_25px_80px_-15px_rgba(0,0,0,0.5),0_0_0_1px_rgba(255,255,255,0.1)] overflow-hidden">
-              {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
-              {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
-              {template === 'minimalist' && <MinimalistTemplate resumeData={resumeData} theme={theme} />}
-              {template === 'executive' && <ExecutiveTemplate resumeData={resumeData} theme={theme} />}
-              {template === 'creative' && <CreativeTemplate resumeData={resumeData} theme={theme} />}
+        {/* Fixed Header/Toolbar within Preview Area */}
+        <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-center p-4 bg-slate-900/50 backdrop-blur-sm">
+             <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-xs font-semibold text-white shadow-sm">
+                <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                Live Preview
             </div>
-          </div>
+            
+            <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700">
+               <span className="opacity-50">Template:</span>
+               <span className="font-semibold text-white capitalize">{template}</span>
+            </div>
         </div>
 
-        {/* Template Indicator - Bottom center */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-sm text-white/70 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
-          <span className="text-white/50">Template:</span>
-          <span className="font-semibold text-white capitalize">{template}</span>
+        {/* Scrollable Canvas Area */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-black w-full h-full flex justify-center pt-20 pb-20">
+            {/* The scaled A4 Paper */}
+             <div className="relative transform scale-[0.45] xl:scale-[0.55] 2xl:scale-[0.65] origin-top transition-transform duration-300 ease-out">
+                {/* Paper Glow Effect */}
+                <div className="absolute -inset-10 bg-blue-500/10 rounded-xl blur-3xl opacity-50 pointer-events-none" />
+                
+                <div className="relative w-[210mm] min-h-[297mm] bg-white shadow-2xl overflow-hidden">
+                    {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
+                    {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
+                    {template === 'minimalist' && <MinimalistTemplate resumeData={resumeData} theme={theme} />}
+                    {template === 'executive' && <ExecutiveTemplate resumeData={resumeData} theme={theme} />}
+                    {template === 'creative' && <CreativeTemplate resumeData={resumeData} theme={theme} />}
+                </div>
+             </div>
         </div>
-      </div>
-      {/* Info Hint - Bottom Right */}
-      <div className="absolute bottom-6 right-6 z-20 flex items-center gap-2 bg-blue-600 shadow-lg shadow-blue-900/20 text-white px-4 py-3 rounded-xl text-sm font-medium border border-blue-400/30 animate-bounce-slow">
-         <span>💡</span>
-         <span>Go to <b>Finalize & Download</b> to save PDF</span>
+
+        {/* Info Hint - Fixed to bottom right */}
+        <div className="absolute bottom-6 right-6 z-30 flex items-center gap-2 bg-blue-600 shadow-lg shadow-blue-900/40 text-white px-4 py-3 rounded-xl text-sm font-medium border border-blue-400/30 animate-bounce-slow">
+           <span>💡</span>
+           <span>Preview updates automatically</span>
+        </div>
       </div>
 
     </div>

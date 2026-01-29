@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { 
@@ -74,15 +74,12 @@ const ExperienceForm = () => {
     }
   };
 
-  // Watch for changes and sync to Redux
+  // Robust Sync with Redux using useWatch
+  const watchedExperience = useWatch({ control, name: 'experience' });
+
   useEffect(() => {
-    const subscription = watch((value) => {
-       if (value.experience) {
-           dispatch(setExperience(value.experience as Experience[]));
-       }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, dispatch]);
+      dispatch(setExperience(watchedExperience as Experience[]));
+  }, [watchedExperience, dispatch]);
 
   const handleAdd = () => {
     append({

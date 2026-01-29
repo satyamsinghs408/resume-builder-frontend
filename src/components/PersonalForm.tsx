@@ -28,24 +28,30 @@ const PersonalForm = () => {
   useEffect(() => {
     const subscription = watch((value, { name }) => {
        if (name) {
-           // name is FieldPath<PersonalInfoFormData>. Since our schema is flat (mostly), we can try to access.
-           // However, safer to just dispatch the specific field if we can, or the whole object?
-           // updatePersonalInfo accepts Partial<PersonalInfo>.
-           // value is Partial<PersonalInfo>.
-           // So why not dispatch updatePersonalInfo(value)?
-           // Because value might be incomplete? No, watch returns current values merged.
-           // But `value` from watch might define some fields as undefined.
-           // Let's safe cast.
            const castValue = value as PersonalInfo;
-           const fieldName = name as keyof PersonalInfo;
            
-           if (Object.prototype.hasOwnProperty.call(castValue, fieldName)) {
-                dispatch(updatePersonalInfo({ [fieldName]: castValue[fieldName] }));
+           if (name.startsWith('socialLinks.')) {
+               // Handle nested social links update
+               const socialField = name.split('.')[1] as keyof NonNullable<PersonalInfo['socialLinks']>;
+               if (castValue.socialLinks && castValue.socialLinks[socialField] !== undefined) {
+                   dispatch(updatePersonalInfo({ 
+                       socialLinks: { 
+                           ...personalInfo.socialLinks, 
+                           [socialField]: castValue.socialLinks[socialField] 
+                       } 
+                   }));
+               }
+           } else {
+               // Handle top-level fields
+               const fieldName = name as keyof PersonalInfo;
+               if (Object.prototype.hasOwnProperty.call(castValue, fieldName)) {
+                    dispatch(updatePersonalInfo({ [fieldName]: castValue[fieldName] }));
+               }
            }
        }
     });
     return () => subscription.unsubscribe();
-  }, [watch, dispatch]);
+  }, [watch, dispatch, personalInfo]);
 
   // Sync from Redux (e.g. File Upload) IF form is not dirty
   // This handles the "Import" case where we want the form to populate.
@@ -104,6 +110,32 @@ const PersonalForm = () => {
               error={errors.summary?.message}
               {...register('summary')}
             />
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <h3 className="text-lg font-semibold text-gray-700 mb-4">Social Links</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+             <Input 
+                label="LinkedIn"
+                placeholder="linkedin.com/in/..."
+                {...register('socialLinks.linkedin')}
+             />
+             <Input 
+                label="GitHub"
+                placeholder="github.com/..."
+                {...register('socialLinks.github')}
+             />
+             <Input 
+                label="Portfolio/Website"
+                placeholder="yoursite.com"
+                {...register('socialLinks.portfolio')}
+             />
+             <Input 
+                label="Twitter/X"
+                placeholder="twitter.com/..."
+                {...register('socialLinks.twitter')}
+             />
         </div>
       </div>
     </div>

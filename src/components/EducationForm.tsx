@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { 
@@ -74,15 +74,12 @@ const EducationForm = () => {
     }
   };
 
-  // Watch for changes and sync to Redux
+  // Robust Sync with Redux using useWatch
+  const watchedEducation = useWatch({ control, name: 'education' });
+
   useEffect(() => {
-    const subscription = watch((value) => {
-       if (value.education) {
-           dispatch(setEducation(value.education as Education[]));
-       }
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, dispatch]);
+      dispatch(setEducation(watchedEducation as Education[]));
+  }, [watchedEducation, dispatch]);
 
   const handleAdd = () => {
     append({

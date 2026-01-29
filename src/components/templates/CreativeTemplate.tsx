@@ -27,6 +27,22 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
           
           {/* Left Col */}
           <div className="space-y-10">
+              
+              {/* Summary */}
+              {resumeData.personalInfo?.summary && (
+                <section>
+                    <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
+                      <span className="w-8 h-1 rounded-full" style={{ backgroundColor: primaryColor }}></span>
+                      Profile
+                    </h2>
+                    <p className="text-gray-600 leading-relaxed font-medium text-sm">
+                        {resumeData.personalInfo.summary}
+                    </p>
+                </section>
+              )}
+
+              {/* Experience */}
+              {resumeData.experience.length > 0 && (
               <section>
                   <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
                       <span className="w-8 h-1 rounded-full" style={{ backgroundColor: primaryColor }}></span>
@@ -50,6 +66,31 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
                     ))}
                   </div>
               </section>
+              )}
+
+              {/* Projects */}
+              {resumeData.projects && resumeData.projects.length > 0 && (
+              <section>
+                  <h2 className="text-2xl font-black mb-6 flex items-center gap-2">
+                      <span className="w-8 h-1 rounded-full" style={{ backgroundColor: primaryColor }}></span>
+                      Projects
+                  </h2>
+                  <div className="space-y-6">
+                    {resumeData.projects.map((proj, index) => (
+                      <div key={index} className="bg-gray-50 p-6 rounded-2xl">
+                          <div className="flex justify-between items-center mb-2">
+                            <h3 className="font-bold text-xl leading-none">{proj.title}</h3>
+                            {proj.link && <a href={proj.link} className="text-xs font-bold uppercase tracking-wider hover:underline" style={{ color: primaryColor }}>Link</a>}
+                          </div>
+                          {proj.technologies && <div className="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wide">{proj.technologies.join(' / ')}</div>}
+                          <p className="text-sm text-gray-600 leading-relaxed font-medium">
+                             {proj.description}
+                          </p>
+                      </div>
+                    ))}
+                  </div>
+              </section>
+              )}
           </div>
 
           {/* Right Col */}
@@ -69,10 +110,70 @@ const CreativeTemplate: React.FC<TemplateProps> = ({ resumeData, theme }) => {
                  </div>
              </section>
 
+             {/* Skills */}
+             {resumeData.skills && resumeData.skills.length > 0 && (
+             <section>
+                 <h2 className="text-xl font-black mb-4" style={{ color: primaryColor }}>Skills</h2>
+                 <div className="flex flex-wrap gap-2">
+                    {resumeData.skills.map(skill => (
+                        <span key={skill} className="px-3 py-1.5 rounded-lg text-sm font-bold bg-gray-100 text-gray-600 border border-gray-200">
+                            {skill}
+                        </span>
+                    ))}
+                 </div>
+             </section>
+             )}
+
+             {/* Certifications */}
+             {resumeData.certifications && resumeData.certifications.length > 0 && (
+             <section>
+                 <h2 className="text-xl font-black mb-4" style={{ color: primaryColor }}>Certifications</h2>
+                 <div className="space-y-3">
+                    {resumeData.certifications.map((cert, index) => (
+                        <div key={index}>
+                            <div className="font-bold text-gray-800 flex items-center gap-2">
+                                {cert.name}
+                                {cert.link && (
+                                    <a href={cert.link} target="_blank" rel="noreferrer" className="text-xs font-normal text-blue-500 hover:underline">
+                                        (Link)
+                                    </a>
+                                )}
+                            </div>
+                            <div className="text-xs font-bold text-gray-400">{cert.issuer}</div>
+                        </div>
+                    ))}
+                 </div>
+             </section>
+             )}
+
+             {/* Languages */}
+             {resumeData.languages && resumeData.languages.length > 0 && (
+             <section>
+                 <h2 className="text-xl font-black mb-4" style={{ color: primaryColor }}>Languages</h2>
+                 <div className="space-y-2">
+                    {resumeData.languages.map((lang, index) => (
+                        <div key={index} className="flex justify-between font-bold text-gray-700 text-sm">
+                            <span>{lang.language}</span>
+                            <span className="text-gray-400">{lang.proficiency}</span>
+                        </div>
+                    ))}
+                 </div>
+             </section>
+             )}
+
              <section>
                  <div className="p-6 rounded-2xl text-white" style={{ backgroundColor: primaryColor }}>
                      <h2 className="text-xl font-black mb-2 opacity-90">Contact</h2>
                      <p className="text-sm font-medium opacity-80">{phone}</p>
+                     
+                     {/* Social Links */}
+                     {(resumeData.personalInfo?.socialLinks?.linkedin || resumeData.personalInfo?.socialLinks?.portfolio) && (
+                         <div className="mt-4 pt-4 border-t border-white/20 space-y-2">
+                             {resumeData.personalInfo?.socialLinks?.linkedin && <a href={resumeData.personalInfo.socialLinks.linkedin} className="block text-xs font-bold opacity-80 hover:opacity-100 truncate">LinkedIn</a>}
+                             {resumeData.personalInfo?.socialLinks?.portfolio && <a href={resumeData.personalInfo.socialLinks.portfolio} className="block text-xs font-bold opacity-80 hover:opacity-100 truncate">Portfolio</a>}
+                             {resumeData.personalInfo?.socialLinks?.github && <a href={resumeData.personalInfo.socialLinks.github} className="block text-xs font-bold opacity-80 hover:opacity-100 truncate">GitHub</a>}
+                         </div>
+                     )}
                  </div>
              </section>
           </div>

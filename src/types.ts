@@ -18,6 +18,35 @@ export interface Education {
   description?: string;
 }
 
+export interface SocialLinks {
+    linkedin?: string;
+    github?: string;
+    portfolio?: string;
+    twitter?: string;
+}
+
+export interface Project {
+    id: string;
+    title: string;
+    description: string;
+    technologies: string[];
+    link?: string;
+}
+
+export interface Certification {
+    id: string;
+    name: string;
+    issuer: string;
+    date: string;
+    link?: string;
+}
+
+export interface Language {
+    id: string;
+    language: string;
+    proficiency: string;
+}
+
 export interface PersonalInfo {
   firstName: string;
   lastName: string;
@@ -25,6 +54,7 @@ export interface PersonalInfo {
   phone: string;
   address: string;
   summary?: string;
+  socialLinks?: SocialLinks;
 }
 
 export interface ResumeData {
@@ -32,7 +62,10 @@ export interface ResumeData {
   personalInfo: PersonalInfo;
   experience: Experience[];
   education: Education[];
-  skills: string[]; // Added skills as it is standard
+  skills: string[];
+  projects: Project[];
+  certifications: Certification[];
+  languages: Language[];
   createdAt?: string;
   updatedAt?: string;
 }
