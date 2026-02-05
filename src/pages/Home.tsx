@@ -65,8 +65,7 @@ const Home = () => {
              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
-            
+        <div className="max-w-7xl mx-auto px-6 py-3 grid lg:grid-cols-2 gap-12 items-center relative z-10 w-full">
             {/* Left Content */}
             <div className="text-center lg:text-left pt-10 lg:pt-0">
                 <motion.div 
@@ -83,7 +82,7 @@ const Home = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className="text-5xl lg:text-7xl font-bold text-white leading-tight tracking-tight mb-6"
+                    className="text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight mb-6"
                 >
                     Build a <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-400">Winning Resume</span> <br className="hidden lg:block"/> in Minutes.
                 </motion.h1>
@@ -183,7 +182,7 @@ const Home = () => {
 
             <div className="grid md:grid-cols-3 gap-8">
                 {features.map((feature, idx) => (
-                    <div key={idx} className="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all group">
+                    <div key={idx} className="bg-slate-200 p-8 rounded-2xl border border-slate-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-1 transition-all group">
                          <div className="w-14 h-14 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                              <feature.icon className="w-7 h-7 text-blue-600" />
                          </div>
@@ -294,7 +293,7 @@ const Home = () => {
               <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">Why We Are Better</h2>
               
               <div className="border border-slate-200 rounded-2xl overflow-hidden shadow-lg">
-                  <div className="grid grid-cols-3 bg-slate-50 p-4 border-b border-slate-200 text-sm font-bold text-slate-500 uppercase tracking-wider">
+                  <div className="grid grid-cols-3 bg-slate-200 p-4 border-b border-slate-200 text-sm font-bold text-slate-500 uppercase tracking-wider">
                       <div>Features</div>
                       <div className="text-center text-blue-600">ResumeBuilder</div>
                       <div className="text-center">Other Builders</div>
@@ -371,7 +370,7 @@ const Home = () => {
               </div>
           </div>
           <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/5 text-center text-xs">
-              © {new Date().getFullYear()} ResumeBuilder. All rights reserved.
+              © {new Date().getFullYear()} ResumeBuilder. All rights reserved. || Designed and Developed with ❤️ by Satyam Singh
           </div>
       </footer>
     </div>
