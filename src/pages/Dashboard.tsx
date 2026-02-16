@@ -19,8 +19,23 @@ const Dashboard = () => {
       try {
         if (!user) return;
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const { data } = await axios.get<ResumeData[]>(endpoints.resumes, config);
-        setResumes(data);
+        const { data } = await axios.get<any[]>(endpoints.resumes, config);
+        
+        // Map backend flat structure to frontend nested structure
+        const mappedResumes: ResumeData[] = data.map(item => ({
+             ...item,
+             personalInfo: {
+                 firstName: item.firstName || item.personalInfo?.firstName || '',
+                 lastName: item.lastName || item.personalInfo?.lastName || '',
+                 email: item.email || item.personalInfo?.email || '',
+                 phone: item.phone || item.personalInfo?.phone || '',
+                 address: item.address || item.personalInfo?.address || '',
+                 summary: item.summary || item.personalInfo?.summary || '',
+                 socialLinks: item.socialLinks || item.personalInfo?.socialLinks || {}
+             }
+        }));
+
+        setResumes(mappedResumes);
       } catch (error) {
         console.error('Error fetching resumes:', error);
       } finally {

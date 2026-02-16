@@ -48,7 +48,7 @@ const FileUpload: React.FC<FileUploadProps> = ({ onUploadSuccess }) => {
     // Show Loading Popup
     Swal.fire({
       title: 'Analyzing Resume...',
-      text: 'Our AI is extracting your details. This may take a few seconds.',
+      text: 'Please wait while we extract your information.',
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();

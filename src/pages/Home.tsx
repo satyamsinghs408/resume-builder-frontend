@@ -267,7 +267,7 @@ const Home = () => {
                            {/* Preview Container */}
                            <div className="aspect-210/297 bg-white rounded-lg overflow-hidden relative shadow-lg mb-4">
                                 <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-all z-10"></div>
-                                <div className="transform scale-[0.45] origin-top-left w-[200%] h-[200%]">
+                                <div className="transform scale-[0.90] origin-top-left w-[200%] h-[200%]">
                                     <TemplatePreview template={template}  />
                                 </div>
                                 

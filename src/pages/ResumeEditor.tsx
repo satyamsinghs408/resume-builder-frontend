@@ -20,6 +20,7 @@ import CreativeTemplate from '../components/templates/CreativeTemplate';
 import EditorLayout from '../components/editor/EditorLayout';
 import ColorPicker from '../components/ui/ColorPicker';
 import FileUpload from '../components/editor/FileUpload';
+import PageBreakLines from '../components/preview/PageBreakLines';
 import { normalizeDate } from '../utils/dateUtils';
 
 // Redux Imports
@@ -58,10 +59,31 @@ const ResumeEditor = () => {
 
   useEffect(() => {
     if (location.state && location.state.resumeToEdit) {
-      const resumeToEdit = location.state.resumeToEdit as ResumeData;
-      dispatch(setResumeData(resumeToEdit));
+      const rawData = location.state.resumeToEdit;
+      
+      // Backend returns flat structure, Redux expects nested personalInfo
+      // We must reconstruct the ResumeData object correctly
+      const structuredData: ResumeData = {
+          ...rawData,
+          personalInfo: {
+              firstName: rawData.firstName || rawData.personalInfo?.firstName || '',
+              lastName: rawData.lastName || rawData.personalInfo?.lastName || '',
+              email: rawData.email || rawData.personalInfo?.email || '',
+              phone: rawData.phone || rawData.personalInfo?.phone || '',
+              address: rawData.address || rawData.personalInfo?.address || '',
+              summary: rawData.summary || rawData.personalInfo?.summary || '',
+              socialLinks: {
+                  linkedin: rawData.socialLinks?.linkedin || rawData.personalInfo?.socialLinks?.linkedin || '',
+                  github: rawData.socialLinks?.github || rawData.personalInfo?.socialLinks?.github || '',
+                  portfolio: rawData.socialLinks?.portfolio || rawData.personalInfo?.socialLinks?.portfolio || '',
+                  twitter: rawData.socialLinks?.twitter || rawData.personalInfo?.socialLinks?.twitter || '',
+              }
+          }
+      };
+
+      dispatch(setResumeData(structuredData));
       setIsEditing(true);
-      setCurrentResumeId(resumeToEdit._id || null);
+      setCurrentResumeId(rawData._id || null);
     }
   }, [location, dispatch]);
 
@@ -81,11 +103,22 @@ const ResumeEditor = () => {
         }
       };
 
+      // Flatten the data for the backend
+      // Backend expects firstName, lastName etc at root, but Redux has them in personalInfo
+      const payload = {
+        ...resumeData,
+        ...resumeData.personalInfo, // Spreads firstName, lastName, email, socialLinks etc. to root
+      };
+      
+      // Remove the nested personalInfo object to avoid confusion (optional but clean)
+      // @ts-ignore
+      delete payload.personalInfo;
+
       if (isEditing) {
-        await axios.put(`${endpoints.resumes}/${currentResumeId}`, resumeData, config);
+        await axios.put(`${endpoints.resumes}/${currentResumeId}`, payload, config);
         alert('Resume Updated Successfully!');
       } else {
-        await axios.post(endpoints.resumes, resumeData, config);
+        await axios.post(endpoints.resumes, payload, config);
         alert('Resume Created Successfully!');
       }
       navigate('/dashboard');
@@ -393,6 +426,7 @@ const ResumeEditor = () => {
                 <div className="absolute -inset-10 bg-blue-500/10 rounded-xl blur-3xl opacity-50 pointer-events-none" />
                 
                 <div className="relative w-[210mm] min-h-[297mm] bg-white shadow-2xl overflow-hidden">
+                    <PageBreakLines />
                     {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
                     {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
                     {template === 'minimalist' && <MinimalistTemplate resumeData={resumeData} theme={theme} />}
