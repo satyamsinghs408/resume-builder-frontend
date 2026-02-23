@@ -12,29 +12,29 @@ const Navbar = () => {
   if (isEditorPage) return null;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-xl border-b border-white/10">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/90 backdrop-blur-xl border-b border-white/6">
+      <div className="max-w-7xl mx-auto px-6 py-3.5 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-linear-to-tr from-blue-600 to-purple-600 rounded-xl flex items-center justify-center group-hover:shadow-lg group-hover:shadow-blue-500/30 transition-all">
-            <FileText className="w-5 h-5 text-white" />
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 bg-emerald-600 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-emerald-500/20 transition-all duration-300">
+            <FileText className="w-4.5 h-4.5 text-white" />
           </div>
-          <span className="text-xl font-bold text-white">
-            Resume<span className="text-blue-400">Builder</span>
+          <span className="text-lg font-bold text-white tracking-tight">
+            Resume<span className="text-emerald-400">Builder</span>
           </span>
         </Link>
         
         {/* Navigation Links */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {user ? (
             <>
               {/* Dashboard Link */}
               <Link 
                 to="/dashboard" 
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                   location.pathname === '/dashboard'
                     ? 'bg-white/10 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    : 'text-slate-400 hover:text-white hover:bg-white/6'
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
@@ -42,13 +42,13 @@ const Navbar = () => {
               </Link>
 
               {/* User Section */}
-              <div className="flex items-center gap-3 ml-4 pl-4 border-l border-white/10">
+              <div className="flex items-center gap-2.5 ml-3 pl-3 border-l border-white/8">
                 {/* User Info */}
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-linear-to-tr from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-white" />
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
+                    <User className="w-3.5 h-3.5 text-white" />
                   </div>
-                  <span className="text-sm text-gray-300 hidden sm:block">
+                  <span className="text-sm text-slate-300 hidden sm:block font-medium">
                     {user.name}
                   </span>
                 </div>
@@ -56,7 +56,7 @@ const Navbar = () => {
                 {/* Logout Button */}
                 <button 
                   onClick={logout} 
-                  className="flex items-center gap-2 px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl font-medium transition-all"
+                  className="flex items-center gap-2 px-3.5 py-2 bg-red-500/10 hover:bg-red-500/15 text-red-400 hover:text-red-300 rounded-lg font-medium text-sm transition-all duration-200"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:block">Logout</span>
@@ -67,13 +67,13 @@ const Navbar = () => {
             <>
               <Link 
                 to="/login" 
-                className="px-5 py-2.5 text-gray-300 hover:text-white font-medium transition-colors"
+                className="px-4 py-2 text-sm text-slate-300 hover:text-white font-medium transition-colors duration-200"
               >
                 Login
               </Link>
               <Link 
                 to="/register" 
-                className="px-5 py-2.5 bg-linear-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all"
+                className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-lg shadow-sm shadow-emerald-500/20 hover:shadow-md hover:shadow-emerald-500/25 transition-all duration-200"
               >
                 Get Started
               </Link>

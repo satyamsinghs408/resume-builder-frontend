@@ -20,20 +20,20 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-14 md:h-16 bg-gray-900/95 backdrop-blur-xl border-b border-white/10">
+    <header className="fixed top-0 left-0 right-0 z-50 h-14 md:h-16 bg-slate-950/90 backdrop-blur-xl border-b border-white/6">
       <div className="max-w-7xl mx-auto px-3 md:px-6 h-full flex justify-between items-center">
         
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 md:gap-3 group">
-          <div className="w-8 h-8 md:w-10 md:h-10 bg-linear-to-tr from-blue-600 to-purple-600 rounded-lg md:rounded-xl flex items-center justify-center group-hover:shadow-lg group-hover:shadow-blue-500/30 transition-all">
-            <FileText className="w-4 h-4 md:w-5 md:h-5 text-white" />
+        <Link to="/" className="flex items-center gap-2 md:gap-2.5 group">
+          <div className="w-8 h-8 md:w-9 md:h-9 bg-emerald-600 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-emerald-500/20 transition-all duration-300">
+            <FileText className="w-4 h-4 md:w-4.5 md:h-4.5 text-white" />
           </div>
           <div className="hidden sm:block">
-            <span className="text-lg md:text-xl font-bold text-white">
-              Resume<span className="text-blue-400">Builder</span>
+            <span className="text-lg md:text-lg font-bold text-white tracking-tight">
+              Resume<span className="text-emerald-400">Builder</span>
             </span>
             {isEditorPage && (
-              <p className="text-[9px] md:text-[10px] text-gray-500 font-medium uppercase tracking-wider">Professional Edition</p>
+              <p className="text-[9px] md:text-[10px] text-slate-500 font-medium uppercase tracking-wider">Professional Edition</p>
             )}
           </div>
         </Link>
@@ -49,15 +49,15 @@ const Header: React.FC = () => {
               return (
                 <div key={step.id} className="flex items-center">
                   <div className={`
-                    flex items-center gap-1.5 px-2.5 py-1.5 rounded-full transition-all duration-300
-                    ${isActive ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30' : 
-                      isCompleted ? 'bg-blue-500/20 text-blue-400' : 'text-gray-500'}
+                    flex items-center gap-1.5 px-2.5 py-1.5 rounded-md transition-all duration-300
+                    ${isActive ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-500/20' : 
+                      isCompleted ? 'bg-emerald-500/15 text-emerald-400' : 'text-slate-500'}
                   `}>
                     {isCompleted ? <CheckCircle size={13} /> : <Icon size={13} />}
-                    <span className="text-xs font-bold">{step.label}</span>
+                    <span className="text-xs font-semibold">{step.label}</span>
                   </div>
                   {idx < steps.length - 1 && (
-                    <div className={`w-4 h-0.5 mx-0.5 rounded-full transition-colors ${isCompleted ? 'bg-blue-500/50' : 'bg-gray-700'}`} />
+                    <div className={`w-4 h-0.5 mx-0.5 rounded-full transition-colors ${isCompleted ? 'bg-emerald-500/40' : 'bg-slate-700'}`} />
                   )}
                 </div>
               );
@@ -72,7 +72,7 @@ const Header: React.FC = () => {
               {(isEditorPage || location.pathname === '/dashboard') && (
                 <Link 
                   to="/" 
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl font-medium text-sm text-gray-400 hover:text-white hover:bg-white/5 transition-all"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sm text-slate-400 hover:text-white hover:bg-white/6 transition-all duration-200"
                 >
                   <Home className="w-4 h-4" />
                   <span className="hidden lg:block">Home</span>
@@ -81,27 +81,27 @@ const Header: React.FC = () => {
 
               <Link 
                 to="/dashboard" 
-                className={`flex items-center gap-2 px-3 py-2 rounded-xl font-medium text-sm transition-all ${
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                   location.pathname === '/dashboard'
                     ? 'bg-white/10 text-white'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    : 'text-slate-400 hover:text-white hover:bg-white/6'
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
                 <span className="hidden lg:block">Dashboard</span>
               </Link>
 
-              <div className="flex items-center gap-2 ml-2 pl-2 border-l border-white/10">
-                <div className="w-8 h-8 bg-linear-to-tr from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-white" />
+              <div className="flex items-center gap-2 ml-2 pl-2 border-l border-white/8">
+                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
+                  <User className="w-3.5 h-3.5 text-white" />
                 </div>
-                <span className="text-sm text-gray-300 hidden xl:block max-w-24 truncate">
+                <span className="text-sm text-slate-300 hidden xl:block max-w-24 truncate font-medium">
                   {user.name}
                 </span>
 
                 <button 
                   onClick={logout} 
-                  className="flex items-center gap-1.5 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl font-medium text-sm transition-all"
+                  className="flex items-center gap-1.5 px-3 py-2 bg-red-500/10 hover:bg-red-500/15 text-red-400 hover:text-red-300 rounded-lg font-medium text-sm transition-all duration-200"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden lg:block">Logout</span>
@@ -112,13 +112,13 @@ const Header: React.FC = () => {
             <>
               <Link 
                 to="/login" 
-                className="px-4 py-2 text-sm text-gray-300 hover:text-white font-medium transition-colors"
+                className="px-4 py-2 text-sm text-slate-300 hover:text-white font-medium transition-colors duration-200"
               >
                 Login
               </Link>
               <Link 
                 to="/register" 
-                className="px-4 py-2 bg-linear-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-blue-500/30 transition-all"
+                className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-lg shadow-sm shadow-emerald-500/20 transition-all duration-200"
               >
                 Get Started
               </Link>
@@ -129,7 +129,7 @@ const Header: React.FC = () => {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 text-gray-300 hover:text-white transition-colors"
+          className="md:hidden p-2 text-slate-300 hover:text-white transition-colors"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -137,13 +137,13 @@ const Header: React.FC = () => {
 
       {/* Mobile Menu Slide-out */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-14 left-0 right-0 bg-gray-900/98 backdrop-blur-xl border-b border-white/10 shadow-xl">
+        <div className="md:hidden absolute top-14 left-0 right-0 bg-slate-950/98 backdrop-blur-xl border-b border-white/6 shadow-xl">
           <div className="px-3 py-3 space-y-1">
             {user ? (
               <>
                 {/* User Info */}
-                <div className="flex items-center gap-3 px-3 py-3 bg-white/5 rounded-xl mb-2">
-                  <div className="w-10 h-10 bg-linear-to-tr from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                <div className="flex items-center gap-3 px-3 py-3 bg-white/4 rounded-lg mb-2">
+                  <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-white" />
                   </div>
                   <span className="text-sm font-medium text-white">{user.name}</span>
@@ -153,7 +153,7 @@ const Header: React.FC = () => {
                   <Link 
                     to="/" 
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition-all"
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/6 transition-all"
                   >
                     <Home className="w-5 h-5" />
                     <span className="font-medium">Home</span>
@@ -163,10 +163,10 @@ const Header: React.FC = () => {
                 <Link 
                   to="/dashboard" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                     location.pathname === '/dashboard'
                       ? 'bg-white/10 text-white'
-                      : 'text-gray-300 hover:text-white hover:bg-white/5'
+                      : 'text-slate-300 hover:text-white hover:bg-white/6'
                   }`}
                 >
                   <LayoutDashboard className="w-5 h-5" />
@@ -175,7 +175,7 @@ const Header: React.FC = () => {
 
                 <button 
                   onClick={() => { logout(); setMobileMenuOpen(false); }} 
-                  className="w-full flex items-center gap-3 px-4 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-xl font-medium transition-all"
+                  className="w-full flex items-center gap-3 px-4 py-3 bg-red-500/10 hover:bg-red-500/15 text-red-400 hover:text-red-300 rounded-lg font-medium transition-all"
                 >
                   <LogOut className="w-5 h-5" />
                   <span>Logout</span>
@@ -186,14 +186,14 @@ const Header: React.FC = () => {
                 <Link 
                   to="/login" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-xl font-medium transition-all"
+                  className="block px-4 py-3 text-slate-300 hover:text-white hover:bg-white/6 rounded-lg font-medium transition-all"
                 >
                   Login
                 </Link>
                 <Link 
                   to="/register" 
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 bg-linear-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl text-center hover:shadow-lg transition-all"
+                  className="block px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-center transition-all"
                 >
                   Get Started
                 </Link>
