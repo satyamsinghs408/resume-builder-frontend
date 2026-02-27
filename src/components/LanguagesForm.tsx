@@ -37,6 +37,7 @@ const LanguagesForm = () => {
   const {
     register,
     control,
+    reset,
     formState: { errors },
   } = useForm<LanguagesFormValues>({
     defaultValues: { languages: languagesData },
@@ -74,6 +75,15 @@ const LanguagesForm = () => {
       dispatch(setLanguages(watchedLanguages as any));
   }, [watchedLanguages, dispatch]);
 
+  // Sync from Redux (e.g. File Upload)
+  useEffect(() => {
+      if (languagesData && languagesData.length > 0) {
+          if (watchedLanguages.length !== languagesData.length) {
+              reset({ languages: languagesData });
+          }
+      }
+  }, [languagesData, reset, watchedLanguages.length]);
+
   const handleAdd = () => {
     append({
       id: crypto.randomUUID(),
@@ -84,18 +94,18 @@ const LanguagesForm = () => {
 
   return (
     <div className="animate-fadeIn">
-      <p className="text-gray-500 text-sm md:text-base mb-5 md:mb-8">
+      <p className="text-gray-500 text-sm md:text-base mb-2 md:mb-2">
         Languages you speak.
       </p>
       
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={fields} strategy={verticalListSortingStrategy}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {fields.map((field, index) => (
                 <SortableWrapper key={field.id} id={field.id}>
                     {(listeners) => (
-                        <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
-                             <div className="flex justify-between items-center mb-3">
+                        <div className="p-2 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
+                             <div className="flex justify-between items-center mb-0">
                                 <div className="flex items-center gap-2">
                                     <DragHandle listeners={listeners} />
                                 </div>
@@ -105,7 +115,7 @@ const LanguagesForm = () => {
                                     </svg>
                                 </button>
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-1">
                                 <Input 
                                     label="Language"
                                     placeholder="e.g. English" 
@@ -127,7 +137,7 @@ const LanguagesForm = () => {
         </SortableContext>
       </DndContext>
       
-      <button type="button" onClick={handleAdd} className="mt-6 text-blue-600 font-bold hover:text-blue-800 transition flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50">
+      <button type="button" onClick={handleAdd} className="mt-2 text-blue-600 font-bold hover:text-blue-800 transition flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
         </svg>

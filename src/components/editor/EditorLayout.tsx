@@ -21,7 +21,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
       
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden relative scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-        <div className="max-w-3xl mx-auto py-10 px-6">
+        <div className="max-w-3xl mx-auto py-2 px-6">
            <motion.div
                key={currentStep}
                initial={{ opacity: 0, y: 20, filter: 'blur(5px)' }}
@@ -29,12 +29,12 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
                exit={{ opacity: 0, y: -20, filter: 'blur(5px)' }}
                transition={{ duration: 0.4, ease: "easeOut" }}
            >
-               <div className="mb-8">
-                   <h2 className="text-2xl font-extrabold text-slate-900 mb-1.5 tracking-tight">{title}</h2>
+               <div className="mb-2">
+                   <h2 className="text-2xl font-extrabold text-slate-900 mb-0.5 tracking-tight">{title}</h2>
                    <p className="text-slate-500 text-base">Make it stand out.</p>
                </div>
 
-               <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200/60 ring-4 ring-slate-50">
+               <div className="bg-white rounded-2xl p-2 shadow-sm border border-slate-200/60 ring-4 ring-slate-50">
                     {children}
                </div>
            </motion.div>

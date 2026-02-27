@@ -37,6 +37,7 @@ const CertificationsForm = () => {
   const {
     register,
     control,
+    reset,
     formState: { errors },
   } = useForm<CertificationsFormValues>({
     defaultValues: { certifications: certificationsData },
@@ -74,6 +75,15 @@ const CertificationsForm = () => {
       dispatch(setCertifications(watchedCertifications as any));
   }, [watchedCertifications, dispatch]);
 
+  // Sync from Redux (e.g. File Upload)
+  useEffect(() => {
+      if (certificationsData && certificationsData.length > 0) {
+          if (watchedCertifications.length !== certificationsData.length) {
+              reset({ certifications: certificationsData });
+          }
+      }
+  }, [certificationsData, reset, watchedCertifications.length]);
+
   const handleAdd = () => {
     append({
       id: crypto.randomUUID(),
@@ -86,7 +96,7 @@ const CertificationsForm = () => {
 
   return (
     <div className="animate-fadeIn">
-      <p className="text-gray-500 text-sm md:text-base mb-5 md:mb-8">
+      <p className="text-gray-500 text-sm md:text-base mb-2 md:mb-2">
         Certifications and licenses.
       </p>
       
@@ -95,8 +105,8 @@ const CertificationsForm = () => {
             {fields.map((field, index) => (
                 <SortableWrapper key={field.id} id={field.id}>
                     {(listeners) => (
-                        <div className="mb-6 md:mb-10 p-4 md:p-6 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
-                            <div className="flex justify-between items-center mb-4 md:mb-6">
+                        <div className="mb-2 md:mb-2 p-2 md:p-2 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
+                            <div className="flex justify-between items-center mb-2 md:mb-2">
                                 <div className="flex items-center gap-3">
                                     <DragHandle listeners={listeners} />
                                     <span className="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-200 px-2.5 py-1 rounded-full">
@@ -108,7 +118,7 @@ const CertificationsForm = () => {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2">
                                 <Input 
                                     label="Name"
                                     placeholder="e.g. AWS Certified Solutions Architect" 

@@ -42,6 +42,7 @@ const SkillsForm = () => {
     register,
     control,
     watch,
+    reset,
     formState: { errors },
   } = useForm<SkillsFormValues>({
     defaultValues: { 
@@ -88,23 +89,35 @@ const SkillsForm = () => {
     return () => subscription.unsubscribe();
   }, [watch, dispatch]);
 
+  // Sync from Redux (e.g. File Upload)
+  useEffect(() => {
+     if (skillsData && skillsData.length > 0) {
+         const currentWatch = watch('skills');
+         if (!currentWatch || currentWatch.length !== skillsData.length) {
+             reset({ 
+                 skills: skillsData.map((s: string) => ({ id: crypto.randomUUID(), value: s })) 
+             });
+         }
+     }
+  }, [skillsData, reset, watch]);
+
   const handleAdd = () => {
     append({ id: crypto.randomUUID(), value: '' });
   };
 
   return (
     <div className="animate-fadeIn">
-      <p className="text-gray-500 text-sm md:text-base mb-5 md:mb-8">
+      <p className="text-gray-500 text-sm md:text-base mb-3 md:mb-3">
         List your technical and soft skills.
       </p>
       
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={fields} strategy={verticalListSortingStrategy}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
             {fields.map((field, index) => (
                 <SortableWrapper key={field.id} id={field.id}>
                     {(listeners) => (
-                        <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg border border-gray-200 group">
+                        <div className="flex items-center gap-1 p-1 bg-gray-50 rounded-lg border border-gray-200 group">
                             <DragHandle listeners={listeners} />
                              <div className="flex-1">
                                 <Input 
@@ -134,7 +147,7 @@ const SkillsForm = () => {
       <button 
         type="button" 
         onClick={handleAdd} 
-        className="mt-6 text-blue-600 font-bold hover:text-blue-800 transition flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50"
+        className="mt-2 text-blue-600 font-bold hover:text-blue-800 transition flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-50"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
           <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />

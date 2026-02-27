@@ -39,6 +39,7 @@ const ProjectsForm = () => {
     register,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<ProjectsFormValues>({
     defaultValues: { projects: projectsData },
@@ -76,6 +77,17 @@ const ProjectsForm = () => {
       dispatch(setProjects(watchedProjects as any));
   }, [watchedProjects, dispatch]);
 
+  // Sync from Redux (e.g. File Upload)
+  useEffect(() => {
+      if (projectsData && projectsData.length > 0) {
+          // Only reset if our watched projects length is different than Redux
+          // meaning new data came in from an upload
+          if (watchedProjects.length !== projectsData.length) {
+              reset({ projects: projectsData });
+          }
+      }
+  }, [projectsData, reset, watchedProjects.length]);
+
   const handleAdd = () => {
     append({
       id: crypto.randomUUID(),
@@ -88,7 +100,7 @@ const ProjectsForm = () => {
 
   return (
     <div className="animate-fadeIn">
-      <p className="text-gray-500 text-sm md:text-base mb-5 md:mb-8">
+      <p className="text-gray-500 text-sm md:text-base mb-2 md:mb-2">
         Showcase your best work.
       </p>
       
@@ -97,8 +109,8 @@ const ProjectsForm = () => {
             {fields.map((field, index) => (
                 <SortableWrapper key={field.id} id={field.id}>
                     {(listeners) => (
-                        <div className="mb-6 md:mb-10 p-4 md:p-6 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
-                            <div className="flex justify-between items-center mb-4 md:mb-6">
+                        <div className="mb-2 md:mb-2 p-2 md:p-2 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
+                            <div className="flex justify-between items-center mb-2 md:mb-2">
                                 <div className="flex items-center gap-3">
                                     <DragHandle listeners={listeners} />
                                     <span className="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-200 px-2.5 py-1 rounded-full">
@@ -110,7 +122,7 @@ const ProjectsForm = () => {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-4 md:gap-6">
+                            <div className="grid grid-cols-1 gap-2 md:gap-2">
                                 <Input 
                                     label="Project Title"
                                     placeholder="e.g. E-commerce Platform" 
@@ -126,8 +138,7 @@ const ProjectsForm = () => {
                                 
                                 <div>
                                     <label className="text-sm font-bold text-gray-600 tracking-wide uppercase mb-2 block">Technologies (comma separated)</label>
-                                    <input 
-                                        className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border-2 border-transparent focus:border-blue-500 outline-none transition-all"
+                                    <Input 
                                         placeholder="React, Node.js, MongoDB"
                                         defaultValue={field.technologies?.join(', ')}
                                         onChange={(e) => {

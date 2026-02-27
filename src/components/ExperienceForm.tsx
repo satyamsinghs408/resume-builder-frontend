@@ -41,6 +41,7 @@ const ExperienceForm = () => {
     register,
     control,
     watch,
+    reset,
     formState: { errors },
   } = useForm<ExperienceFormValues>({
     defaultValues: { experience: experienceData },
@@ -81,6 +82,15 @@ const ExperienceForm = () => {
       dispatch(setExperience(watchedExperience as Experience[]));
   }, [watchedExperience, dispatch]);
 
+  // Sync from Redux (e.g. File Upload)
+  useEffect(() => {
+    if (experienceData && experienceData.length > 0) {
+      if (watchedExperience.length !== experienceData.length) {
+        reset({ experience: experienceData });
+      }
+    }
+  }, [experienceData, reset, watchedExperience.length]);
+
   const handleAdd = () => {
     append({
       id: crypto.randomUUID(),
@@ -95,7 +105,7 @@ const ExperienceForm = () => {
 
   return (
     <div className="animate-fadeIn">
-      <p className="text-gray-500 text-sm md:text-base mb-5 md:mb-8">
+      <p className="text-gray-500 text-sm md:text-base mb-3 md:mb-3">
         Highlight your career history. Start with your most recent position.
       </p>
       
@@ -111,9 +121,9 @@ const ExperienceForm = () => {
             {fields.map((field, index) => (
                 <SortableWrapper key={field.id} id={field.id}>
                     {(listeners) => (
-                        <div className="mb-6 md:mb-10 p-4 md:p-6 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
+                        <div className="mb-3 md:mb-3 p-2 md:p-2 bg-gray-50 rounded-xl border border-gray-100 relative group transition-all hover:border-blue-200 hover:shadow-sm">
                         {/* Header for Job Block */}
-                        <div className="flex justify-between items-center mb-4 md:mb-6">
+                        <div className="flex justify-between items-center mb-2 md:mb-2">
                             <div className="flex items-center gap-3">
                                 <DragHandle listeners={listeners} />
                                 <span className="text-xs font-bold uppercase tracking-wider text-gray-400 bg-gray-200 px-2.5 py-1 rounded-full">
@@ -132,8 +142,8 @@ const ExperienceForm = () => {
                             </button>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-4 md:gap-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                        <div className="grid grid-cols-1 gap-2 md:gap-2">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2">
                                 <Input 
                                 label="Job Title"
                                 placeholder="e.g. Senior Software Engineer" 
@@ -148,7 +158,7 @@ const ExperienceForm = () => {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2">
                                 <Input 
                                 label="Start Date"
                                 type="month"

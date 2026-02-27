@@ -7,7 +7,20 @@ import { updatePersonalInfo } from '../store/slices/resumeSlice';
 import { PersonalInfo } from '../types';
 import { PersonalInfoSchema, PersonalInfoFormData } from '../utils/schemas';
 
-const defaultPersonalInfo = {} as PersonalInfo;
+const defaultPersonalInfo: PersonalInfo = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  address: '',
+  summary: '',
+  socialLinks: {
+    linkedin: '',
+    github: '',
+    portfolio: '',
+    twitter: ''
+  }
+};
 
 const PersonalForm = () => {
   const dispatch = useAppDispatch();
@@ -58,18 +71,25 @@ const PersonalForm = () => {
   // Sync from Redux (e.g. File Upload) IF form is not dirty
   useEffect(() => {
       if (!isDirty && personalInfo) {
-          reset(personalInfo);
+          reset({
+              ...defaultPersonalInfo,
+              ...personalInfo,
+              socialLinks: {
+                  ...defaultPersonalInfo.socialLinks,
+                  ...(personalInfo.socialLinks || {})
+              }
+          });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(personalInfo), reset, isDirty]);
 
   return (
     <div className="animate-fadeIn">
-      <p className="text-gray-500 text-sm md:text-base mb-5 md:mb-8">
+      <p className="text-gray-600 text-sm md:text-base mb-5 md:mb-8">
         Let's start with the basics. Recruiters use this information to contact you.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-2">
         <Input 
           label="First Name"
           placeholder="e.g. John" 
@@ -113,9 +133,9 @@ const PersonalForm = () => {
         </div>
       </div>
 
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold text-gray-700 mb-4">Social Links</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+      <div className="mt-3">
+        <h3 className="text-lg font-semibold underline text-gray-700 mb-4">Social Links</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-2">
              <Input 
                 label="LinkedIn"
                 placeholder="linkedin.com/in/..."

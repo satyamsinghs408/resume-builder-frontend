@@ -276,9 +276,9 @@ const ResumeEditor = () => {
             {currentStep === 0 && (
                 <div className="animate-fadeIn">
                     <FileUpload onUploadSuccess={handleUploadSuccess} />
-                    <div className="flex items-center gap-3 my-6 md:my-8">
+                    <div className="flex items-center gap-3 my-3 md:my-3">
                         <div className="h-px bg-gray-200 flex-1"></div>
-                        <span className="text-gray-400 text-xs md:text-sm font-medium uppercase tracking-wider">Or enter manually</span>
+                        <span className="text-gray-700 text-xs md:text-sm font-medium uppercase tracking-wider">Or enter manually</span>
                         <div className="h-px bg-gray-200 flex-1"></div>
                     </div>
                     <PersonalForm />
@@ -368,7 +368,7 @@ const ResumeEditor = () => {
                          </div>
                     </div>
 
-                    <div className="space-y-3 md:space-y-4">
+                    <div className="space-y-2 md:space-y-2">
                         <h3 className="font-bold text-gray-800 text-base md:text-lg">2. Customize Theme</h3>
                         <div className="bg-gray-50 p-4 md:p-6 rounded-xl border border-gray-100">
                              <ColorPicker 
@@ -379,7 +379,7 @@ const ResumeEditor = () => {
                         </div>
                     </div>
 
-                    <div className="bg-blue-50/50 p-4 md:p-6 rounded-xl space-y-3 md:space-y-4 border border-blue-100 mt-6 md:mt-8">
+                    <div className="bg-blue-50/50 p-2 md:p-4 rounded-xl space-y-2 md:space-y-2 border border-blue-100 mt-6 md:mt-8">
                          <h3 className="font-bold text-gray-800 text-sm md:text-base">Ready?</h3>
                          <button 
                              onClick={() => downloadResumePDF(resumeData, template, theme)} 
