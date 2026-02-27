@@ -32,7 +32,9 @@ type CertificationsFormValues = z.infer<typeof CertificationsFormSchema>;
 
 const CertificationsForm = () => {
   const dispatch = useAppDispatch();
-  const certificationsData = useAppSelector((state: any) => state.resume?.certifications || []);
+  const resumeData = useAppSelector((state: any) => state.resume);
+  const certificationsData = resumeData?.certifications || [];
+  const lastImportTimestamp = resumeData?.lastImportTimestamp || 0;
 
   const {
     register,
@@ -75,14 +77,13 @@ const CertificationsForm = () => {
       dispatch(setCertifications(watchedCertifications as any));
   }, [watchedCertifications, dispatch]);
 
-  // Sync from Redux (e.g. File Upload)
+  // Sync from Redux (e.g. File Upload) OUTSIDE of infinite loops
   useEffect(() => {
-      if (certificationsData && certificationsData.length > 0) {
-          if (watchedCertifications.length !== certificationsData.length) {
-              reset({ certifications: certificationsData });
-          }
+      if (lastImportTimestamp > 0 && certificationsData) {
+          reset({ certifications: certificationsData });
       }
-  }, [certificationsData, reset, watchedCertifications.length]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastImportTimestamp, reset]);
 
   const handleAdd = () => {
     append({

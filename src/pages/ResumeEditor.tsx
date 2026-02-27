@@ -245,6 +245,9 @@ const ResumeEditor = () => {
     if (cleanedData.languages) {
         cleanedData.languages = cleanedData.languages.map(ensureId);
     }
+    
+    // 6. Trigger a single-fire update timestamp for nested forms
+    cleanedData.lastImportTimestamp = Date.now();
 
     // Dispatch to Redux
     dispatch(setResumeData(cleanedData));

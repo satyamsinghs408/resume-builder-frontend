@@ -35,7 +35,9 @@ const defaultExperience: Experience[] = [];
 
 const ExperienceForm = () => {
   const dispatch = useAppDispatch();
-  const experienceData = useAppSelector((state: any) => state.resume?.experience || defaultExperience) as Experience[];
+  const resumeData = useAppSelector((state: any) => state.resume);
+  const experienceData = (resumeData?.experience || defaultExperience) as Experience[];
+  const lastImportTimestamp = resumeData?.lastImportTimestamp || 0;
 
   const {
     register,
@@ -82,14 +84,13 @@ const ExperienceForm = () => {
       dispatch(setExperience(watchedExperience as Experience[]));
   }, [watchedExperience, dispatch]);
 
-  // Sync from Redux (e.g. File Upload)
+  // Sync from Redux (e.g. File Upload) OUTSIDE of infinite loops
   useEffect(() => {
-    if (experienceData && experienceData.length > 0) {
-      if (watchedExperience.length !== experienceData.length) {
+    if (lastImportTimestamp > 0 && experienceData) {
         reset({ experience: experienceData });
-      }
     }
-  }, [experienceData, reset, watchedExperience.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastImportTimestamp, reset]);
 
   const handleAdd = () => {
     append({

@@ -35,7 +35,9 @@ const defaultEducation: Education[] = [];
 
 const EducationForm = () => {
   const dispatch = useAppDispatch();
-  const educationData = useAppSelector((state: any) => state.resume?.education || defaultEducation) as Education[];
+  const resumeData = useAppSelector((state: any) => state.resume);
+  const educationData = (resumeData?.education || defaultEducation) as Education[];
+  const lastImportTimestamp = resumeData?.lastImportTimestamp || 0;
 
   const {
     register,
@@ -82,14 +84,13 @@ const EducationForm = () => {
       dispatch(setEducation(watchedEducation as Education[]));
   }, [watchedEducation, dispatch]);
 
-  // Sync from Redux (e.g. File Upload)
+  // Sync from Redux (e.g. File Upload) OUTSIDE of infinite loops
   useEffect(() => {
-    if (educationData && educationData.length > 0) {
-      if (watchedEducation.length !== educationData.length) {
+    if (lastImportTimestamp > 0 && educationData) {
         reset({ education: educationData });
-      }
     }
-  }, [educationData, reset, watchedEducation.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastImportTimestamp, reset]);
 
   const handleAdd = () => {
     append({

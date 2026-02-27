@@ -34,6 +34,7 @@ const ProjectsForm = () => {
   const dispatch = useAppDispatch();
   const resumeData = useAppSelector((state: any) => state.resume);
   const projectsData = resumeData?.projects || [];
+  const lastImportTimestamp = resumeData?.lastImportTimestamp || 0;
 
   const {
     register,
@@ -77,16 +78,13 @@ const ProjectsForm = () => {
       dispatch(setProjects(watchedProjects as any));
   }, [watchedProjects, dispatch]);
 
-  // Sync from Redux (e.g. File Upload)
+  // Sync from Redux (e.g. File Upload) OUTSIDE of infinite loops
   useEffect(() => {
-      if (projectsData && projectsData.length > 0) {
-          // Only reset if our watched projects length is different than Redux
-          // meaning new data came in from an upload
-          if (watchedProjects.length !== projectsData.length) {
-              reset({ projects: projectsData });
-          }
+      if (lastImportTimestamp > 0 && projectsData) {
+          reset({ projects: projectsData });
       }
-  }, [projectsData, reset, watchedProjects.length]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastImportTimestamp, reset]);
 
   const handleAdd = () => {
     append({

@@ -66,6 +66,7 @@ export interface ResumeData {
   projects: Project[];
   certifications: Certification[];
   languages: Language[];
+  lastImportTimestamp?: number;
   createdAt?: string;
   updatedAt?: string;
 }

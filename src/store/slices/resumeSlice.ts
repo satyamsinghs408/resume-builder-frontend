@@ -22,6 +22,7 @@ const initialState: ResumeData = {
   projects: [],
   certifications: [],
   languages: [],
+  lastImportTimestamp: 0,
 };
 
 const resumeSlice = createSlice({

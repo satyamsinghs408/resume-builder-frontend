@@ -36,7 +36,9 @@ type SkillsFormValues = z.infer<typeof SkillsFormSchema>;
 
 const SkillsForm = () => {
   const dispatch = useAppDispatch();
-  const skillsData = useAppSelector((state: any) => state.resume?.skills || []);
+  const resumeData = useAppSelector((state: any) => state.resume);
+  const skillsData = resumeData?.skills || [];
+  const lastImportTimestamp = resumeData?.lastImportTimestamp || 0;
 
   const {
     register,
@@ -89,17 +91,15 @@ const SkillsForm = () => {
     return () => subscription.unsubscribe();
   }, [watch, dispatch]);
 
-  // Sync from Redux (e.g. File Upload)
+  // Sync from Redux (e.g. File Upload) OUTSIDE of infinite loops
   useEffect(() => {
-     if (skillsData && skillsData.length > 0) {
-         const currentWatch = watch('skills');
-         if (!currentWatch || currentWatch.length !== skillsData.length) {
-             reset({ 
-                 skills: skillsData.map((s: string) => ({ id: crypto.randomUUID(), value: s })) 
-             });
-         }
+     if (lastImportTimestamp > 0 && skillsData) {
+         reset({ 
+             skills: skillsData.map((s: string) => ({ id: crypto.randomUUID(), value: s })) 
+         });
      }
-  }, [skillsData, reset, watch]);
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastImportTimestamp, reset]);
 
   const handleAdd = () => {
     append({ id: crypto.randomUUID(), value: '' });

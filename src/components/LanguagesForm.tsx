@@ -32,7 +32,9 @@ type LanguagesFormValues = z.infer<typeof LanguagesFormSchema>;
 
 const LanguagesForm = () => {
   const dispatch = useAppDispatch();
-  const languagesData = useAppSelector((state: any) => state.resume?.languages || []);
+  const resumeData = useAppSelector((state: any) => state.resume);
+  const languagesData = resumeData?.languages || [];
+  const lastImportTimestamp = resumeData?.lastImportTimestamp || 0;
 
   const {
     register,
@@ -69,20 +71,20 @@ const LanguagesForm = () => {
   };
 
   // Robust Sync with Redux using useWatch
+  // Robust Sync with Redux using useWatch
   const watchedLanguages = useWatch({ control, name: 'languages' });
 
   useEffect(() => {
       dispatch(setLanguages(watchedLanguages as any));
   }, [watchedLanguages, dispatch]);
 
-  // Sync from Redux (e.g. File Upload)
+  // Sync from Redux (e.g. File Upload) OUTSIDE of infinite loops
   useEffect(() => {
-      if (languagesData && languagesData.length > 0) {
-          if (watchedLanguages.length !== languagesData.length) {
-              reset({ languages: languagesData });
-          }
+      if (lastImportTimestamp > 0 && languagesData) {
+          reset({ languages: languagesData });
       }
-  }, [languagesData, reset, watchedLanguages.length]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastImportTimestamp, reset]);
 
   const handleAdd = () => {
     append({
