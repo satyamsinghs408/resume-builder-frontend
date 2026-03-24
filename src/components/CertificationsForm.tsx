@@ -23,6 +23,7 @@ import { SortableWrapper, DragHandle } from './ui/SortableWrapper';
 import { setCertifications } from '../store/slices/resumeSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { CertificationSchema } from '../utils/schemas';
+import { generateId } from '../utils/generateId';
 
 const CertificationsFormSchema = z.object({
   certifications: z.array(CertificationSchema)
@@ -87,7 +88,7 @@ const CertificationsForm = () => {
 
   const handleAdd = () => {
     append({
-      id: crypto.randomUUID(),
+      id: generateId(),
       name: '',
       issuer: '',
       date: '',

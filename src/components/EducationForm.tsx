@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setEducation } from '../store/slices/resumeSlice';
 import { Education } from '../types';
 import { EducationSchema } from '../utils/schemas';
+import { generateId } from '../utils/generateId';
 
 // Define schema for the form structure
 const EducationFormSchema = z.object({
@@ -94,7 +95,7 @@ const EducationForm = () => {
 
   const handleAdd = () => {
     append({
-      id: crypto.randomUUID(),
+      id: generateId(),
       school: '',
       degree: '',
       startDate: '',

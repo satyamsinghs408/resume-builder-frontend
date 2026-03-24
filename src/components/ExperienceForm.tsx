@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setExperience } from '../store/slices/resumeSlice';
 import { Experience } from '../types';
 import { ExperienceSchema } from '../utils/schemas';
+import { generateId } from '../utils/generateId';
 
 // Define schema for the form structure
 const ExperienceFormSchema = z.object({
@@ -94,7 +95,7 @@ const ExperienceForm = () => {
 
   const handleAdd = () => {
     append({
-      id: crypto.randomUUID(),
+      id: generateId(),
       title: '',
       company: '',
       startDate: '',

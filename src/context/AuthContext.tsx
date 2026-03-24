@@ -2,8 +2,7 @@ import React, { createContext, useState, useEffect, ReactNode, useContext } from
 import axios from 'axios';
 import { User, AuthContextType } from '../types';
 
-// Get API URL from environment variable
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+import { useApi } from './ApiContext';
 
 // Create the context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -13,6 +12,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const { apiUrl: API_URL } = useApi();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 

@@ -21,6 +21,7 @@ import { Input } from './ui';
 import { SortableWrapper, DragHandle } from './ui/SortableWrapper';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setSkills } from '../store/slices/resumeSlice';
+import { generateId } from '../utils/generateId';
 
 // Define schema for the form structure - Skills is simple array of strings
 // But useFieldArray works best with objects. 
@@ -48,7 +49,7 @@ const SkillsForm = () => {
     formState: { errors },
   } = useForm<SkillsFormValues>({
     defaultValues: { 
-        skills: skillsData.map((s: string) => ({ id: crypto.randomUUID(), value: s })) 
+        skills: skillsData.map((s: string) => ({ id: generateId(), value: s })) 
     },
     resolver: zodResolver(SkillsFormSchema),
     mode: 'onChange',
@@ -95,14 +96,14 @@ const SkillsForm = () => {
   useEffect(() => {
      if (lastImportTimestamp > 0 && skillsData) {
          reset({ 
-             skills: skillsData.map((s: string) => ({ id: crypto.randomUUID(), value: s })) 
+             skills: skillsData.map((s: string) => ({ id: generateId(), value: s })) 
          });
      }
      // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastImportTimestamp, reset]);
 
   const handleAdd = () => {
-    append({ id: crypto.randomUUID(), value: '' });
+    append({ id: generateId(), value: '' });
   };
 
   return (

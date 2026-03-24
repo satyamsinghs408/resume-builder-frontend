@@ -10,8 +10,23 @@ interface ApiContextType {
   };
 }
 
-// Get API URL from environment variable, fallback to localhost
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Get API URL dynamically based on current hostname
+const API_URL = (() => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  const hostname = window.location.hostname;
+  
+  // Regex to check if hostname is an IP address
+  const isIP = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hostname);
+
+  // If we are accessing via an IP (network or localhost), 
+  // and we are NOT explicitly forcing a non-local URL, 
+  // or we just want to ensure network devices can reach the backend.
+  if (isIP && hostname !== '127.0.0.1') {
+    return `http://${hostname}:5000`;
+  }
+  
+  return envUrl || 'http://localhost:5000';
+})();
 
 const ApiContext = createContext<ApiContextType>({
   apiUrl: API_URL,

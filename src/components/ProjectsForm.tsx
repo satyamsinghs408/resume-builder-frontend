@@ -23,6 +23,7 @@ import { SortableWrapper, DragHandle } from './ui/SortableWrapper';
 import { setProjects } from '../store/slices/resumeSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { ProjectSchema } from '../utils/schemas';
+import { generateId } from '../utils/generateId';
 
 const ProjectsFormSchema = z.object({
   projects: z.array(ProjectSchema)
@@ -88,7 +89,7 @@ const ProjectsForm = () => {
 
   const handleAdd = () => {
     append({
-      id: crypto.randomUUID(),
+      id: generateId(),
       title: '',
       description: '',
       technologies: [],

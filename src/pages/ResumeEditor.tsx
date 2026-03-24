@@ -22,6 +22,7 @@ import ColorPicker from '../components/ui/ColorPicker';
 import FileUpload from '../components/editor/FileUpload';
 import PageBreakLines from '../components/preview/PageBreakLines';
 import { normalizeDate } from '../utils/dateUtils';
+import { generateId } from '../utils/generateId';
 
 // Redux Imports
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -201,7 +202,7 @@ const ResumeEditor = () => {
     const cleanedData = { ...mappedData };
 
     // Helper to ensure ID
-    const ensureId = (item: any) => ({ ...item, id: item.id || crypto.randomUUID() });
+    const ensureId = (item: any) => ({ ...item, id: item.id || generateId() });
 
     // 1. Normalize Experience
     if (cleanedData.experience) {

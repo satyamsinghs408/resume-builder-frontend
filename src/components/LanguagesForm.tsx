@@ -23,6 +23,7 @@ import { SortableWrapper, DragHandle } from './ui/SortableWrapper';
 import { setLanguages } from '../store/slices/resumeSlice';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { LanguageSchema } from '../utils/schemas';
+import { generateId } from '../utils/generateId';
 
 const LanguagesFormSchema = z.object({
   languages: z.array(LanguageSchema)
@@ -88,7 +89,7 @@ const LanguagesForm = () => {
 
   const handleAdd = () => {
     append({
-      id: crypto.randomUUID(),
+      id: generateId(),
       language: '',
       proficiency: ''
     });
