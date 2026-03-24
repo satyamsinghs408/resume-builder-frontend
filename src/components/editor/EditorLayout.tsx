@@ -21,7 +21,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
       
       {/* Main Content Area */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden relative scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-        <div className="max-w-3xl mx-auto py-2 px-6">
+        <div className="max-w-3xl mx-auto py-4 px-1 md:py-3 md:px-6">
            <motion.div
                key={currentStep}
                initial={{ opacity: 0, y: 20, filter: 'blur(5px)' }}
@@ -42,7 +42,7 @@ const EditorLayout: React.FC<EditorLayoutProps> = ({
       </div>
 
       {/* Bottom Action Bar */}
-      <div className="h-18 bg-white/90 backdrop-blur-xl border-t border-slate-200/60 flex items-center justify-between px-8 z-20 sticky bottom-0">
+      <div className="h-18 md:h-18 bg-white/90 backdrop-blur-xl border-t border-slate-200/60 flex items-center justify-between px-4 md:px-8 z-20 sticky bottom-0">
          <button 
              onClick={onBack}
              disabled={!onBack || currentStep === 1}

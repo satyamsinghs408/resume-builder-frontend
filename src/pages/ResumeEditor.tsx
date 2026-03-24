@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../context/ApiContext';
 import { downloadResumePDF } from '../utils/pdfGenerator';
@@ -33,13 +34,14 @@ import {
     setTotalSteps, 
     nextStep, 
     prevStep,
-    resetEditor
+    resetEditor,
+    toggleMobilePreview
 } from '../store/slices/editorSlice';
 
 const ResumeEditor = () => {
   const dispatch = useAppDispatch();
   const resumeData = useAppSelector((state: any) => state.resume);
-  const { currentStep, totalSteps } = useAppSelector((state: any) => state.editor);
+  const { currentStep, totalSteps, showMobilePreview } = useAppSelector((state: any) => state.editor);
   
   const [template, setTemplate] = useState<'classic' | 'modern' | 'minimalist' | 'executive' | 'creative'>('classic'); 
   const [theme, setTheme] = useState<ThemeConfig>({
@@ -403,6 +405,70 @@ const ResumeEditor = () => {
         </EditorLayout>
       </div>
 
+      {/* Mobile Preview FAB (Explicitly Draggable) */}
+      <motion.div
+        drag
+        dragMomentum={false}
+        dragElastic={0}
+        dragConstraints={{ left: -2000, right: 200, top: -2000, bottom: 200 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        style={{ touchAction: "none" }}
+        onClick={() => {
+            // Framer motion automatically prevents onClick if it was dragged!
+            dispatch(toggleMobilePreview());
+        }}
+        className="lg:hidden fixed bottom-24 right-6 z-100 bg-slate-900 text-white p-4 rounded-full shadow-2xl flex items-center justify-center border border-slate-600 cursor-grab active:cursor-grabbing"
+        aria-label="Preview Resume"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+        </svg>
+      </motion.div>
+
+      {/* Mobile Live Preview Modal */}
+      {showMobilePreview && (
+        <div className="fixed inset-0 z-50 lg:hidden flex flex-col bg-slate-900/95 backdrop-blur-md overflow-hidden">
+          {/* Modal Header */}
+          <div className="flex justify-between items-center p-4 bg-slate-900 border-b border-slate-800 shadow-sm">
+            <div className="text-white font-semibold flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              Live Preview
+            </div>
+            <button 
+              onClick={() => dispatch(toggleMobilePreview())}
+              className="text-slate-400 hover:text-white p-2 rounded-full hover:bg-slate-800 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          
+          {/* Scrollable Scaled Canvas Area */}
+          <div className="flex-1 overflow-y-auto w-full flex justify-center pt-8 pb-32">
+             <div className="relative transform scale-[0.35] sm:scale-[0.45] origin-top transition-transform duration-300 ease-out">
+                {/* Paper Glow Effect */}
+                <div className="absolute -inset-10 bg-blue-500/10 rounded-xl blur-3xl opacity-50 pointer-events-none" />
+                
+                <div className="relative w-[260mm] min-h-[297mm] bg-white shadow-2xl overflow-hidden pointer-events-none">
+                    <PageBreakLines />
+                    {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
+                    {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
+                    {template === 'minimalist' && <MinimalistTemplate resumeData={resumeData} theme={theme} />}
+                    {template === 'executive' && <ExecutiveTemplate resumeData={resumeData} theme={theme} />}
+                    {template === 'creative' && <CreativeTemplate resumeData={resumeData} theme={theme} />}
+                </div>
+             </div>
+          </div>
+        </div>
+      )}
+
+
       {/* RIGHT: Live Preview - Dark themed like NovoResume */}
       <div className="hidden lg:flex flex-col w-1/2 h-[calc(100vh-64px)] relative bg-slate-900">
         
@@ -429,7 +495,7 @@ const ResumeEditor = () => {
                 {/* Paper Glow Effect */}
                 <div className="absolute -inset-10 bg-blue-500/10 rounded-xl blur-3xl opacity-50 pointer-events-none" />
                 
-                <div className="relative w-[210mm] min-h-[297mm] bg-white shadow-2xl overflow-hidden">
+                <div className="relative w-[260mm] min-h-[297mm] bg-white shadow-2xl overflow-hidden">
                     <PageBreakLines />
                     {template === 'classic' && <ClassicTemplate resumeData={resumeData} theme={theme} />}
                     {template === 'modern' && <ModernTemplate resumeData={resumeData} theme={theme} />}
