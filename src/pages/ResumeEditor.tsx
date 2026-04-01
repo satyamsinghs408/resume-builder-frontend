@@ -146,6 +146,8 @@ const ResumeEditor = () => {
   
   const onNextClick = () => {
       if (currentStep === 7) { // Last step (0-indexed 7 = Step 8)
+          // Download PDF first, then save to backend
+          downloadResumePDF(resumeData, template, theme);
           saveResume();
       } else {
           dispatch(nextStep());
