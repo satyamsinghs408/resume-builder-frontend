@@ -322,7 +322,7 @@ const Home = () => {
               <div className="border border-slate-200 rounded-xl overflow-hidden shadow-sm">
                   <div className="grid grid-cols-3 bg-slate-50 p-4 border-b border-slate-200 text-sm font-semibold text-slate-500 uppercase tracking-wider">
                       <div>Features</div>
-                      <div className="text-center text-emerald-600">ResumeBuilder</div>
+                      <div className="text-center text-emerald-600">CareerLeaf</div>
                       <div className="text-center">Other Builders</div>
                   </div>
                   
@@ -373,7 +373,7 @@ const Home = () => {
                       <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
                           <FileText className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-lg font-bold text-white tracking-tight">Resume<span className="text-emerald-400">Builder</span></span>
+                      <span className="text-lg font-bold text-white tracking-tight">Career<span className="text-emerald-400">Leaf</span></span>
                   </div>
                   <p className="text-sm leading-relaxed max-w-sm text-slate-500">
                       We believe every professional deserves a great resume without breaking the bank. Open-source and free forever.
@@ -399,7 +399,7 @@ const Home = () => {
               </div>
           </div>
           <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/4 text-center text-xs text-slate-600">
-              © {new Date().getFullYear()} ResumeBuilder. All rights reserved. || Designed and Developed with ❤️ by Satyam Singh
+              © {new Date().getFullYear()} CareerLeaf. All rights reserved. || Designed and Developed with ❤️ by Satyam Singh
           </div>
       </footer>
     </div>

@@ -30,7 +30,7 @@ const Header: React.FC = () => {
           </div>
           <div className="hidden sm:block">
             <span className="text-lg md:text-lg font-bold text-white tracking-tight">
-              Resume<span className="text-emerald-400">Builder</span>
+              Career<span className="text-emerald-400">Leaf</span>
             </span>
             {isEditorPage && (
               <p className="text-[9px] md:text-[10px] text-slate-500 font-medium uppercase tracking-wider">Professional Edition</p>

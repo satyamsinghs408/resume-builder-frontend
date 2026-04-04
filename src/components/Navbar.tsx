@@ -20,7 +20,7 @@ const Navbar = () => {
             <FileText className="w-4.5 h-4.5 text-white" />
           </div>
           <span className="text-lg font-bold text-white tracking-tight">
-            Resume<span className="text-emerald-400">Builder</span>
+            Career<span className="text-emerald-400">Leaf</span>
           </span>
         </Link>
         

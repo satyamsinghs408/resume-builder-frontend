@@ -46,7 +46,7 @@ const Login = () => {
               <div className="w-10 h-10 bg-emerald-600 rounded-lg flex items-center justify-center">
                 <FileText className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white tracking-tight">Resume<span className="text-emerald-400">Builder</span></span>
+              <span className="text-xl font-bold text-white tracking-tight">Career<span className="text-emerald-400">Leaf</span></span>
             </div>
 
             <h2 className="text-3xl font-extrabold text-white mb-3 leading-tight tracking-tight">
@@ -91,7 +91,7 @@ const Login = () => {
             <div className="w-9 h-9 bg-emerald-600 rounded-lg flex items-center justify-center">
               <FileText className="w-4.5 h-4.5 text-white" />
             </div>
-            <span className="text-lg font-bold text-slate-900 tracking-tight">Resume<span className="text-emerald-600">Builder</span></span>
+            <span className="text-lg font-bold text-slate-900 tracking-tight">Career<span className="text-emerald-600">Leaf</span></span>
           </div>
 
           {/* Form Card */}
