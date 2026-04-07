@@ -1,8 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useEditor } from '../context/EditorContext';
-import { FileText, LayoutDashboard, LogOut, User, CheckCircle, Briefcase, GraduationCap, Download, Home, Menu, X } from 'lucide-react';
+import { 
+  FileText, LayoutDashboard, LogOut, User, CheckCircle, 
+  Briefcase, GraduationCap, Download, Menu, X, ChevronRight
+} from 'lucide-react';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
@@ -10,7 +13,23 @@ const Header: React.FC = () => {
   const location = useLocation();
   const isEditorPage = location.pathname === '/editor';
   const hasEditorSteps = currentStep > 0 && totalSteps > 0;
+  
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll for sticky navbar shadow
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const steps = [
     { id: 1, icon: FileText, label: "Details" },
@@ -19,28 +38,39 @@ const Header: React.FC = () => {
     { id: 4, icon: Download, label: "Finalize" },
   ];
 
+  const publicLinks = [
+    { name: 'Resume Builder', href: '/editor' },
+    { name: 'Templates', href: '/#templates' },
+    { name: 'Resume Examples', href: '/#examples' },
+    { name: 'Cover Letter', href: '/#cover-letter' },
+    { name: 'About', href: '/#about' },
+  ];
+
+  const mobileOnlyLinks = [
+    { name: 'Contact', href: '/#contact' }
+  ];
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-14 md:h-16 bg-slate-950/90 backdrop-blur-xl border-b border-white/6">
-      <div className="max-w-7xl mx-auto px-3 md:px-6 h-full flex justify-between items-center">
+    <header className={`fixed top-0 left-0 right-0 z-50 h-16 md:h-20 transition-all duration-300 ${
+      scrolled 
+        ? 'bg-white/80 backdrop-blur-xl shadow-sm border-b border-slate-200/50' 
+        : 'bg-white/50 backdrop-blur-md border-b border-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-full flex justify-between items-center">
         
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 md:gap-2.5 group">
-          <div className="w-8 h-8 md:w-9 md:h-9 bg-emerald-600 rounded-lg flex items-center justify-center group-hover:shadow-lg group-hover:shadow-emerald-500/20 transition-all duration-300">
-            <FileText className="w-4 h-4 md:w-4.5 md:h-4.5 text-white" />
-          </div>
-          <div className="hidden sm:block">
-            <span className="text-lg md:text-lg font-bold text-white tracking-tight">
-              Career<span className="text-emerald-400">Leaf</span>
-            </span>
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <img src="/logo.png" alt="CareerLeaf" className="h-10 w-auto object-contain" />
+          <div className="flex flex-col justify-center">
             {isEditorPage && (
-              <p className="text-[9px] md:text-[10px] text-slate-500 font-medium uppercase tracking-wider">Professional Edition</p>
+              <span className="text-[10px] sm:text-xs text-slate-500 font-semibold uppercase tracking-wider">Professional Edition</span>
             )}
           </div>
         </Link>
 
-        {/* Step Navigation - Desktop only */}
-        {isEditorPage && hasEditorSteps && (
-          <div className="hidden lg:flex items-center gap-1 ml-4">
+        {/* Step Navigation - Desktop only Editor */}
+        {isEditorPage && hasEditorSteps ? (
+          <div className="hidden lg:flex items-center gap-1.5 ml-8">
             {steps.map((step, idx) => {
               const isActive = step.id === currentStep;
               const isCompleted = step.id < currentStep;
@@ -49,159 +79,151 @@ const Header: React.FC = () => {
               return (
                 <div key={step.id} className="flex items-center">
                   <div className={`
-                    flex items-center gap-1.5 px-2.5 py-1.5 rounded-md transition-all duration-300
-                    ${isActive ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-500/20' : 
-                      isCompleted ? 'bg-emerald-500/15 text-emerald-400' : 'text-slate-500'}
+                    flex items-center gap-2 px-3 py-1.5 rounded-md transition-all duration-300
+                    ${isActive ? 'bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200' : 
+                      isCompleted ? 'text-indigo-600 font-medium' : 'text-slate-400'}
                   `}>
-                    {isCompleted ? <CheckCircle size={13} /> : <Icon size={13} />}
-                    <span className="text-xs font-semibold">{step.label}</span>
+                    {isCompleted ? <CheckCircle size={15} /> : <Icon size={15} />}
+                    <span className="text-sm">{step.label}</span>
                   </div>
                   {idx < steps.length - 1 && (
-                    <div className={`w-4 h-0.5 mx-0.5 rounded-full transition-colors ${isCompleted ? 'bg-emerald-500/40' : 'bg-slate-700'}`} />
+                    <div className={`w-6 h-px mx-1.5 transition-colors ${isCompleted ? 'bg-indigo-300' : 'bg-slate-200'}`} />
                   )}
                 </div>
               );
             })}
           </div>
+        ) : (
+          /* Main Public Navigation - Desktop */
+          <nav className="hidden lg:flex items-center space-x-1 lg:space-x-2">
+            {publicLinks.map((link) => (
+              <a 
+                key={link.name} 
+                href={link.href}
+                className="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-all"
+              >
+                {link.name}
+              </a>
+            ))}
+          </nav>
         )}
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-1.5">
+        {/* Right Actions - Desktop */}
+        <div className="hidden lg:flex items-center gap-3">
           {user ? (
-            <>
-              {(isEditorPage || location.pathname === '/dashboard') && (
+            <div className="flex items-center gap-3">
+              {!isEditorPage && (
                 <Link 
-                  to="/" 
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sm text-slate-400 hover:text-white hover:bg-white/6 transition-all duration-200"
+                  to="/dashboard" 
+                  className="px-4 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors flex items-center gap-2"
                 >
-                  <Home className="w-4 h-4" />
-                  <span className="hidden lg:block">Home</span>
+                  <LayoutDashboard className="w-4 h-4" />
+                  Dashboard
                 </Link>
               )}
-
-              <Link 
-                to="/dashboard" 
-                className={`flex items-center gap-2 px-3 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
-                  location.pathname === '/dashboard'
-                    ? 'bg-white/10 text-white'
-                    : 'text-slate-400 hover:text-white hover:bg-white/6'
-                }`}
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                <span className="hidden lg:block">Dashboard</span>
-              </Link>
-
-              <div className="flex items-center gap-2 ml-2 pl-2 border-l border-white/8">
-                <div className="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center">
-                  <User className="w-3.5 h-3.5 text-white" />
+              <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
+                <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center border border-indigo-200">
+                  <User className="w-4 h-4 text-indigo-700" />
                 </div>
-                <span className="text-sm text-slate-300 hidden xl:block max-w-24 truncate font-medium">
-                  {user.name}
-                </span>
-
                 <button 
                   onClick={logout} 
-                  className="flex items-center gap-1.5 px-3 py-2 bg-red-500/10 hover:bg-red-500/15 text-red-400 hover:text-red-300 rounded-lg font-medium text-sm transition-all duration-200"
+                  className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all group"
+                  title="Logout"
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span className="hidden lg:block">Logout</span>
+                  <LogOut className="w-4.5 h-4.5 group-hover:scale-110 transition-transform" />
                 </button>
               </div>
-            </>
+            </div>
           ) : (
-            <>
+            <div className="flex items-center gap-2">
               <Link 
                 to="/login" 
-                className="px-4 py-2 text-sm text-slate-300 hover:text-white font-medium transition-colors duration-200"
+                className="px-5 py-2.5 text-sm font-semibold text-slate-700 hover:text-indigo-600 transition-colors"
               >
-                Login
+                Sign In
               </Link>
               <Link 
                 to="/register" 
-                className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold rounded-lg shadow-sm shadow-emerald-500/20 transition-all duration-200"
+                className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-sm font-semibold rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all hover:-translate-y-1"
               >
                 Get Started
               </Link>
-            </>
+            </div>
           )}
         </div>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 text-slate-300 hover:text-white transition-colors"
+          className="lg:hidden p-2 -mr-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-colors"
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
       {/* Mobile Menu Slide-out */}
-      {mobileMenuOpen && (
-        <div className="md:hidden absolute top-14 left-0 right-0 bg-slate-950/98 backdrop-blur-xl border-b border-white/6 shadow-xl">
-          <div className="px-3 py-3 space-y-1">
+      <div className={`
+        lg:hidden absolute top-full left-0 right-0 bg-white border-b border-slate-200 shadow-xl
+        transition-all duration-300 ease-in-out origin-top overflow-hidden
+        ${mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}
+      `}>
+        <div className="px-4 py-6 space-y-5">
+          {/* Mobile Navigation Links */}
+          <nav className="flex flex-col space-y-1">
+            {[...publicLinks, ...mobileOnlyLinks].map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="flex items-center justify-between px-4 py-3 text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.name}
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </a>
+            ))}
+          </nav>
+
+          <hr className="border-slate-100" />
+
+          {/* Mobile User Actions */}
+          <div className="flex flex-col gap-3 pt-2">
             {user ? (
               <>
-                {/* User Info */}
-                <div className="flex items-center gap-3 px-3 py-3 bg-white/4 rounded-lg mb-2">
-                  <div className="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center">
-                    <User className="w-5 h-5 text-white" />
-                  </div>
-                  <span className="text-sm font-medium text-white">{user.name}</span>
-                </div>
-
-                {(isEditorPage || location.pathname === '/dashboard') && (
-                  <Link 
-                    to="/" 
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:text-white hover:bg-white/6 transition-all"
-                  >
-                    <Home className="w-5 h-5" />
-                    <span className="font-medium">Home</span>
-                  </Link>
-                )}
-
                 <Link 
                   to="/dashboard" 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                    location.pathname === '/dashboard'
-                      ? 'bg-white/10 text-white'
-                      : 'text-slate-300 hover:text-white hover:bg-white/6'
-                  }`}
+                  className="flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors"
                 >
-                  <LayoutDashboard className="w-5 h-5" />
-                  <span className="font-medium">Dashboard</span>
+                  <LayoutDashboard className="w-4.5 h-4.5" />
+                  Go to Dashboard
                 </Link>
-
                 <button 
-                  onClick={() => { logout(); setMobileMenuOpen(false); }} 
-                  className="w-full flex items-center gap-3 px-4 py-3 bg-red-500/10 hover:bg-red-500/15 text-red-400 hover:text-red-300 rounded-lg font-medium transition-all"
+                  onClick={logout} 
+                  className="flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
                 >
-                  <LogOut className="w-5 h-5" />
-                  <span>Logout</span>
+                  <LogOut className="w-4.5 h-4.5" />
+                  Sign Out ({user.name})
                 </button>
               </>
             ) : (
-              <>
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Link 
                   to="/login" 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-slate-300 hover:text-white hover:bg-white/6 rounded-lg font-medium transition-all"
+                  className="flex-1 flex items-center justify-center px-5 py-3 text-sm font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl transition-colors"
                 >
-                  Login
+                  Sign In
                 </Link>
                 <Link 
                   to="/register" 
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-center transition-all"
+                  className="flex-1 flex items-center justify-center px-5 py-3 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors"
                 >
                   Get Started
                 </Link>
-              </>
+              </div>
             )}
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 };
