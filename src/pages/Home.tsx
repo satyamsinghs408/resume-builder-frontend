@@ -56,7 +56,7 @@ const AnimatedResumeDetails = () => {
               <motion.div
                 animate={{ opacity: [1, 0] }}
                 transition={{ repeat: Infinity, duration: 0.8 }}
-                className="w-[1.5px] h-3.5 bg-indigo-600 ml-[1px]"
+                className="w-[1.5px] h-3.5 bg-indigo-600 ml-px"
               />
             </div>
           </div>
@@ -786,7 +786,7 @@ const Home = () => {
       {/* 13. CTA SECTION */}
       <section className="py-16 sm:py-24 bg-linear-to-r from-indigo-600 to-emerald-500 text-center px-4 relative overflow-hidden">
         {/* Subtle geometric background overlay */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_white_1px,_transparent_1px)] bg-[length:20px_20px]"></div>
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[20px_20px]"></div>
 
         <div className="max-w-3xl mx-auto relative z-10">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight drop-shadow-sm tracking-tight">
@@ -829,7 +829,7 @@ const Home = () => {
             <div className="col-span-1 sm:col-span-2 md:col-span-1">
               <Link
                 to="/"
-                className="flex items-center gap-2 mb-4 sm:mb-6 group inline-flex"
+                className="flex items-center gap-2 mb-4 sm:mb-6 group"
               >
                 <img
                   src="/logo.png"

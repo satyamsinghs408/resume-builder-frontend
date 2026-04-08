@@ -144,7 +144,7 @@ const Header: React.FC = () => {
               </Link>
               <Link 
                 to="/register" 
-                className="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-sm font-semibold rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all hover:-translate-y-1"
+                className="px-5 py-2.5 bg-linear-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-white text-sm font-semibold rounded-xl shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all hover:-translate-y-1"
               >
                 Get Started
               </Link>
@@ -215,7 +215,7 @@ const Header: React.FC = () => {
                 </Link>
                 <Link 
                   to="/register" 
-                  className="flex-1 flex items-center justify-center px-5 py-3 bg-gradient-to-r from-indigo-600 to-cyan-500 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors"
+                  className="flex-1 flex items-center justify-center px-5 py-3 bg-linear-to-r from-indigo-600 to-cyan-500 text-white text-sm font-semibold rounded-xl shadow-lg transition-colors"
                 >
                   Get Started
                 </Link>

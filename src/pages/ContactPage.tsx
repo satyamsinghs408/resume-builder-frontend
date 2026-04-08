@@ -23,7 +23,7 @@ const ContactPage = () => {
       {/* Background Decorators */}
       <div className="absolute top-0 right-0 w-125 h-125 bg-indigo-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-100 h-100 bg-cyan-600/15 rounded-full blur-[120px] -z-10 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#000000_1px,_transparent_1px)] bg-[length:24px_24px] opacity-[0.03] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#000000_1px,transparent_1px)] bg-size-[24px_24px] opacity-[0.03] pointer-events-none" />
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -48,8 +48,8 @@ const ContactPage = () => {
             className="lg:col-span-1 space-y-6"
           >
             <div className="bg-slate-900 rounded-3xl p-8 shadow-2xl relative overflow-hidden h-full">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/20 rounded-full blur-[40px]" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-[40px]" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/20 rounded-full blur-2xl" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl" />
               
               <h3 className="text-2xl font-bold text-white mb-8 relative z-10">Contact Information</h3>
               

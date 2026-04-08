@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield } from 'lucide-react';
 
@@ -8,7 +7,7 @@ const PrivacyPolicy = () => {
       {/* Background Decorators */}
       <div className="absolute top-0 right-0 w-125 h-125 bg-cyan-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-100 h-100 bg-indigo-600/15 rounded-full blur-[120px] -z-10 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#000000_1px,_transparent_1px)] bg-[length:24px_24px] opacity-[0.03] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[24px_24px] opacity-[0.03] pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <motion.div

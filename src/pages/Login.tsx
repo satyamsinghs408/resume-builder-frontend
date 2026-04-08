@@ -32,7 +32,7 @@ const Login = () => {
         <div className="absolute bottom-1/4 right-1/4 w-75 h-75 bg-cyan-600/10 rounded-full blur-[100px]" />
         
         {/* Dot Pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#ffffff_1px,_transparent_1px)] bg-[length:24px_24px] opacity-5 filter invert" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[24px_24px] opacity-5 filter invert" />
         
         {/* Content */}
         <div className="relative z-10 max-w-md">

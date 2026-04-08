@@ -353,7 +353,7 @@ const ResumeEditor = () => {
                     </div>
 
                     <div className="bg-linear-to-r from-indigo-50 to-cyan-50 p-6 md:p-8 rounded-3xl space-y-4 border border-indigo-100/50 mt-8 relative overflow-hidden group">
-                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 blur-[40px] rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-700" />
+                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 blur-2xl rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-700" />
                          
                          <h3 className="font-extrabold text-slate-900 text-lg md:text-xl tracking-tight">Ready to Export?</h3>
                          <button 
@@ -422,7 +422,7 @@ const ResumeEditor = () => {
              <div className="absolute top-0 right-0 w-full h-full bg-cyan-600/5 blur-[80px] rounded-full pointer-events-none" />
              <div className="relative transform scale-[0.35] sm:scale-[0.45] origin-top transition-transform duration-300 ease-out z-10">
                 {/* Paper Glow Effect */}
-                <div className="absolute -inset-10 bg-indigo-500/15 rounded-3xl blur-[40px] opacity-70 pointer-events-none" />
+                <div className="absolute -inset-10 bg-indigo-500/15 rounded-3xl blur-2xl opacity-70 pointer-events-none" />
                 
                 <div className="relative w-[260mm] min-h-[297mm] bg-white shadow-2xl overflow-hidden pointer-events-none rounded-sm">
                     <PageBreakLines />
@@ -460,9 +460,9 @@ const ResumeEditor = () => {
 
         {/* Scrollable Canvas Area */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-slate-950 w-full h-full flex justify-center pt-24 pb-24 relative">
-             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen mix-blend-lighten" />
-             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/10 blur-[120px] rounded-full pointer-events-none mix-blend-screen mix-blend-lighten" />
-             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_#ffffff_1px,_transparent_1px)] bg-[length:24px_24px] opacity-[0.02] pointer-events-none" />
+             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none mix-blend-lighten" />
+             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-600/10 blur-[120px] rounded-full pointer-events-none mix-blend-lighten" />
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[24px_24px] opacity-[0.02] pointer-events-none" />
 
              {/* The scaled A4 Paper */}
              <div className="relative transform scale-[0.45] xl:scale-[0.55] 2xl:scale-[0.65] origin-top transition-transform duration-300 ease-out z-10">
