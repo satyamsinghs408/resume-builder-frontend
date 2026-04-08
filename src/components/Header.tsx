@@ -40,14 +40,14 @@ const Header: React.FC = () => {
 
   const publicLinks = [
     { name: 'Resume Builder', href: '/editor' },
-    { name: 'Templates', href: '/#templates' },
-    { name: 'Resume Examples', href: '/#examples' },
-    { name: 'Cover Letter', href: '/#cover-letter' },
-    { name: 'About', href: '/#about' },
+    { name: 'Templates', href: '/templates' },
+    { name: 'Resume Examples', href: '/examples' },
+    { name: 'Cover Letter', href: '/cover-letter' },
+    { name: 'About', href: '/about' },
   ];
 
   const mobileOnlyLinks = [
-    { name: 'Contact', href: '/#contact' }
+    { name: 'Contact', href: '/contact' }
   ];
 
   return (
@@ -97,13 +97,13 @@ const Header: React.FC = () => {
           /* Main Public Navigation - Desktop */
           <nav className="hidden lg:flex items-center space-x-1 lg:space-x-2">
             {publicLinks.map((link) => (
-              <a 
+              <Link 
                 key={link.name} 
-                href={link.href}
+                to={link.href}
                 className="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-all"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
           </nav>
         )}
@@ -172,15 +172,15 @@ const Header: React.FC = () => {
           {/* Mobile Navigation Links */}
           <nav className="flex flex-col space-y-1">
             {[...publicLinks, ...mobileOnlyLinks].map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
+                to={link.href}
                 className="flex items-center justify-between px-4 py-3 text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.name}
                 <ChevronRight className="w-4 h-4 text-slate-400" />
-              </a>
+              </Link>
             ))}
           </nav>
 
