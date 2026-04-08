@@ -39,11 +39,11 @@ const Header: React.FC = () => {
   ];
 
   const publicLinks = [
-    { name: 'Resume Builder', href: '/editor' },
     { name: 'Templates', href: '/templates' },
     { name: 'Resume Examples', href: '/examples' },
     { name: 'Cover Letter', href: '/cover-letter' },
     { name: 'About', href: '/about' },
+    { name: 'Feedback', href: '/feedback' },
   ];
 
   const mobileOnlyLinks = [

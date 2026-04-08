@@ -21,6 +21,7 @@ import TermsOfService from "./pages/TermsOfService";
 import TemplatesPage from "./pages/TemplatesPage";
 import ExamplesPage from "./pages/ExamplesPage";
 import CoverLetterPage from "./pages/CoverLetterPage";
+import FeedbackPage from "./pages/FeedbackPage";
 
 import "./App.css";
 
@@ -42,6 +43,7 @@ function App() {
               <Route path="/templates" element={<TemplatesPage />} />
               <Route path="/examples" element={<ExamplesPage />} />
               <Route path="/cover-letter" element={<CoverLetterPage />} />
+              <Route path="/feedback" element={<FeedbackPage />} />
 
               {/* --- PROTECT THIS ROUTE --- */}
               <Route

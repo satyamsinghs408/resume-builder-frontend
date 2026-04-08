@@ -16,6 +16,7 @@ import {
 import { useState, useEffect } from "react";
 import RealisticTemplatePreview from "../components/landing/RealisticTemplatePreview";
 import AdSlot from "../components/ads/AdSlot";
+import { industries } from "./ExamplesPage";
 
 const AnimatedResumeDetails = () => {
   const text1 = "React Developer";
@@ -381,10 +382,10 @@ const Home = () => {
                   key={idx}
                   className={`relative group bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_50px_rgba(79,70,229,0.12)] hover:border-indigo-200 transition-all duration-500 hover:-translate-y-2 max-w-[280px] sm:max-w-none mx-auto w-full ${idx > 2 ? "lg:col-span-1.5" : ""}`}
                 >
-                  <div className="w-full aspect-[0.85] bg-slate-100 rounded-3xl mb-8 relative border border-slate-200 shadow-inner overflow-hidden group-hover/card:shadow-lg transition-all group/preview">
+                  <div className="w-full aspect-[1.0] bg-slate-100 rounded-3xl mb-6 relative border border-slate-200 shadow-inner overflow-hidden group-hover/card:shadow-lg transition-all group/preview">
                     <div
-                      className="w-full h-[500px] transform scale-[0.55] sm:scale-[0.55] md:scale-[0.5] xl:scale-[0.55] origin-top-left absolute top-0 left-0 transition-transform duration-[2s] ease-in-out group-hover/preview:-translate-y-[2%]"
-                      style={{ width: "181%" }}
+                      className="w-full h-[650px] transform scale-[0.58] origin-top-left absolute top-0 left-0 transition-transform duration-[2s] ease-in-out group-hover/preview:-translate-y-[2%]"
+                      style={{ width: "172%" }}
                     >
                       <RealisticTemplatePreview template={template} />
                     </div>
@@ -613,35 +614,26 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {[
-              "Fresher Resume",
-              "Developer Resume",
-              "Designer Resume",
-              "Marketing Resume",
-            ].map((job, idx) => (
+            {industries.slice(0, 4).map((ind, idx) => (
               <div key={idx} className="group flex flex-col">
-                <div className="bg-linear-to-b from-white to-slate-50 p-4 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-slate-100 aspect-3/4 mb-5 relative overflow-hidden group-hover:shadow-[0_20px_50px_rgba(6,182,212,0.12)] group-hover:ring-cyan-200 transition-all duration-500 group-hover:-translate-y-2">
-                  {/* Abstract Resume Design Placeholder */}
-                  <div className="w-full h-full bg-white shadow-[0_2px_15px_rgba(0,0,0,0.06)] rounded-2xl p-4 sm:p-5 flex flex-col justify-between border border-slate-50 relative top-2 group-hover:top-0 transition-all duration-500 pointer-events-none">
-                    <div className="h-3 sm:h-4 bg-linear-to-r from-indigo-100 to-slate-100 w-2/3 rounded-full mb-5"></div>
-                    <div className="space-y-3 flex-1 border-t border-slate-50 pt-4">
-                      <div className="h-2 bg-slate-100 w-full rounded-full"></div>
-                      <div className="h-2 bg-slate-100 w-5/6 rounded-full"></div>
-                      <div className="h-2 bg-slate-100 w-4/6 rounded-full"></div>
-                      <div className="h-6"></div>
-                      <div className="h-2 bg-slate-100 w-full rounded-full"></div>
-                      <div className="h-2 bg-slate-100 w-3/4 rounded-full"></div>
+                <div className="bg-linear-to-b from-white to-slate-50 p-3 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-slate-100 aspect-[1.05] mb-4 relative overflow-hidden group-hover:shadow-[0_20px_50px_rgba(6,182,212,0.12)] group-hover:ring-cyan-200 transition-all duration-500 group-hover:-translate-y-2">
+                  <div className="w-full h-full bg-white shadow-[0_2px_15px_rgba(0,0,0,0.06)] rounded-2xl relative transition-all duration-500 pointer-events-none overflow-hidden">
+                    <div className="w-full h-[650px] transform scale-[0.46] origin-top-left absolute top-0 left-0 transition-transform duration-[2s] ease-in-out group-hover:-translate-y-[3%]" style={{ width: '217%' }}>
+                      <RealisticTemplatePreview 
+                        template={ind.tpl} 
+                        overrideData={ind.data}
+                      />
                     </div>
                   </div>
 
                   <div className="absolute inset-0 bg-indigo-900/0 group-hover:bg-indigo-900/60 transition-all duration-300 flex items-center justify-center backdrop-blur-none group-hover:backdrop-blur-sm cursor-pointer border-2 border-transparent group-hover:border-cyan-400/50 rounded-3xl z-10 box-border">
-                    <button className="text-white font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center gap-2 text-sm sm:text-base border border-white/50 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                    <Link to="/examples" className="text-white font-bold opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center gap-2 text-sm sm:text-base border border-white/50 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/20 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
                       View Example <ArrowRight className="w-4 h-4" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
                 <h3 className="text-lg font-extrabold text-slate-800 text-center group-hover:text-cyan-600 transition-colors tracking-tight">
-                  {job}
+                  {ind.name}
                 </h3>
               </div>
             ))}
@@ -912,6 +904,14 @@ const Home = () => {
                     className="hover:text-emerald-400 text-slate-400 transition-colors flex items-center gap-2"
                   >
                     <ArrowRight className="w-3 h-3" /> Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/feedback"
+                    className="hover:text-emerald-400 text-slate-400 transition-colors flex items-center gap-2"
+                  >
+                    <ArrowRight className="w-3 h-3" /> Feedback
                   </Link>
                 </li>
               </ul>

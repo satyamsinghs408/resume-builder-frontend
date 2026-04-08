@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import RealisticTemplatePreview from '../components/landing/RealisticTemplatePreview';
 
-const industries: Array<{ name: string; tpl: 'classic' | 'modern' | 'minimalist' | 'executive' | 'creative'; data: any }> = [
+export const industries: Array<{ name: string; tpl: 'classic' | 'modern' | 'minimalist' | 'executive' | 'creative'; data: any }> = [
   { 
     name: "Software Engineering", tpl: "modern", 
     data: { 
@@ -140,8 +140,8 @@ const ExamplesPage = () => {
               className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:border-indigo-500 hover:shadow-lg transition-all group cursor-pointer flex flex-col"
             >
               {/* Preview Box */}
-              <div className="w-full aspect-[0.85] rounded-xl mb-5 relative border border-slate-200 shadow-inner overflow-hidden pointer-events-none bg-slate-100">
-                <div className="w-full h-[500px] transform scale-[0.55] xl:scale-[0.55] origin-top-left absolute top-0 left-0 transition-transform duration-[2s] ease-in-out group-hover:-translate-y-[2%]" style={{ width: '181%' }}>
+              <div className="w-full aspect-[1.0] rounded-xl mb-5 relative border border-slate-200 shadow-inner overflow-hidden pointer-events-none bg-slate-100">
+                <div className="w-full h-[650px] transform scale-[0.58] origin-top-left absolute top-0 left-0 transition-transform duration-[2s] ease-in-out group-hover:-translate-y-[2%]" style={{ width: '172%' }}>
                   <RealisticTemplatePreview 
                     template={ind.tpl} 
                     overrideData={ind.data}

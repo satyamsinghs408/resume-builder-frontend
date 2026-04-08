@@ -37,9 +37,9 @@ const TemplatesPage = () => {
               transition={{ delay: i * 0.1 }}
               className="bg-white rounded-3xl p-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-slate-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group"
             >
-              <div className="w-full aspect-[0.85] rounded-2xl mb-6 relative border border-slate-200 shadow-inner overflow-hidden group/preview pointer-events-none bg-slate-100">
+              <div className="w-full aspect-[1.0] rounded-2xl mb-6 relative border border-slate-200 shadow-inner overflow-hidden group/preview pointer-events-none bg-slate-100">
                  {/* Container that scrolls on hover */}
-                 <div className="w-full h-[500px] transform scale-[0.55] sm:scale-[0.55] md:scale-[0.5] xl:scale-[0.55] origin-top-left absolute top-0 left-0 transition-transform duration-[2s] ease-in-out group-hover:-translate-y-[2%]" style={{ width: '181%' }}>
+                 <div className="w-full h-[650px] transform scale-[0.58] origin-top-left absolute top-0 left-0 transition-transform duration-[2s] ease-in-out group-hover:-translate-y-[2%]" style={{ width: '172%' }}>
                    <RealisticTemplatePreview template={tpl.id as 'classic' | 'modern' | 'minimalist' | 'executive' | 'creative'} />
                  </div>
 
