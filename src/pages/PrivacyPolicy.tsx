@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Shield } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const PrivacyPolicy = () => {
   return (
@@ -10,6 +11,11 @@ const PrivacyPolicy = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[24px_24px] opacity-[0.03] pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <SEO
+          title="Privacy Policy | CareerLeaf"
+          description="Read CareerLeaf's privacy policy. Learn how we collect, use, and protect your personal data. We are committed to transparency and your privacy."
+          path="/privacy-policy"
+        />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

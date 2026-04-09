@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, ArrowRight, CheckCircle } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -35,6 +36,12 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex relative overflow-hidden bg-[#0F172A]">
+      <SEO
+        title="Create Account | CareerLeaf"
+        description="Create a free CareerLeaf account to save your resumes and access them anytime."
+        path="/register"
+        noindex={true}
+      />
       
       {/* Left Panel - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-6 lg:p-12 bg-slate-50 relative">

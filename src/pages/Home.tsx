@@ -16,6 +16,7 @@ import {
 import { useState, useEffect } from "react";
 import RealisticTemplatePreview from "../components/landing/RealisticTemplatePreview";
 import AdSlot from "../components/ads/AdSlot";
+import SEO from "../components/SEO";
 import { industries } from "./ExamplesPage";
 
 const AnimatedResumeDetails = () => {
@@ -102,9 +103,9 @@ const AnimatedResumeDetails = () => {
         <div className="w-full bg-white shadow-lg border border-slate-200 h-full p-4 sm:p-5 flex flex-col relative transform">
           {/* Template Header */}
           <div className="text-center border-b-2 border-slate-800 pb-3 mb-4 shrink-0 transition-all duration-300">
-            <h1 className="text-sm sm:text-base font-extrabold text-slate-900 uppercase tracking-widest transition-colors duration-300 relative inline-block">
+            <span className="text-sm sm:text-base font-extrabold text-slate-900 uppercase tracking-widest transition-colors duration-300 relative inline-block">
               Alex Rivera
-            </h1>
+            </span>
             <div className="text-indigo-600 text-[9px] sm:text-[10px] font-bold mt-1.5 uppercase tracking-wider h-3 border-l-2 border-r-2 border-transparent px-2">
               {typedTitle || <span className="opacity-0">Placeholder</span>}
             </div>
@@ -176,9 +177,44 @@ const Home = () => {
       a: "Yes, if you create a free account, your resume data is saved securely, and you can come back anytime to edit or download it again.",
     },
   ];
+  // Structured Data: FAQ
+  const faqStructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
+  };
+
+  // Structured Data: WebApplication
+  const webAppStructuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'CareerLeaf',
+    url: 'https://www.careerleaf.app',
+    applicationCategory: 'BusinessApplication',
+    operatingSystem: 'All',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    description: 'Free online resume builder with ATS-friendly templates. Create, edit, and download professional resumes as PDF instantly.',
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans mt-16 md:mt-20">
+      <SEO
+        title="Free Resume Builder Online - Create ATS-Friendly Resumes | CareerLeaf"
+        description="Create professional ATS-friendly resumes for free with CareerLeaf. Choose from modern templates, customize your content, and download instantly as PDF. No signup required."
+        path="/"
+        structuredData={[faqStructuredData, webAppStructuredData]}
+      />
       {/* 2. HERO SECTION */}
       <section className="relative overflow-hidden py-10 lg:py-24 bg-linear-to-r from-indigo-600 to-cyan-500 border-b border-indigo-700/50">
         {/* Soft Pattern Overlay */}
@@ -924,7 +960,9 @@ const Home = () => {
               </h3>
               <div className="flex gap-3 sm:gap-4">
                 <a
-                  href="#"
+                  href="https://twitter.com/careerleafapp"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-800 border border-slate-700 hover:border-emerald-500 hover:bg-emerald-600/20 hover:text-emerald-400 flex items-center justify-center text-slate-400 transition-all shadow-sm"
                   aria-label="Twitter"
                 >
@@ -936,7 +974,9 @@ const Home = () => {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href="https://linkedin.com/company/careerleaf"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-800 border border-slate-700 hover:border-indigo-500 hover:bg-indigo-600/20 hover:text-indigo-400 flex items-center justify-center text-slate-400 transition-all shadow-sm"
                   aria-label="LinkedIn"
                 >

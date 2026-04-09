@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import SEO from '../components/SEO';
+import AdSlot from '../components/ads/AdSlot';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -26,6 +28,12 @@ const ContactPage = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#000000_1px,transparent_1px)] bg-size-[24px_24px] opacity-[0.03] pointer-events-none" />
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <SEO
+          title="Contact Us | CareerLeaf Support"
+          description="Get in touch with CareerLeaf's support team. We're here to help with your resume building needs. Reach out via email or our contact form."
+          path="/contact"
+        />
         
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -177,6 +185,12 @@ const ContactPage = () => {
           </motion.div>
 
         </div>
+
+        {/* Ad Placement */}
+        <div className="mt-12">
+          <AdSlot position="footer" />
+        </div>
+
       </div>
     </div>
   );

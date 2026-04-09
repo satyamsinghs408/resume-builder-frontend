@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import RealisticTemplatePreview from '../components/landing/RealisticTemplatePreview';
+import SEO from '../components/SEO';
+import AdSlot from '../components/ads/AdSlot';
 
 export const industries: Array<{ name: string; tpl: 'classic' | 'modern' | 'minimalist' | 'executive' | 'creative'; data: any }> = [
   { 
@@ -118,6 +120,12 @@ const ExamplesPage = () => {
     <div className="min-h-screen bg-slate-50 relative overflow-hidden pt-24 md:pt-32 pb-16">
       <div className="absolute top-0 left-0 w-125 h-125 bg-cyan-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
       
+      <SEO
+        title="Resume Examples by Industry - Professional Samples | CareerLeaf"
+        description="Browse real resume examples for Software Engineering, Marketing, Sales, Design, Finance, HR, Data Science & more. Get inspired and build yours free."
+        path="/examples"
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -170,6 +178,27 @@ const ExamplesPage = () => {
                 Create Your Resume
               </button>
             </Link>
+        </div>
+
+        {/* SEO Content Section */}
+        <div className="mt-16 max-w-4xl mx-auto text-slate-500 prose prose-slate">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 tracking-tight">
+            Professional Resume Examples for Every Career
+          </h2>
+          <p className="mb-4 text-sm sm:text-base leading-relaxed font-medium">
+            Browsing <strong>resume examples</strong> is one of the most effective ways to understand what works in your specific industry. Each example above is built using a CareerLeaf template and filled with realistic content that mirrors what hiring managers and <strong>Applicant Tracking Systems</strong> look for.
+          </p>
+          <p className="mb-4 text-sm sm:text-base leading-relaxed font-medium">
+            Whether you're targeting a <strong>software engineering</strong> role at a startup, a <strong>marketing</strong> position at an agency, or a <strong>healthcare</strong> job at a hospital, our examples show the ideal structure, keywords, and formatting for each field. Pay attention to how each example balances technical skills with achievements and uses action verbs to describe responsibilities.
+          </p>
+          <p className="text-sm sm:text-base leading-relaxed font-medium">
+            Ready to create your own? Use any of these examples as a starting point in our <strong>free resume builder</strong>. Simply click "Use this layout" on any card above to load the template into the editor and customize it with your own information.
+          </p>
+        </div>
+
+        {/* Ad Placement */}
+        <div className="mt-12">
+          <AdSlot position="templates" />
         </div>
       </div>
     </div>

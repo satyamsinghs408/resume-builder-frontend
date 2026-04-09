@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { FileText } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const TermsOfService = () => {
   return (
@@ -10,6 +11,11 @@ const TermsOfService = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,white_1px,transparent_1px)] bg-size-[24px_24px] opacity-[0.03] pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        <SEO
+          title="Terms of Service | CareerLeaf"
+          description="Review CareerLeaf's terms of service. Understand the rules and guidelines for using our free online resume builder platform."
+          path="/terms-of-service"
+        />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

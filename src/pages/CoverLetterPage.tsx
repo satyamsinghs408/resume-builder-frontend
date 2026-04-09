@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
+import SEO from '../components/SEO';
+import AdSlot from '../components/ads/AdSlot';
 
 const CoverLetterPage = () => {
   return (
@@ -9,6 +11,11 @@ const CoverLetterPage = () => {
       <div className="absolute bottom-1/4 left-1/4 w-100 h-100 bg-cyan-600/15 rounded-full blur-[120px] -z-10 pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <SEO
+          title="AI Cover Letter Generator (Coming Soon) | CareerLeaf"
+          description="CareerLeaf's AI cover letter generator is coming soon. Pair it perfectly with your resume for the ultimate job application."
+          path="/cover-letter"
+        />
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -45,6 +52,11 @@ const CoverLetterPage = () => {
              </button>
           </div>
         </motion.div>
+
+        {/* Ad Placement */}
+        <div className="mt-12">
+          <AdSlot position="footer" />
+        </div>
       </div>
     </div>
   );

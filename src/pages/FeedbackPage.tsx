@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Send, ThumbsUp, AlertCircle, Lightbulb } from 'lucide-react';
+import SEO from '../components/SEO';
+import AdSlot from '../components/ads/AdSlot';
 
 const FeedbackPage = () => {
   const [formData, setFormData] = useState({
@@ -43,6 +45,12 @@ const FeedbackPage = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#000000_1px,transparent_1px)] bg-size-[24px_24px] opacity-[0.03] pointer-events-none" />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <SEO
+          title="Share Your Feedback | CareerLeaf"
+          description="Help us improve CareerLeaf by sharing your thoughts, reporting bugs, or requesting new features. Your feedback shapes our product."
+          path="/feedback"
+        />
         
         {/* Header Section */}
         <motion.div
@@ -189,6 +197,11 @@ const FeedbackPage = () => {
             </form>
           )}
         </motion.div>
+
+        {/* Ad Placement */}
+        <div className="mt-12">
+          <AdSlot position="footer" />
+        </div>
       </div>
     </div>
   );

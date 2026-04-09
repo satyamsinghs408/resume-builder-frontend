@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -24,6 +25,12 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex relative overflow-hidden bg-[#0F172A]">
+      <SEO
+        title="Sign In | CareerLeaf"
+        description="Sign in to your CareerLeaf account to access your saved resumes and continue building."
+        path="/login"
+        noindex={true}
+      />
       
       {/* Left Panel - Decorative */}
       <div className="hidden lg:flex lg:w-1/2 relative bg-[#0F172A] p-12 items-center justify-center">

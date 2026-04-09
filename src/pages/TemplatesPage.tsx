@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import RealisticTemplatePreview from '../components/landing/RealisticTemplatePreview';
+import SEO from '../components/SEO';
+import AdSlot from '../components/ads/AdSlot';
 
 const templates = [
   { id: 'classic', name: 'Classic Professional', desc: 'Standard ATS-friendly format perfect for corporate roles.', bg: 'bg-white', border: 'border-slate-200' },
@@ -16,6 +18,11 @@ const TemplatesPage = () => {
       <div className="absolute top-0 right-0 w-125 h-125 bg-indigo-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-100 h-100 bg-cyan-600/15 rounded-full blur-[120px] -z-10 pointer-events-none" />
       
+      <SEO
+        title="Free Resume Templates - ATS Friendly Professional Designs | CareerLeaf"
+        description="Browse CareerLeaf's collection of free, ATS-optimized resume templates. Classic, Modern, Minimalist, Executive & Creative designs. Download as PDF instantly."
+        path="/templates"
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -57,6 +64,27 @@ const TemplatesPage = () => {
               <p className="text-slate-500 font-medium text-sm">{tpl.desc}</p>
             </motion.div>
           ))}
+        </div>
+
+        {/* SEO Content Section */}
+        <div className="mt-16 max-w-4xl mx-auto text-slate-500 prose prose-slate">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4 tracking-tight">
+            Why Choose Our Free Resume Templates?
+          </h2>
+          <p className="mb-4 text-sm sm:text-base leading-relaxed font-medium">
+            Every <strong>resume template</strong> in our library has been designed by HR professionals and tested against major <strong>Applicant Tracking Systems (ATS)</strong>. Whether you're a fresh graduate writing your first CV or a seasoned executive updating your career profile, our templates provide the perfect structure for showcasing your skills, experience, and education.
+          </p>
+          <p className="mb-4 text-sm sm:text-base leading-relaxed font-medium">
+            Our <strong>Classic Professional</strong> template is the go-to choice for corporate and traditional industries. The <strong>Modern</strong> template features a bold sidebar layout ideal for tech and product roles. Choose the <strong>Minimalist</strong> or <strong>Creative</strong> designs for maximum visual impact while maintaining ATS compatibility.
+          </p>
+          <p className="text-sm sm:text-base leading-relaxed font-medium">
+            All our templates are <strong>100% free</strong> — no hidden paywalls, no credit card required. Simply select your preferred design, fill in your information using our intuitive editor, and download a polished PDF ready for your next job application.
+          </p>
+        </div>
+
+        {/* Ad Placement */}
+        <div className="mt-12">
+          <AdSlot position="templates" />
         </div>
       </div>
     </div>
