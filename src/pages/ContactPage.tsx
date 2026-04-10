@@ -1,22 +1,32 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Clock, Calendar, Info, Send } from 'lucide-react';
+import { Mail, Clock, Calendar, Info, Send, AlertCircle } from 'lucide-react';
 import SEO from '../components/SEO';
+import axios from 'axios';
+import { useApi } from '../context/ApiContext';
 
 const ContactPage = () => {
+  const { endpoints } = useApi();
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Dummy submission logic for frontend aesthetics
-    setTimeout(() => {
+    setError(null);
+    
+    try {
+      await axios.post(endpoints.contact, formData);
       setIsSubmitting(false);
       setSubmitted(true);
       setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 1500);
+    } catch (err: any) {
+      console.error('Submission error:', err);
+      setError(err.response?.data?.message || 'Failed to send message. Please try again later.');
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -135,6 +145,12 @@ const ContactPage = () => {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  {error && (
+                    <div className="p-4 bg-rose-50 border border-rose-100 rounded-xl flex items-center gap-3 text-rose-600 font-medium animate-shake">
+                      <AlertCircle size={20} />
+                      {error}
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-bold text-slate-700">Your Name</label>

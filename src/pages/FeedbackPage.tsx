@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Send, ThumbsUp, AlertCircle, Lightbulb } from 'lucide-react';
 import SEO from '../components/SEO';
+import axios from 'axios';
+import { useApi } from '../context/ApiContext';
 
 const FeedbackPage = () => {
+  const { endpoints } = useApi();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -12,21 +15,26 @@ const FeedbackPage = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Feedback Submitted:', formData);
+    try {
+      await axios.post(endpoints.feedback, formData);
       setIsSubmitting(false);
       setIsSuccess(true);
       setFormData({ name: '', email: '', type: 'general', message: '' });
       
-      // Reset success message after 5 seconds
-      setTimeout(() => setIsSuccess(false), 5000);
-    }, 1500);
+      // Reset success message after 10 seconds
+      setTimeout(() => setIsSuccess(false), 10000);
+    } catch (err: any) {
+      console.error('Feedback submission error:', err);
+      setError(err.response?.data?.message || 'Failed to send feedback. Please try again later.');
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -99,6 +107,12 @@ const FeedbackPage = () => {
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6 relative z-10 font-medium text-slate-700">
+              {error && (
+                <div className="p-4 bg-rose-50 border border-rose-100 rounded-xl flex items-center gap-3 text-rose-600 font-bold animate-shake">
+                  <AlertCircle size={20} />
+                  {error}
+                </div>
+              )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-bold text-slate-700 mb-2">Full Name</label>

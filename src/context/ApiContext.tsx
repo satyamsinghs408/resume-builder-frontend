@@ -7,6 +7,8 @@ interface ApiContextType {
     register: string;
     resumes: string;
     parseResume: string;
+    contact: string;
+    feedback: string;
   };
 }
 
@@ -35,6 +37,8 @@ const ApiContext = createContext<ApiContextType>({
     register: `${API_URL}/api/users/register`,
     resumes: `${API_URL}/api/resumes`,
     parseResume: `${API_URL}/api/resumes/parse`,
+    contact: `${API_URL}/api/contact`,
+    feedback: `${API_URL}/api/feedback`,
   },
 });
 
@@ -50,6 +54,8 @@ export const ApiProvider: React.FC<ApiProviderProps> = ({ children }) => {
       register: `${API_URL}/api/users/register`,
       resumes: `${API_URL}/api/resumes`,
       parseResume: `${API_URL}/api/resumes/parse`,
+      contact: `${API_URL}/api/contact`,
+      feedback: `${API_URL}/api/feedback`,
     },
   };
 
