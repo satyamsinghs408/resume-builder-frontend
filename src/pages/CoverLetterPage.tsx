@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import SEO from '../components/SEO';
-import AdSlot from '../components/ads/AdSlot';
 
 const CoverLetterPage = () => {
   return (
@@ -53,10 +52,6 @@ const CoverLetterPage = () => {
           </div>
         </motion.div>
 
-        {/* Ad Placement */}
-        <div className="mt-12">
-          <AdSlot position="footer" />
-        </div>
       </div>
     </div>
   );

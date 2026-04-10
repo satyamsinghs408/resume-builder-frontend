@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { Sparkles, Target, Users, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
-import AdSlot from '../components/ads/AdSlot';
 
 const AboutPage = () => {
   return (
@@ -128,11 +127,6 @@ const AboutPage = () => {
             </button>
           </Link>
         </motion.div>
-
-        {/* Ad Placement */}
-        <div className="mt-12">
-          <AdSlot position="footer" />
-        </div>
 
       </div>
     </div>

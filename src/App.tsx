@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ApiProvider } from "./context/ApiContext";
 import { EditorProvider } from "./context/EditorContext";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 // Import the Guard
 import ProtectedRoute from "./components/ProtectedRoute.jsx"; // <--- IMPORT THIS
@@ -45,15 +46,9 @@ function App() {
               <Route path="/cover-letter" element={<CoverLetterPage />} />
               <Route path="/feedback" element={<FeedbackPage />} />
 
-              {/* --- PROTECT THIS ROUTE --- */}
-              <Route
-                path="/editor"
-                element={
-                  <ProtectedRoute>
-                    <ResumeEditor />
-                  </ProtectedRoute>
-                }
-              />
+              {/* --- editor is now public for guest creation --- */}
+              <Route path="/editor" element={<ResumeEditor />} />
+              
               <Route
                 path="/dashboard"
                 element={
@@ -67,6 +62,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>
+            <Footer />
           </Router>
         </EditorProvider>
       </AuthProvider>

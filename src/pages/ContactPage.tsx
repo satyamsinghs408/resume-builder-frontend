@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Mail, Clock, Calendar, Info, Send } from 'lucide-react';
 import SEO from '../components/SEO';
-import AdSlot from '../components/ads/AdSlot';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -55,13 +54,13 @@ const ContactPage = () => {
             transition={{ delay: 0.1 }}
             className="lg:col-span-1 space-y-6"
           >
-            <div className="bg-slate-900 rounded-3xl p-8 shadow-2xl relative overflow-hidden h-full">
+            <div className="bg-slate-900 rounded-3xl p-8 shadow-2xl relative overflow-hidden h-full flex flex-col">
               <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/20 rounded-full blur-2xl" />
               <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl" />
               
               <h3 className="text-2xl font-bold text-white mb-8 relative z-10">Contact Information</h3>
               
-              <div className="space-y-8 relative z-10">
+              <div className="space-y-8 relative z-10 grow">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 border border-white/5">
                     <Mail className="w-5 h-5 text-cyan-400" />
@@ -69,29 +68,43 @@ const ContactPage = () => {
                   <div>
                     <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-1">Email Us</p>
                     <p className="text-white font-medium">support@careerleaf.app</p>
-                    <p className="text-white font-medium">hello@careerleaf.app</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 border border-white/5">
-                    <MapPin className="w-5 h-5 text-indigo-400" />
+                    <Clock className="w-5 h-5 text-indigo-400" />
                   </div>
                   <div>
-                    <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-1">Headquarters</p>
-                    <p className="text-white font-medium">100 Tech Hub Road</p>
-                    <p className="text-white font-medium">Innovation Valley, CA 94000</p>
+                    <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-1">Response Time</p>
+                    <p className="text-white font-medium">We typically respond within</p>
+                    <p className="text-white font-medium">24–48 hours.</p>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 border border-white/5">
-                    <Phone className="w-5 h-5 text-purple-400" />
+                    <Calendar className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
-                    <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-1">Phone</p>
-                    <p className="text-white font-medium">+1 (555) 123-4567</p>
-                    <p className="text-slate-500 text-xs mt-1">Mon-Fri 9am to 6pm PST</p>
+                    <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-1">Business Hours</p>
+                    <p className="text-white font-medium">Monday – Friday</p>
+                    <p className="text-white font-medium">9:00 AM – 6:00 PM (IST)</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* About Support Section */}
+              <div className="mt-12 pt-8 border-t border-white/10 relative z-10">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center shrink-0 border border-white/5">
+                    <Info className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <div>
+                    <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider mb-1">About Support</p>
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      For any questions, feedback, or issues related to CareerLeaf, feel free to contact us via email. We’re here to help you build better resumes.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -101,7 +114,7 @@ const ContactPage = () => {
           {/* Contact Form */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="lg:col-span-2"
           >
@@ -112,7 +125,7 @@ const ContactPage = () => {
                     <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                   </div>
                   <h3 className="text-2xl font-extrabold text-slate-900">Message Sent!</h3>
-                  <p className="text-slate-500 font-medium">Thank you for reaching out. Our support team will get back to you within 24 hours.</p>
+                  <p className="text-slate-500 font-medium">Thank you for reaching out. Our support team will get back to you within 24–48 hours.</p>
                   <button 
                     onClick={() => setSubmitted(false)}
                     className="mt-6 px-6 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 transition-colors"
@@ -185,12 +198,6 @@ const ContactPage = () => {
           </motion.div>
 
         </div>
-
-        {/* Ad Placement */}
-        <div className="mt-12">
-          <AdSlot position="footer" />
-        </div>
-
       </div>
     </div>
   );

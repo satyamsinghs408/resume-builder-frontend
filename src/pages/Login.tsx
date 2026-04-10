@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Mail, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Sparkles, AlertCircle } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const Login = () => {
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/dashboard';
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -19,7 +22,7 @@ const Login = () => {
     const success = await login(email, password);
     setIsLoading(false);
     if (success) {
-      navigate('/editor'); 
+      navigate(redirect); 
     }
   };
 
@@ -101,6 +104,20 @@ const Login = () => {
           {/* Form Card */}
           <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 lg:p-10 relative">
             <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-indigo-500 to-cyan-400 rounded-t-3xl" />
+            
+            {searchParams.get('redirect') === '/editor' && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-start gap-3"
+              >
+                <AlertCircle className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+                <p className="text-sm font-medium text-indigo-900 leading-relaxed">
+                  Sign in to save your resume progress to your dashboard.
+                </p>
+              </motion.div>
+            )}
+
             <h2 className="text-2xl font-extrabold text-slate-900 mb-2 tracking-tight mt-1">Sign In</h2>
             <p className="text-slate-500 text-sm mb-8 font-medium">Enter your credentials to access your account</p>
 

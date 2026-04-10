@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { User, Mail, Lock, ArrowRight, CheckCircle } from 'lucide-react';
+import { User, Mail, Lock, ArrowRight, CheckCircle, AlertCircle } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const Register = () => {
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get('redirect') || '/dashboard';
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,7 +33,7 @@ const Register = () => {
     const success = await register(name, email, password);
     setIsLoading(false);
     if (success) {
-      navigate('/editor');
+      navigate(redirect);
     }
   };
 
@@ -62,6 +65,20 @@ const Register = () => {
           {/* Form Card */}
           <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-8 lg:p-10 relative">
             <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-cyan-400 to-indigo-500 rounded-t-3xl" />
+            
+            {searchParams.get('redirect') === '/editor' && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-2xl flex items-start gap-3"
+              >
+                <AlertCircle className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+                <p className="text-sm font-medium text-indigo-900 leading-relaxed">
+                  Note: To save your current resume progress, please create an account first.
+                </p>
+              </motion.div>
+            )}
+
             <h2 className="text-2xl font-extrabold text-slate-900 mb-2 tracking-tight mt-1">Create Account</h2>
             <p className="text-slate-500 text-sm mb-8 font-medium">Start building professional resumes today</p>
 

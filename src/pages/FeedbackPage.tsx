@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Send, ThumbsUp, AlertCircle, Lightbulb } from 'lucide-react';
 import SEO from '../components/SEO';
-import AdSlot from '../components/ads/AdSlot';
 
 const FeedbackPage = () => {
   const [formData, setFormData] = useState({
@@ -198,10 +197,6 @@ const FeedbackPage = () => {
           )}
         </motion.div>
 
-        {/* Ad Placement */}
-        <div className="mt-12">
-          <AdSlot position="footer" />
-        </div>
       </div>
     </div>
   );

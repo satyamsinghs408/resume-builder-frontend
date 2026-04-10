@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useApi } from '../context/ApiContext';
 import { downloadResumePDF } from '../utils/pdfGenerator';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import PersonalForm from '../components/PersonalForm';
 import ExperienceForm from '../components/ExperienceForm';
 import EducationForm from '../components/EducationForm';
@@ -24,7 +24,7 @@ import FileUpload from '../components/editor/FileUpload';
 import PageBreakLines from '../components/preview/PageBreakLines';
 import { normalizeDate } from '../utils/dateUtils';
 import { generateId } from '../utils/generateId';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Layout, ChevronDown, Check } from 'lucide-react';
 
 // Redux Imports
 import { useAppDispatch, useAppSelector } from '../store/hooks';
@@ -44,22 +44,59 @@ const ResumeEditor = () => {
   const resumeData = useAppSelector((state: any) => state.resume);
   const { currentStep, totalSteps, showMobilePreview } = useAppSelector((state: any) => state.editor);
   
+  const { user } = useAuth();
+  const { endpoints } = useApi();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // 1. Template & UI States
   const [template, setTemplate] = useState<'classic' | 'modern' | 'minimalist' | 'executive' | 'creative'>('classic'); 
   const [theme, setTheme] = useState<ThemeConfig>({
     primaryColor: '#4F46E5', // Updated default base text theme to Indigo
     secondaryColor: '#ffffff',
     fontFamily: 'Roboto'
   });
-  
-  const { user } = useAuth();
-  const { endpoints } = useApi();
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  // CHECK: Are we editing an existing resume?
+  const [isTemplateSwitcherOpen, setIsTemplateSwitcherOpen] = useState(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [currentResumeId, setCurrentResumeId] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+
+  // 2. Initialize Template from URL or Storage
+  useEffect(() => {
+    const templateParam = searchParams.get('template');
+    const validTemplates = ['classic', 'modern', 'minimalist', 'executive', 'creative'];
+    
+    if (templateParam && validTemplates.includes(templateParam)) {
+        setTemplate(templateParam as any);
+        console.log(`Initialized editor with ${templateParam} template from URL`);
+    } else {
+        const storedTemplate = localStorage.getItem('lastSelectedTemplate');
+        if (storedTemplate && validTemplates.includes(storedTemplate)) {
+            setTemplate(storedTemplate as any);
+        }
+    }
+  }, [searchParams]);
+
+  // Update storage when template changes
+  useEffect(() => {
+    localStorage.setItem('lastSelectedTemplate', template);
+  }, [template]);
+
+  // 2. Draft Restoration Logic
+  useEffect(() => {
+    const draft = localStorage.getItem('guestResumeDraft');
+    if (draft && !isEditing) {
+        try {
+            const parsedDraft = JSON.parse(draft);
+            dispatch(setResumeData(parsedDraft));
+            localStorage.removeItem('guestResumeDraft');
+            console.log('Restored resume draft from guest session');
+        } catch (e) {
+            console.error('Failed to parse resume draft', e);
+        }
+    }
+  }, [dispatch, isEditing]);
 
   useEffect(() => {
     if (location.state && location.state.resumeToEdit) {
@@ -91,7 +128,9 @@ const ResumeEditor = () => {
 
   const saveResume = async () => {
     if (!user) {
-      alert("Please login to save your resume.");
+      // Save draft to localStorage before redirecting
+      localStorage.setItem('guestResumeDraft', JSON.stringify(resumeData));
+      navigate('/login?redirect=/editor');
       return;
     }
 
@@ -452,9 +491,41 @@ const ResumeEditor = () => {
                 <span className="z-10 tracking-widest uppercase">Live Preview</span>
             </div>
             
-            <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-800/60 px-4 py-2 rounded-xl border border-slate-700/50 shadow-sm backdrop-blur-md">
-               <span className="tracking-widest uppercase opacity-70">Template:</span>
-               <span className="font-bold text-white tracking-widest uppercase">{template}</span>
+            <div className="relative">
+              <button 
+                onClick={() => setIsTemplateSwitcherOpen(!isTemplateSwitcherOpen)}
+                className="flex items-center gap-2 text-xs text-slate-400 bg-slate-800/60 hover:bg-slate-800 hover:text-white px-4 py-2 rounded-xl border border-slate-700/50 shadow-sm transition-all active:scale-95 group"
+              >
+                 <Layout className="w-3 h-3 text-indigo-400 group-hover:text-cyan-400" />
+                 <span className="tracking-widest uppercase opacity-70">Template:</span>
+                 <span className="font-bold text-white tracking-widest uppercase">{template}</span>
+                 <ChevronDown className={`w-3 h-3 transition-transform ${isTemplateSwitcherOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isTemplateSwitcherOpen && (
+                <div className="absolute top-full right-0 mt-2 w-56 bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-2 z-60 animate-fadeIn">
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest p-2 mb-1 border-b border-slate-800">
+                        Choose Style
+                    </div>
+                    {['classic', 'modern', 'minimalist', 'executive', 'creative'].map((t) => (
+                        <button
+                            key={t}
+                            onClick={() => {
+                                setTemplate(t as any);
+                                setIsTemplateSwitcherOpen(false);
+                            }}
+                            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                                template === t 
+                                    ? 'bg-indigo-600 text-white shadow-lg' 
+                                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                            }`}
+                        >
+                            <span className="capitalize">{t}</span>
+                            {template === t && <Check className="w-4 h-4" />}
+                        </button>
+                    ))}
+                </div>
+              )}
             </div>
         </div>
 
