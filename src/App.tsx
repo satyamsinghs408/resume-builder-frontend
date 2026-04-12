@@ -23,6 +23,7 @@ import TemplatesPage from "./pages/TemplatesPage";
 import ExamplesPage from "./pages/ExamplesPage";
 import CoverLetterPage from "./pages/CoverLetterPage";
 import FeedbackPage from "./pages/FeedbackPage";
+import ProfilePage from "./pages/ProfilePage";
 
 import "./App.css";
 
@@ -59,6 +60,14 @@ function App() {
               />
               {/* -------------------------- */}
 
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>

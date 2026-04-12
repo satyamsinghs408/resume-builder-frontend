@@ -122,9 +122,13 @@ const Header: React.FC = () => {
                 </Link>
               )}
               <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
-                <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center border border-indigo-200">
+                <Link 
+                  to="/profile" 
+                  className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center border border-indigo-200 hover:bg-indigo-200 transition-colors shadow-sm"
+                  title="My Profile"
+                >
                   <User className="w-4 h-4 text-indigo-700" />
-                </div>
+                </Link>
                 <button 
                   onClick={logout} 
                   className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all group"
@@ -197,12 +201,23 @@ const Header: React.FC = () => {
                   <LayoutDashboard className="w-4.5 h-4.5" />
                   Go to Dashboard
                 </Link>
+                <Link 
+                  to="/profile" 
+                  className="flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-semibold text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-xl transition-colors border border-slate-200"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <User className="w-4.5 h-4.5" />
+                  My Profile ({user.name})
+                </Link>
                 <button 
-                  onClick={logout} 
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    logout();
+                  }} 
                   className="flex items-center justify-center gap-2 w-full px-5 py-3 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
                 >
                   <LogOut className="w-4.5 h-4.5" />
-                  Sign Out ({user.name})
+                  Sign Out
                 </button>
               </>
             ) : (
