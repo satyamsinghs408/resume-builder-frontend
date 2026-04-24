@@ -80,6 +80,14 @@ const Footer: React.FC = () => {
                     <ArrowRight className="w-3 h-3" /> Examples
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    to="/blog"
+                    className="hover:text-emerald-400 text-slate-400 transition-colors flex items-center gap-2"
+                  >
+                    <ArrowRight className="w-3 h-3" /> Career Blog
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -127,6 +135,14 @@ const Footer: React.FC = () => {
                     className="hover:text-emerald-400 text-slate-400 transition-colors flex items-center gap-2"
                   >
                     <ArrowRight className="w-3 h-3" /> Feedback
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/disclaimer"
+                    className="hover:text-emerald-400 text-slate-400 transition-colors flex items-center gap-2"
+                  >
+                    <ArrowRight className="w-3 h-3" /> Disclaimer
                   </Link>
                 </li>
               </ul>

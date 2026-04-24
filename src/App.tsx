@@ -23,6 +23,8 @@ import TemplatesPage from "./pages/TemplatesPage";
 import ExamplesPage from "./pages/ExamplesPage";
 import CoverLetterPage from "./pages/CoverLetterPage";
 import FeedbackPage from "./pages/FeedbackPage";
+import DisclaimerPage from "./pages/DisclaimerPage";
+import BlogPage from "./pages/BlogPage";
 import ProfilePage from "./pages/ProfilePage";
 
 import "./App.css";
@@ -46,6 +48,8 @@ function App() {
               <Route path="/examples" element={<ExamplesPage />} />
               <Route path="/cover-letter" element={<CoverLetterPage />} />
               <Route path="/feedback" element={<FeedbackPage />} />
+              <Route path="/disclaimer" element={<DisclaimerPage />} />
+              <Route path="/blog" element={<BlogPage />} />
 
               {/* --- editor is now public for guest creation --- */}
               <Route path="/editor" element={<ResumeEditor />} />

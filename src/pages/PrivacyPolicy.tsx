@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Eye, Database, Share2, Lock, Mail, ShieldCheck, Heart } from 'lucide-react';
+import { Eye, Database, Lock, Mail, ShieldCheck, Heart } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const PrivacyPolicy = () => {

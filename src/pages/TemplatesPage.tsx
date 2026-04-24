@@ -77,9 +77,37 @@ const TemplatesPage = () => {
           <p className="mb-4 text-sm sm:text-base leading-relaxed font-medium">
             Our <strong>Classic Professional</strong> template is the go-to choice for corporate and traditional industries. The <strong>Modern</strong> template features a bold sidebar layout ideal for tech and product roles. Choose the <strong>Minimalist</strong> or <strong>Creative</strong> designs for maximum visual impact while maintaining ATS compatibility.
           </p>
-          <p className="text-sm sm:text-base leading-relaxed font-medium">
+          <p className="mb-6 text-sm sm:text-base leading-relaxed font-medium">
             All our templates are <strong>100% free</strong> — no hidden paywalls, no credit card required. Simply select your preferred design, fill in your information using our intuitive editor, and download a polished PDF ready for your next job application.
           </p>
+
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3 tracking-tight">
+            How to Choose the Right Resume Template for Your Industry
+          </h3>
+          <p className="mb-4 text-sm sm:text-base leading-relaxed font-medium">
+            Selecting the right template is more than an aesthetic choice — it directly affects how recruiters and ATS software perceive your application. For <strong>corporate sectors</strong> like banking, law, accounting, and consulting, stick with clean, single-column layouts that prioritize readability and professionalism. The Classic Professional template works exceptionally well here. For <strong>technology, design, and startup roles</strong>, a two-column layout with a skills sidebar (like our Modern template) allows you to showcase technical proficiencies prominently while keeping work history accessible.
+          </p>
+          <p className="mb-6 text-sm sm:text-base leading-relaxed font-medium">
+            If you're a <strong>recent graduate or career changer</strong>, choose a template that allows you to lead with skills and education rather than extensive work experience. Functional or combination layouts help highlight transferable competencies. Regardless of which template you choose, ensure it uses standard section headings like "Work Experience," "Education," and "Skills" — these are the labels ATS software is programmed to recognize.
+          </p>
+
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 tracking-tight">
+            Frequently Asked Questions About Our Resume Templates
+          </h3>
+          <div className="space-y-4">
+            {[
+              { q: "Are these resume templates really free?", a: "Yes, 100% free with no hidden fees. You can create, edit, and download your resume as a PDF without ever entering payment information. CareerLeaf is supported by advertising, which allows us to offer premium-quality templates at no cost to you." },
+              { q: "Are the templates compatible with ATS software?", a: "Absolutely. Every template is tested against popular ATS platforms including Workday, Greenhouse, Lever, and iCIMS. We use clean HTML-to-PDF rendering with standard fonts, proper heading hierarchy, and machine-readable formatting to ensure your resume passes automated screening." },
+              { q: "Can I customize the colors and fonts?", a: "Yes. Our resume editor lets you personalize your template with different color accents while maintaining professional readability. The layout structure is optimized for both visual appeal and ATS compatibility, so your customizations won't break the formatting." },
+              { q: "Which template is best for freshers with no experience?", a: "We recommend starting with the Classic Professional or Minimalist template. These layouts allow you to lead with your education, skills, and projects rather than work experience. Focus on internships, academic achievements, volunteer work, and relevant coursework to fill your resume with impactful content." },
+              { q: "What file format will I download?", a: "All resumes are exported as high-quality PDF files. PDF is the universally accepted format for job applications — it preserves your formatting across all devices and operating systems, and is compatible with virtually every ATS on the market." }
+            ].map((faq, i) => (
+              <div key={i} className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                <h4 className="font-bold text-slate-900 text-sm mb-2">{faq.q}</h4>
+                <p className="text-sm text-slate-600 font-medium leading-relaxed m-0">{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Ad Placement */}

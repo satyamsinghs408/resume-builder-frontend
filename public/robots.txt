@@ -4,5 +4,6 @@ Disallow: /editor
 Disallow: /dashboard
 Disallow: /login
 Disallow: /register
+Disallow: /profile
 
 Sitemap: https://www.careerleaf.app/sitemap.xml

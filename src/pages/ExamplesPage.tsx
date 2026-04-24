@@ -191,9 +191,44 @@ const ExamplesPage = () => {
           <p className="mb-4 text-sm sm:text-base leading-relaxed font-medium">
             Whether you're targeting a <strong>software engineering</strong> role at a startup, a <strong>marketing</strong> position at an agency, or a <strong>healthcare</strong> job at a hospital, our examples show the ideal structure, keywords, and formatting for each field. Pay attention to how each example balances technical skills with achievements and uses action verbs to describe responsibilities.
           </p>
-          <p className="text-sm sm:text-base leading-relaxed font-medium">
+          <p className="mb-6 text-sm sm:text-base leading-relaxed font-medium">
             Ready to create your own? Use any of these examples as a starting point in our <strong>free resume builder</strong>. Simply click "Use this layout" on any card above to load the template into the editor and customize it with your own information.
           </p>
+
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3 tracking-tight">
+            How to Use Resume Examples Effectively
+          </h3>
+          <p className="mb-4 text-sm sm:text-base leading-relaxed font-medium">
+            Resume examples are meant to be <strong>inspiration, not templates to copy verbatim</strong>. Study the structure — notice how each example organizes sections, formats bullet points, and highlights measurable achievements. Then adapt the approach to your own experience. For instance, if a marketing example shows "Increased email open rates by 42% through A/B testing subject lines," think about similar metrics from your own work and frame them the same way.
+          </p>
+          <p className="mb-6 text-sm sm:text-base leading-relaxed font-medium">
+            The most effective strategy is to select an example from your industry, identify the <strong>keywords and skills</strong> it highlights, and cross-reference them with the job descriptions you're targeting. This ensures your resume speaks the same language as the recruiter and passes ATS keyword filters. Pay special attention to how professional summaries are written — they're often the first thing a hiring manager reads and the section that determines whether they continue reviewing your application.
+          </p>
+
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-3 tracking-tight">
+            What Recruiters Look For in a Resume
+          </h3>
+          <p className="mb-6 text-sm sm:text-base leading-relaxed font-medium">
+            Recruiters spend an average of <strong>6-7 seconds</strong> on an initial resume scan. In that time, they look for three things: a clear job title or professional summary that matches the role, quantifiable achievements that demonstrate impact (numbers, percentages, dollar amounts), and relevant skills that align with the job requirements. Clean formatting and consistent layout help them find this information quickly. Our examples are designed to front-load this critical information so it's visible at first glance.
+          </p>
+
+          <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-4 tracking-tight">
+            Frequently Asked Questions About Resume Examples
+          </h3>
+          <div className="space-y-4">
+            {[
+              { q: "Can I copy these resume examples directly?", a: "We don't recommend copying examples word-for-word. Recruiters and ATS systems can detect generic, overused content. Instead, use the examples to understand the structure, tone, and formatting that works in your industry, then write your own unique bullet points based on your actual experience and achievements." },
+              { q: "How do I adapt an example to my experience level?", a: "If an example shows 10 years of experience but you have 2, focus on the formatting structure rather than the volume of content. Lead with education, skills, and any internships or projects. You can also add relevant coursework, certifications, and volunteer work to demonstrate competency." },
+              { q: "Which example is best for career changers?", a: "Career changers should focus on examples that highlight transferable skills rather than industry-specific experience. Look at how examples frame achievements in universal terms — leadership, problem-solving, communication, and project management apply across industries." },
+              { q: "Do these examples work with Applicant Tracking Systems?", a: "Yes. Every example uses ATS-friendly formatting with standard section headings, clean fonts, and proper hierarchy. The content includes relevant industry keywords naturally woven into experience descriptions, which helps your resume rank higher in ATS keyword searches." },
+              { q: "How often are new examples added?", a: "We regularly update and add new resume examples to cover emerging industries and evolving job market trends. Check back periodically for fresh examples in your field, or explore our career blog for the latest resume writing advice." }
+            ].map((faq, i) => (
+              <div key={i} className="p-5 rounded-2xl bg-slate-50 border border-slate-100">
+                <h4 className="font-bold text-slate-900 text-sm mb-2">{faq.q}</h4>
+                <p className="text-sm text-slate-600 font-medium leading-relaxed m-0">{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Ad Placement */}

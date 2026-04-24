@@ -42,8 +42,8 @@ const Header: React.FC = () => {
     { name: 'Templates', href: '/templates' },
     { name: 'Resume Examples', href: '/examples' },
     { name: 'Cover Letter', href: '/cover-letter' },
+    { name: 'Blog', href: '/blog' },
     { name: 'About', href: '/about' },
-    { name: 'Feedback', href: '/feedback' },
   ];
 
   const mobileOnlyLinks = [

@@ -50,22 +50,9 @@ const AdSlot = ({ adSlot, adFormat = 'auto', position, className = '' }: AdSlotP
     'sidebar': 'Sidebar Ad Placement',
   };
 
-  // If no adSlot is provided, show placeholder
+  // Hide placeholder until AdSense is approved and configured
   if (!adSlot) {
-    return (
-      <div
-        className={`w-full max-w-4xl mx-auto min-h-[90px] md:min-h-[120px] bg-slate-200/60 rounded-lg border border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 relative overflow-hidden transition-all ${className}`}
-        aria-label={`${position} Advertisement`}
-      >
-        <span className="text-[10px] sm:text-xs absolute top-2 right-2 uppercase tracking-widest bg-slate-300/50 px-2 py-0.5 rounded text-slate-500">
-          Advertisement
-        </span>
-        <p className="text-xs sm:text-sm font-medium">{labelMap[position]} (Responsive)</p>
-        <p className="text-[10px] sm:text-xs text-center px-2 mt-1">
-          Ad unit will render here once AdSense is configured.
-        </p>
-      </div>
-    );
+    return null;
   }
 
   // Real AdSense ad
