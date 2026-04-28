@@ -4,6 +4,7 @@ import { ApiProvider } from "./context/ApiContext";
 import { EditorProvider } from "./context/EditorContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Import the Guard
 import ProtectedRoute from "./components/ProtectedRoute.jsx"; // <--- IMPORT THIS
@@ -35,6 +36,7 @@ function App() {
       <AuthProvider>
         <EditorProvider>
           <Router>
+            <ScrollToTop />
             <Header />
             <Routes>
               <Route path="/" element={<Home />} />

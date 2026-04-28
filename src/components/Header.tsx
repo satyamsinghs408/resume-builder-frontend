@@ -96,15 +96,25 @@ const Header: React.FC = () => {
         ) : (
           /* Main Public Navigation - Desktop */
           <nav className="hidden lg:flex items-center space-x-1 lg:space-x-2">
-            {publicLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                to={link.href}
-                className="px-3.5 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-lg transition-all"
-              >
-                {link.name}
-              </Link>
-            ))}
+            {publicLinks.map((link) => {
+              const isActive = location.pathname === link.href;
+              return (
+                <Link 
+                  key={link.name} 
+                  to={link.href}
+                  className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all relative ${
+                    isActive 
+                      ? 'text-indigo-600 bg-indigo-50 font-semibold' 
+                      : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {link.name}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-indigo-600" />
+                  )}
+                </Link>
+              );
+            })}
           </nav>
         )}
 
@@ -175,17 +185,24 @@ const Header: React.FC = () => {
         <div className="px-4 py-6 space-y-5">
           {/* Mobile Navigation Links */}
           <nav className="flex flex-col space-y-1">
-            {[...publicLinks, ...mobileOnlyLinks].map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className="flex items-center justify-between px-4 py-3 text-base font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.name}
-                <ChevronRight className="w-4 h-4 text-slate-400" />
-              </Link>
-            ))}
+            {[...publicLinks, ...mobileOnlyLinks].map((link) => {
+              const isActive = location.pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className={`flex items-center justify-between px-4 py-3 text-base font-medium rounded-xl transition-colors ${
+                    isActive
+                      ? 'text-indigo-600 bg-indigo-50 font-semibold'
+                      : 'text-slate-700 hover:text-indigo-600 hover:bg-indigo-50'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.name}
+                  <ChevronRight className={`w-4 h-4 ${isActive ? 'text-indigo-500' : 'text-slate-400'}`} />
+                </Link>
+              );
+            })}
           </nav>
 
           <hr className="border-slate-100" />
