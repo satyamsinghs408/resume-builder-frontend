@@ -4,6 +4,7 @@ interface SEOProps {
   title: string;
   description: string;
   path: string;
+  keywords?: string;
   noindex?: boolean;
   ogImage?: string;
   ogType?: string;
@@ -17,6 +18,7 @@ const SEO = ({
   title,
   description,
   path,
+  keywords,
   noindex = false,
   ogImage,
   ogType = 'website',
@@ -64,6 +66,7 @@ const SEO = ({
       {/* Primary Meta Tags */}
       <title>{title}</title>
       <meta name="description" content={description} />
+      {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonicalUrl} />
 
       {/* Robots */}
