@@ -1,18 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useEditor } from '../context/EditorContext';
-import { 
-  FileText, LayoutDashboard, LogOut, User, CheckCircle, 
-  Briefcase, GraduationCap, Download, Menu, X, ChevronRight
-} from 'lucide-react';
+import { LayoutDashboard, LogOut, User, Menu, X, ChevronRight } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
-  const { currentStep, totalSteps } = useEditor();
   const location = useLocation();
-  const isEditorPage = location.pathname === '/editor';
-  const hasEditorSteps = currentStep > 0 && totalSteps > 0;
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -31,12 +24,6 @@ const Header: React.FC = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const steps = [
-    { id: 1, icon: FileText, label: "Details" },
-    { id: 2, icon: Briefcase, label: "Experience" },
-    { id: 3, icon: GraduationCap, label: "Education" },
-    { id: 4, icon: Download, label: "Finalize" },
-  ];
 
   const publicLinks = [
     { name: 'Templates', href: '/templates' },
@@ -61,40 +48,9 @@ const Header: React.FC = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
           <img src="/logo.png" alt="CareerLeaf" className="h-10 w-auto object-contain" />
-          <div className="flex flex-col justify-center">
-            {isEditorPage && (
-              <span className="text-[10px] sm:text-xs text-slate-500 font-semibold uppercase tracking-wider">Professional Edition</span>
-            )}
-          </div>
         </Link>
 
-        {/* Step Navigation - Desktop only Editor */}
-        {isEditorPage && hasEditorSteps ? (
-          <div className="hidden lg:flex items-center gap-1.5 ml-8">
-            {steps.map((step, idx) => {
-              const isActive = step.id === currentStep;
-              const isCompleted = step.id < currentStep;
-              const Icon = step.icon;
-
-              return (
-                <div key={step.id} className="flex items-center">
-                  <div className={`
-                    flex items-center gap-2 px-3 py-1.5 rounded-md transition-all duration-300
-                    ${isActive ? 'bg-indigo-50 text-indigo-700 font-semibold border border-indigo-200' : 
-                      isCompleted ? 'text-indigo-600 font-medium' : 'text-slate-400'}
-                  `}>
-                    {isCompleted ? <CheckCircle size={15} /> : <Icon size={15} />}
-                    <span className="text-sm">{step.label}</span>
-                  </div>
-                  {idx < steps.length - 1 && (
-                    <div className={`w-6 h-px mx-1.5 transition-colors ${isCompleted ? 'bg-indigo-300' : 'bg-slate-200'}`} />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          /* Main Public Navigation - Desktop */
+        {/* Main Public Navigation - Desktop */}
           <nav className="hidden lg:flex items-center space-x-1 lg:space-x-2">
             {publicLinks.map((link) => {
               const isActive = location.pathname === link.href;
@@ -116,21 +72,18 @@ const Header: React.FC = () => {
               );
             })}
           </nav>
-        )}
 
         {/* Right Actions - Desktop */}
         <div className="hidden lg:flex items-center gap-3">
           {user ? (
             <div className="flex items-center gap-3">
-              {!isEditorPage && (
-                <Link 
-                  to="/dashboard" 
-                  className="px-4 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors flex items-center gap-2"
-                >
-                  <LayoutDashboard className="w-4 h-4" />
-                  Dashboard
-                </Link>
-              )}
+              <Link 
+                to="/dashboard" 
+                className="px-4 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors flex items-center gap-2"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                Dashboard
+              </Link>
               <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
                 <Link 
                   to="/profile" 
