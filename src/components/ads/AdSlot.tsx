@@ -42,14 +42,6 @@ const AdSlot = ({ adSlot, adFormat = 'auto', position, className = '' }: AdSlotP
     }
   }, [adSlot]);
 
-  // Labels for placeholder mode
-  const labelMap: Record<string, string> = {
-    'hero': 'Hero Ad Placement',
-    'templates': 'Content Ad Placement',
-    'footer': 'Footer Ad Placement',
-    'sidebar': 'Sidebar Ad Placement',
-  };
-
   // Hide placeholder until AdSense is approved and configured
   if (!adSlot) {
     return null;
