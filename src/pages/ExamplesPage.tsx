@@ -121,8 +121,9 @@ const ExamplesPage = () => {
       <div className="absolute top-0 left-0 w-125 h-125 bg-cyan-600/10 rounded-full blur-[100px] -z-10 pointer-events-none" />
       
       <SEO
-        title="Resume Examples by Industry - Professional Samples | CareerLeaf"
-        description="Browse real resume examples for Software Engineering, Marketing, Sales, Design, Finance, HR, Data Science & more. Get inspired and build yours free."
+        title="Resume Examples & Samples by Industry 2026 - Free Templates | CareerLeaf"
+        description="Browse 50+ professional resume examples for software engineering, marketing, healthcare, finance & more. See real samples, learn what works, and build your own resume for free."
+        keywords="resume examples, resume samples, professional resume examples, resume examples for students, software engineer resume, marketing resume example, resume format examples, CV examples, career change resume"
         path="/examples"
       />
       

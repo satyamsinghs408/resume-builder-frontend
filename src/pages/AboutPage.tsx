@@ -12,8 +12,9 @@ const AboutPage = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#000000_1px,transparent_1px)] bg-size-[24px_24px] opacity-[0.03] pointer-events-none" />
       
       <SEO
-        title="About CareerLeaf - Our Mission to Elevate Careers"
-        description="Learn about CareerLeaf's mission to democratize professional success with free, ATS-friendly resume building tools for everyone."
+        title="About CareerLeaf - Free AI Resume Builder & CV Maker"
+        description="CareerLeaf is a 100% free resume builder and CV maker founded by Satyam Singh. Our mission: professional career tools for everyone. ATS-optimized templates, AI-powered content, instant PDF downloads."
+        keywords="about CareerLeaf, free resume builder, who made CareerLeaf, resume builder team, AI resume maker, free CV builder, CareerLeaf founder"
         path="/about"
         structuredData={{
           '@context': 'https://schema.org',

@@ -210,8 +210,9 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-slate-50 font-sans mt-16 md:mt-20">
       <SEO
-        title="Free Resume Builder Online - Create ATS-Friendly Resumes | CareerLeaf"
-        description="Create professional ATS-friendly resumes for free with CareerLeaf. Choose from modern templates, customize your content, and download instantly as PDF. No signup required."
+        title="Free Resume Builder Online | AI Resume Maker & CV Builder - CareerLeaf"
+        description="Build your resume for free with CareerLeaf — the #1 free online resume builder and CV maker. Create ATS-friendly resumes with AI, choose from professional templates, and download as PDF instantly. No signup, no paywall."
+        keywords="free resume builder, resume maker, CV builder, AI resume builder, create resume online free, resume builder online, ATS friendly resume, professional resume template, resume maker online free, CV maker free, build resume online, resume generator"
         path="/"
         structuredData={[faqStructuredData, webAppStructuredData]}
       />

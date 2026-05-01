@@ -103,8 +103,9 @@ const BlogPage = () => {
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-cyan-600/15 rounded-full blur-[120px] -z-10 pointer-events-none" />
 
       <SEO
-        title="Career Blog - Resume Tips, ATS Guides & Career Advice | CareerLeaf"
-        description="Expert resume writing tips, ATS optimization guides, and career advice to help you land your dream job. Free guides from CareerLeaf."
+        title="How to Write a Resume - Tips, ATS Guide & Career Advice 2026 | CareerLeaf"
+        description="Learn how to write a resume that gets interviews. Expert tips on ATS optimization, resume formatting, action verbs, skills sections, and career advice. Free guides updated for 2026."
+        keywords="how to write a resume, resume tips, ATS resume tips, how to make a resume, resume writing guide, best resume format, resume action verbs, career advice, job search tips, resume help free"
         path="/blog"
       />
 

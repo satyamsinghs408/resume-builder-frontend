@@ -19,8 +19,9 @@ const TemplatesPage = () => {
       <div className="absolute bottom-0 left-0 w-100 h-100 bg-cyan-600/15 rounded-full blur-[120px] -z-10 pointer-events-none" />
       
       <SEO
-        title="Free Resume Templates - ATS Friendly Professional Designs | CareerLeaf"
-        description="Browse CareerLeaf's collection of free, ATS-optimized resume templates. Classic, Modern, Minimalist, Executive & Creative designs. Download as PDF instantly."
+        title="Free Resume Templates 2026 - ATS Friendly Professional Designs | CareerLeaf"
+        description="Download free ATS-friendly resume templates. Professional, modern, minimalist & creative designs optimized for Applicant Tracking Systems. No signup, 100% free PDF download."
+        keywords="free resume templates, ATS friendly resume template, professional resume template free, resume templates 2026, modern resume template, resume format, CV template free download, best resume layout"
         path="/templates"
       />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

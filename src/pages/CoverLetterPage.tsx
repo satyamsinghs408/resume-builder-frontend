@@ -35,8 +35,9 @@ const CoverLetterPage = () => {
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <SEO
-          title="Cover Letter Guide: How to Write a Cover Letter in 2026 | CareerLeaf"
-          description="Learn how to write a compelling cover letter that complements your resume. Step-by-step guide with examples, tips, and a free cover letter template."
+          title="How to Write a Cover Letter That Gets Interviews in 2026 | CareerLeaf"
+          description="Step-by-step cover letter guide with examples, templates, and expert tips. Learn what hiring managers look for and write a compelling cover letter for any job application."
+          keywords="how to write a cover letter, cover letter examples, cover letter template, cover letter tips, job application letter, cover letter format, professional cover letter, cover letter writing guide"
           path="/cover-letter"
         />
 
