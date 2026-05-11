@@ -155,7 +155,7 @@ const Footer: React.FC = () => {
               </h3>
               <div className="flex gap-3 sm:gap-4">
                 <a
-                  href="https://x.com/satyamsingh7272"
+                  href="https://x.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-800 border border-slate-700 hover:border-emerald-500 hover:bg-emerald-600/20 hover:text-emerald-400 flex items-center justify-center text-slate-400 transition-all shadow-sm"
@@ -169,7 +169,7 @@ const Footer: React.FC = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/satyam-singh-020178245/"
+                  href="https://www.linkedin.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-800 border border-slate-700 hover:border-indigo-500 hover:bg-indigo-600/20 hover:text-indigo-400 flex items-center justify-center text-slate-400 transition-all shadow-sm"
@@ -183,7 +183,7 @@ const Footer: React.FC = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://github.com/satyamsinghs408"
+                  href="https://github.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-800 border border-slate-700 hover:border-slate-400 hover:bg-slate-700/20 hover:text-white flex items-center justify-center text-slate-400 transition-all shadow-sm"
