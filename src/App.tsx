@@ -7,13 +7,13 @@ import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 
 // Import the Guard
-import ProtectedRoute from "./components/ProtectedRoute.jsx"; // <--- IMPORT THIS
+import ProtectedRoute from "./components/ProtectedRoute";
 
-import Home from "./pages/Home.jsx";
-import ResumeEditor from "./pages/ResumeEditor.jsx";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
+import Home from "./pages/Home";
+import ResumeEditor from "./pages/ResumeEditor";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 // Import SEO / Legal Pages
 import AboutPage from "./pages/AboutPage";
@@ -27,6 +27,7 @@ import FeedbackPage from "./pages/FeedbackPage";
 import DisclaimerPage from "./pages/DisclaimerPage";
 import BlogPage from "./pages/BlogPage";
 import ProfilePage from "./pages/ProfilePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 import "./App.css";
 
@@ -76,6 +77,9 @@ function App() {
               />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+
+              {/* Catch-all 404 */}
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
             <Footer />
           </Router>
